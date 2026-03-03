@@ -23,7 +23,7 @@
                 </button>
 
                 <div class="submenu">
-                    <a href="#">Add Book</a>
+                    <a href="addBook.php">Add Book</a>
                     <a href="#">Delete Book</a>
                     <a href="#">Update Book</a>
                     <a href="viewBook.php">View Book</a>

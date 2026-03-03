@@ -1,4 +1,40 @@
 <?php
+    function insertBookRecord() {
+    if (isset($_POST['submitBookDetails'])) {
+        try {
+                $ctitle = $_POST['ctitle'];
+                $cauthor = $_POST['cauthor'];
+                $cdescription = $_POST['cdescription'];
+                $cisbn = $_POST['cisbn'];
+                $cgenre = $_POST['cgenre'];
+                $cpublisher = $_POST['cpublisher'];
+                $cpublication = $_POST['cpublication'];
+                $cstatus = $_POST['cstatus'];
+
+                $pdo = new PDO('mysql:host=localhost;dbname=LibrarySYS;charset=utf8', 'root', '');
+                $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+                $sql = "INSERT INTO Books (Title, Author, Description, ISBN, Genre, Publisher, Publication, Status)
+                        VALUES (:ctitle, :cauthor, :cdescription, :cisbn, :cgenre, :cpublisher, :cpublication, :cstatus)";
+
+                $stmt = $pdo->prepare($sql);
+                $stmt->bindValue(':ctitle', $ctitle);
+                $stmt->bindValue(':cauthor', $cauthor);
+                $stmt->bindValue(':cdescription', $cdescription);
+                $stmt->bindValue(':cisbn', $cisbn);
+                $stmt->bindValue(':cgenre', $cgenre);
+                $stmt->bindValue(':cpublisher', $cpublisher);
+                $stmt->bindValue(':cpublication', $cpublication);
+                $stmt->bindValue(':sctatus', $cstatus);
+
+                $stmt->execute();
+            } catch (PDOException $e) {
+                $title = 'An error has occurred';
+                $output = 'Database error: ' . $e->getMessage() . ' in ' . $e->getFile() . ':' . $e->getLine();
+            }
+        }
+    }
+
     function fetchAllBooks(){
         try {
             $pdo = new PDO('mysql:host=localhost;dbname=LibrarySYS;charset=utf8', 'root', '');
