@@ -5,6 +5,9 @@ body {
     min-height: 100vh;
 }
 
+/*
+    NAVIGATION MENU
+*/
 aside {
     width: 30%;
     background: #0f1923;
@@ -94,6 +97,10 @@ nav a:hover {
     border-top: 1px solid #1e3045;
 }
 
+/*
+    DASHBOARD MAIN MENU
+*/
+
 .main h1 { 
     font-family: 'Playfair Display', serif; 
     color: #c8a96e; 
@@ -140,4 +147,94 @@ tr:hover {
 
 td:last-child {
     font-weight: bold;
+}
+
+/*
+    ADD BOOK FORM
+*/
+
+.formContainer {
+    background: #0f1923;
+    border: 1px solid #1e3045;
+    border-radius: 1em;
+    padding: 2em;
+    width: 70%;
+    height: fit-content;
+}
+
+.formContainer h2 {
+    color: #c8a96e;
+    margin-bottom: 0.25em;
+}
+
+.formContainer p {
+    font-size: 0.9rem;
+    color: #6b8099;
+    letter-spacing: 0.10em;
+    text-transform: uppercase;
+    margin-bottom: 2em;
+}
+
+.formGroup {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4em;
+    margin-bottom: 1em;
+}
+
+.formGroup label {
+    font-size: 0.8rem;
+    color: #6b8099;
+    text-transform: uppercase;
+    letter-spacing: 0.10em;
+}
+
+.formGroup input, .formGroup select {
+    background: #0b1520;
+    border: 1px solid #1e3045;
+    border-radius: 0.5em;
+    color: white;
+    padding: 0.75em 1em;
+    font-size: 0.9em;
+    outline: none;
+    transition: border-color 0.2s ease;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.formGroup input::placeholder {
+    color: #3a5068;
+}
+
+.formGroup input:focus, .formGroup select:focus {
+    border-color: #c8a96e;
+}
+
+.formGroup select option {
+    background: #0f1923;
+}
+
+/*https://stackoverflow.com/questions/14946091/are-there-any-style-options-for-the-html5-date-picker*/
+input[type="date"]::-webkit-calendar-picker-indicator {
+    filter: invert(0.5);
+    cursor: pointer;
+}
+
+input[type="submit"] {
+    width: 100%;
+    padding: 0.8em;
+    margin-top: 0.5em;
+    background: #c8a96e;
+    color: #1d2f42;
+    border: 1px solid #c8a96e;
+    border-radius: 0.5em;
+    font-size: 1em;
+    text-transform: uppercase;
+    letter-spacing: 0.10em;
+    cursor: pointer;
+}
+
+input[type="submit"]:hover {
+    background: #c8a96e;
+    color: #0b1520;
 }

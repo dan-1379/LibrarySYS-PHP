@@ -14,7 +14,7 @@
                 $pdo = new PDO('mysql:host=localhost;dbname=LibrarySYS;charset=utf8', 'root', '');
                 $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-                $sql = "INSERT INTO Books (Title, Author, Description, ISBN, Genre, Publisher, Publication, Status)
+                $sql = "INSERT INTO Books (Title, Author, Description, ISBN, Genre, Publisher, PublicationDate, Status)
                         VALUES (:ctitle, :cauthor, :cdescription, :cisbn, :cgenre, :cpublisher, :cpublication, :cstatus)";
 
                 $stmt = $pdo->prepare($sql);
@@ -25,7 +25,7 @@
                 $stmt->bindValue(':cgenre', $cgenre);
                 $stmt->bindValue(':cpublisher', $cpublisher);
                 $stmt->bindValue(':cpublication', $cpublication);
-                $stmt->bindValue(':sctatus', $cstatus);
+                $stmt->bindValue(':cstatus', $cstatus);
 
                 $stmt->execute();
             } catch (PDOException $e) {
