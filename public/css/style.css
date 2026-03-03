@@ -1,0 +1,143 @@
+body {
+    background: #0b1520;
+    color: white;
+    display: flex;
+    min-height: 100vh;
+}
+
+aside {
+    width: 30%;
+    background: #0f1923;
+    border-right: 1px solid #1e3045;
+    margin-right: 2em;
+}
+
+.logo {
+    padding: 1em;
+    border-bottom: 1px solid #1e3045;
+}
+
+.logo h1 {
+    font-size: 1.25rem;
+    color: #c8a96e;
+}
+
+.logo p {
+    font-size: 0.9rem;
+    color: #6b8099;
+    text-transform: uppercase;
+    letter-spacing: .10em;
+}
+
+nav {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5em;
+    padding: 0.5em 0;
+}
+
+nav a {
+    display: flex;
+    padding: 1em;
+    color: #d4dde8;
+    font-size: 1em;
+    text-decoration: none;
+}
+
+nav a:hover {
+    background: #1d2f42;
+}
+
+.menuItem button {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1em;
+    width: 100%;
+    padding: 1em;
+    border: none;
+    font-size: 1em;
+    cursor: pointer;
+    background-color: #0f1923;
+    color: white;
+}
+
+.menuItem button:hover {
+    background: #1d2f42;
+}
+
+.menuItem.open button svg { 
+    transform: rotate(180deg); opacity: 1; 
+}
+
+.submenu {
+    display: none;
+    background-color: #0b1520;
+}
+
+.menuItem.open .submenu { 
+    display: block; 
+}
+
+.submenu a {
+    padding: 1em;
+    font-size: 0.8em;
+    color: #6b8099;
+}
+
+.submenu a:hover { 
+    background: #1d2f42; 
+    color: white;
+}
+
+.logout {
+    border-top: 1px solid #1e3045;
+}
+
+.main h1 { 
+    font-family: 'Playfair Display', serif; 
+    color: #c8a96e; 
+    margin-bottom: 8px; 
+}
+
+.main p  { 
+    font-size: 0.9rem;
+    color: #6b8099;
+    letter-spacing: 0.10em;
+}
+
+table {
+    color: black;
+    border-collapse: collapse;
+    background-color: white;
+    width: 90%;
+    overflow: scroll;
+}
+
+th {
+    background-color: #1d2f42; 
+    color: white;
+    text-align: center;
+    padding: 0.5em;
+    text-transform: uppercase;
+    font-size: 1em;
+}
+
+td {
+    padding: 1em;
+    border-bottom: 1px solid lightgrey;
+    text-align: center;
+}
+
+tr:nth-of-type(even) {
+    background-color: #f9f9f9;
+}
+
+tr:hover {
+    background-color: lightgrey;
+    transition: background-color 0.3s ease;
+}
+
+td:last-child {
+    font-weight: bold;
+}
