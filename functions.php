@@ -5,8 +5,8 @@
     function insertBookRecord() {
         global $inputErrors;
 
-    if (isset($_POST['submitBookDetails'])) {
-        try {
+        if (isset($_POST['submitBookDetails'])) {
+            try {
                 $ctitle = $_POST['ctitle'] ?? "";
                 $cauthor = $_POST['cauthor'] ?? "";
                 $cdescription = $_POST['cdescription'] ?? "";
@@ -16,8 +16,38 @@
                 $cpublication = $_POST['cpublication'] ?? "";
                 $cstatus = $_POST['cstatus'] ?? "";
 
-                 if (!BookValidator::isValidTitle($ctitle)) {
-                    $inputErrors['ctitle'] = "Invalid Title. Please enter a valid title.";
+                if (!BookValidator::isValidTitle($ctitle)) {
+                    $inputErrors['ctitle'] = "Invalid title. Please enter a valid title.";
+                }
+
+                if (!BookValidator::isValidAuthor($cauthor)) {
+                    $inputErrors['cauthor'] = "Invalid author. Please enter a valid author.";
+                }
+
+                if (!BookValidator::isValidDescription($cdescription)) {
+                    $inputErrors['cdescription'] = "Invalid description. Please enter a valid description.";
+                }
+
+                $checkISBN = BookValidator::isValidISBN($cisbn);
+
+                if ($checkISBN != "Valid ISBN") {
+                    $inputErrors['cisbn'] = $checkISBN;
+                }
+
+                if (!BookValidator::isValidGenre($cgenre)) {
+                    $inputErrors['cgenre'] = "Invalid genre. Please enter a valid genre.";
+                }
+
+                if (!BookValidator::isValidPublisher($cpublisher)) {
+                    $inputErrors['cpublisher'] = "Invalid publisher. Please enter a valid publisher.";
+                }
+
+                if (!BookValidator::isValidPublicationDate($cpublication)) {
+                    $inputErrors['cpublication'] = "Invalid publication. Please enter a valid publication.";
+                }
+
+                if (!BookValidator::isValidStatus($cstatus)) {
+                    $inputErrors['cstatus'] = "Invalid status. Please enter a valid status.";
                 }
 
                 if (empty($inputErrors)) {

@@ -1,3 +1,14 @@
+<!--
+ * Title: Font Awesome Icons
+ * Author: W3 Schools
+ * Site: w3schools.com
+ * Date: 09/03/26
+ * Code Version: N/A
+ * Availability: https://www.w3schools.com/icons/fontawesome_icons_intro.asp
+ * Accessed: 09/03/26
+ * Modified: No modifications made. Using icons.
+-->
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -5,20 +16,31 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>LibrarySYS</title>
     <link rel="stylesheet" href="public/css/style.css">
-</head>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 <body>
     <aside>
         <div class="logo">
             <h1>Killorglin Library</h1>
             <p>Management System</p>
+            <i class="fa fa-angle-left" onclick="toggleAside()"></i>
         </div>
 
         <nav>
-            <a href="index.php">Dashboard</a>
+            <div class="menuItem">
+                <button onclick="window.location.href='index.php'">
+                    <div class="menuItem-name">
+                        <i class="fa fa-dashboard"></i>
+                        <span>Dashboard</span>
+                    </div>
+                </button>
+            </div>
 
             <div class="menuItem">
                 <button onclick="toggleMenu(this)">
-                    <span>Books</span>
+                    <div class="menuItem-name">
+                        <i class="fa fa-book"></i>
+                        <span>Books</span>
+                    </div>
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
                 </button>
 
@@ -32,7 +54,10 @@
 
             <div class="menuItem">
                 <button onclick="toggleMenu(this)">
-                    <span>Members</span>
+                    <div class="menuItem-name">
+                        <i class="fa fa-user"></i>
+                        <span>Members</span>
+                    </div>
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
                 </button>
 
@@ -46,7 +71,10 @@
 
             <div class="menuItem">
                 <button onclick="toggleMenu(this)">
-                    <span>Loans</span>
+                    <div class="menuItem-name">
+                        <i class="fa fa-cart-plus"></i>
+                        <span>Loans</span>
+                    </div>
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
                 </button>
 
@@ -58,7 +86,10 @@
 
             <div class="menuItem">
                 <button onclick="toggleMenu(this)">
-                    <span>Admin</span>
+                    <div class="menuItem-name">
+                        <i class="fa fa-area-chart"></i>
+                        <span>Admin</span>
+                    </div>
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
                 </button>
 
@@ -70,7 +101,14 @@
 
             <div class="divider"></div>
 
-            <a href="#" class="logout">Logout</a>
+            <div class="menuItem">
+                <button>
+                    <div class="menuItem-name">
+                        <i class="fa fa-sign-out"></i>
+                        <span>Logout</span>
+                    </div>
+                </button>
+            </div>
         </nav>  
     </aside>
 
@@ -78,6 +116,20 @@
         function toggleMenu(button) {
             const menuItem = button.parentElement;
             menuItem.classList.toggle('open');
+        }
+
+        function toggleAside() {
+            const aside = document.querySelector("aside");
+            aside.classList.toggle("collapsed");
+            
+            const arrowIcon = document.querySelector(".logo i");
+            if (aside.classList.contains("collapsed")) {
+                arrowIcon.classList.remove("fa-angle-left");
+                arrowIcon.classList.add("fa-angle-right");
+            } else {
+                arrowIcon.classList.add("fa-angle-left");
+                arrowIcon.classList.remove("fa-angle-right");
+            }
         }
     </script>
 </body>

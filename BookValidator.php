@@ -1,4 +1,18 @@
 <?php
+    /*******************************************************************************
+     * Title: Input Validation Methods
+     * Author: Daniel Courtney
+     * Site: N/A
+     * Date: 09/03/26
+     * Code Version: N/A
+     * Availability: https://github.com/dan-1379/LibrarySYS/blob/master/LibrarySYS/BookValidator.cs
+     * Accessed: 09/03/26
+     * Modified: Code taken from BookValidator class in SWE project for the purposes of validating
+     *           book entry fields. Code taken and modified for PHP usage.
+     *******************************************************************************/
+
+
+
     /**
      * 
      * Provides validation logic for book-related data within the Library System.
@@ -120,6 +134,69 @@
             }
 
             return true;
+        }
+
+        // INCLUDE METHOD FOR CHECKING IF THE ISBN IS UNIQUE
+        /**
+         * Helper method to check if the provided ISBN is unique in the database.
+         * @param string $isbn - The ISBN of the book.
+         * @return bool - True if the ISBN is unique; otherwise, false.
+         */
+        public static function isUniqueISBN(string $isbn) : bool {
+            return true;
+        }
+
+        /**
+         * Determines if the provided genre is valid.
+         * @param string $genre - The genre of the book.
+         * @return bool - True if the genre is valid; otherwise false.
+         */
+        public static function isValidGenre(string $genre) : bool {
+            $validGenres = [
+                "sci-fi",
+                "fantasy",
+                "mystery",
+                "thriller",
+                "horror"
+            ];
+
+            return in_array($genre, $validGenres);
+        }
+
+        /**
+         * Determines if the provided publisher is valid.
+         * @param string $publisher - The publisher of the book.
+         * @return bool - True if the publisher is non-empty and does not exceed 25 characters; otherwise false.
+         */
+        public static function isValidPublisher(string $publisher) : bool {
+            return !empty(trim($publisher)) && strlen(trim($publisher)) <= 25;
+        }
+
+        /**
+         * Determines if the provided publication date is valid.
+         * @param string $publicationDate - The publication date of the book.
+         * @return bool - True if the publisher is non-empty and does not exceed 25 characters; otherwise false.
+         */
+        public static function isValidPublicationDate(string $publicationDate) : bool {
+            if (empty($publicationDate)) {
+                return false;
+            }
+            
+            return $publicationDate <= date('Y-m-d');
+        }
+
+        /**
+         * Determines if the provided status is valid.
+         * @param string $status - The status of the book.
+         * @return bool - True if the status is:
+         *      A (Available)
+         *      U (Unavailable)
+         *      L (Lost)
+         * otherwise false.
+         */
+        public static function isValidStatus(string $status) : bool {
+            $validStatus = ['A', 'U', 'L'];
+            return in_array($status, $validStatus);
         }
     }
 ?>
