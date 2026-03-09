@@ -10,7 +10,6 @@
     <?php 
         include_once("inc/navMenu.php"); 
         include_once("functions.php");
-
         insertBookRecord();
     ?>
 
@@ -42,8 +41,12 @@
             <div class="formGroup">
                 <label for="cgenre">Genre</label>
                 <select name="cgenre" id="">
-                    <option value="A">A</option>
-                    <option value="B">B</option>
+                    <option disabled selected value> -- Select an option -- </option>
+                    <option value="sci-fi">Science Fiction</option>
+                    <option value="fantasy">Fantasy</option>
+                    <option value="mystery">Mystery</option>
+                    <option value="thriller">Romance</option>
+                    <option value="horror">Horror</option>
                 </select>
             </div>
 
@@ -53,20 +56,20 @@
             </div>
 
             <div class="formGroup">
-                <label for="cpublication">Title</label>
+                <label for="cpublication">Publication</label>
                 <input type="date" name="cpublication" id="">
             </div>
 
            <div class="formGroup">
-                <label for="cpublication">Title</label>
+                <label for="cstatus">Status</label>
                 <select name="cstatus" id="">
-                    <option value="A">A</option>
-                    <option value="I">I</option>
+                    <option disabled selected value> -- Select an option -- </option>
+                    <option value="A">Available</option>
+                    <option value="C">Checked Out</option>
+                    <option value="C">Unavailable</option>
                 </select>
             </div>
-    
-        
-    
+
             <input type="submit" value="Add Book" name="submitBookDetails">
         </form>
     </div>
