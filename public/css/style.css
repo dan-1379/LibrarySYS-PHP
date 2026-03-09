@@ -238,3 +238,9 @@ input[type="submit"]:hover {
     background: #c8a96e;
     color: #0b1520;
 }
+
+.formContainer .errorMessage {
+    color: red;
+    font-size: 0.9em;
+    margin-top: 0.2em;
+}

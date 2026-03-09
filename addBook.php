@@ -11,6 +11,7 @@
         include_once("inc/navMenu.php"); 
         include_once("functions.php");
         insertBookRecord();
+        global $inputErrors;
     ?>
 
     <div class="formContainer">
@@ -20,6 +21,10 @@
             <div class="formGroup">
                 <label for="ctitle">Title</label>
                 <input type="text" name="ctitle" id="" placeholder="Enter title">
+
+                <?php if (!empty($inputErrors['ctitle'])): ?>
+                    <span class="errorMessage"><?php echo $inputErrors['ctitle'] ?></span>
+                <?php endif; ?>
             </div>
 
             <div class="formGroup">

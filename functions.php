@@ -1,33 +1,44 @@
 <?php
+    include("BookValidator.php");
+    $inputErrors = [];
+
     function insertBookRecord() {
+        global $inputErrors;
+
     if (isset($_POST['submitBookDetails'])) {
         try {
-                $ctitle = $_POST['ctitle'];
-                $cauthor = $_POST['cauthor'];
-                $cdescription = $_POST['cdescription'];
-                $cisbn = $_POST['cisbn'];
-                $cgenre = $_POST['cgenre'];
-                $cpublisher = $_POST['cpublisher'];
-                $cpublication = $_POST['cpublication'];
-                $cstatus = $_POST['cstatus'];
+                $ctitle = $_POST['ctitle'] ?? "";
+                $cauthor = $_POST['cauthor'] ?? "";
+                $cdescription = $_POST['cdescription'] ?? "";
+                $cisbn = $_POST['cisbn'] ?? "";
+                $cgenre = $_POST['cgenre'] ?? "";
+                $cpublisher = $_POST['cpublisher'] ?? "";
+                $cpublication = $_POST['cpublication'] ?? "";
+                $cstatus = $_POST['cstatus'] ?? "";
 
-                $pdo = new PDO('mysql:host=localhost;dbname=LibrarySYS;charset=utf8', 'root', '');
-                $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+                 if (!BookValidator::isValidTitle($ctitle)) {
+                    $inputErrors['ctitle'] = "Invalid Title. Please enter a valid title.";
+                }
 
-                $sql = "INSERT INTO Books (Title, Author, Description, ISBN, Genre, Publisher, PublicationDate, Status)
-                        VALUES (:ctitle, :cauthor, :cdescription, :cisbn, :cgenre, :cpublisher, :cpublication, :cstatus)";
+                if (empty($inputErrors)) {
+                    $pdo = new PDO('mysql:host=localhost;dbname=LibrarySYS;charset=utf8', 'root', '');
+                    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-                $stmt = $pdo->prepare($sql);
-                $stmt->bindValue(':ctitle', $ctitle);
-                $stmt->bindValue(':cauthor', $cauthor);
-                $stmt->bindValue(':cdescription', $cdescription);
-                $stmt->bindValue(':cisbn', $cisbn);
-                $stmt->bindValue(':cgenre', $cgenre);
-                $stmt->bindValue(':cpublisher', $cpublisher);
-                $stmt->bindValue(':cpublication', $cpublication);
-                $stmt->bindValue(':cstatus', $cstatus);
+                    $sql = "INSERT INTO Books (Title, Author, Description, ISBN, Genre, Publisher, PublicationDate, Status)
+                            VALUES (:ctitle, :cauthor, :cdescription, :cisbn, :cgenre, :cpublisher, :cpublication, :cstatus)";
 
-                $stmt->execute();
+                    $stmt = $pdo->prepare($sql);
+                    $stmt->bindValue(':ctitle', $ctitle);
+                    $stmt->bindValue(':cauthor', $cauthor);
+                    $stmt->bindValue(':cdescription', $cdescription);
+                    $stmt->bindValue(':cisbn', $cisbn);
+                    $stmt->bindValue(':cgenre', $cgenre);
+                    $stmt->bindValue(':cpublisher', $cpublisher);
+                    $stmt->bindValue(':cpublication', $cpublication);
+                    $stmt->bindValue(':cstatus', $cstatus);
+
+                    $stmt->execute();
+                }
             } catch (PDOException $e) {
                 $title = 'An error has occurred';
                 $output = 'Database error: ' . $e->getMessage() . ' in ' . $e->getFile() . ':' . $e->getLine();
