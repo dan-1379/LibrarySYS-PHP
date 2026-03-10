@@ -62,10 +62,7 @@
                 </button>
 
                 <div class="submenu">
-                    <a href="#">Add Member</a>
-                    <a href="#">Delete Member</a>
-                    <a href="#">Update Book</a>
-                    <a href="#">View Book</a>
+                    <a href="memberCrud.php">Update Members</a>
                 </div>
             </div>
 
@@ -113,6 +110,7 @@
     </aside>
 
     <script>
+        // https://www.w3schools.com/jsref/prop_element_classlist.asp
         function toggleMenu(button) {
             const menuItem = button.parentElement;
             menuItem.classList.toggle('open');

@@ -136,7 +136,6 @@
             return true;
         }
 
-        // INCLUDE METHOD FOR CHECKING IF THE ISBN IS UNIQUE
         /**
          * Helper method to check if the provided ISBN is unique in the database.
          * @param string $isbn - The ISBN of the book.

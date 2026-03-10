@@ -105,6 +105,53 @@
             } 
         } catch (PDOException $e) {  
             $output = 'Unable to connect to the database server: ' . $e->getMessage() . ' in ' . $e->getFile() . ':' . $e->getLine();  
+        } 
+    }
+
+    function getTotalBooks() {
+        try {
+            $pdo = new PDO('mysql:host=localhost;dbname=LibrarySYS;charset=utf8', 'root', '');
+            $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION); 
+
+            $sql = 'SELECT COUNT(*) FROM Books';
+            $result = $pdo->prepare($sql); 
+            $result->execute(); 
+
+            // https://stackoverflow.com/questions/58227521/how-to-get-count-of-rows-in-mysql-table-using-php
+            return (int) $result->fetchColumn();
+        } catch (PDOException $e) {  
+            $output = 'Unable to connect to the database server: ' . $e->getMessage() . ' in ' . $e->getFile() . ':' . $e->getLine();  
+            return 0;
+        } 
+    }
+
+    function fetchAllMembers(){
+        try {
+            $pdo = new PDO('mysql:host=localhost;dbname=LibrarySYS;charset=utf8', 'root', '');
+            $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION); 
+
+            $sql = 'SELECT * FROM Members';
+            $result = $pdo->prepare($sql); 
+            $result->execute(); 
+
+            while ($row = $result->fetch()) { 
+                $statusText = ($row['Status'] === 'A') ? 'Active' : 'Inactive';
+
+                echo "<tr>";
+                echo "<td>{$row['MemberID']}</td>";
+                echo "<td>{$row['FirstName']} {$row['LastName']}</td>";
+                echo "<td>{$row['DOB']}</td>";
+                echo "<td>{$row['Phone']}</td>";
+                echo "<td>{$row['Email']}</td>";
+                echo "<td>{$row['AddressLine1']}, {$row['AddressLine2']}, {$row['City']}</td>";
+                echo "<td>{$row['County']}</td>";
+                echo "<td>{$row['Eircode']}</td>";
+                echo "<td>{$row['RegistrationDate']}</td>";
+                echo "<td>$statusText</td>";
+                echo '</tr>'; 
             } 
+        } catch (PDOException $e) {  
+            $output = 'Unable to connect to the database server: ' . $e->getMessage() . ' in ' . $e->getFile() . ':' . $e->getLine();  
+        } 
     }
 ?>
