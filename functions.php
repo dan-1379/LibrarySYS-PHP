@@ -148,6 +148,12 @@
                 echo "<td>{$row['Eircode']}</td>";
                 echo "<td>{$row['RegistrationDate']}</td>";
                 echo "<td>$statusText</td>";
+                echo "<td><div class='editMember'>";
+                echo "<button onclick='editMember(this)' class='editMemberButton'><i class='fa fa-edit'></i>EDIT</button>";
+                echo "</td></div>";
+                echo "<div class='deleteMember'>";
+                echo "<td><button onclick = 'deleteMember(this)' class='deleteMemberButton'><i class='fa fa-trash-o'></i>DELETE</button></td>";
+                echo "</div>";
                 echo '</tr>'; 
             } 
         } catch (PDOException $e) {  

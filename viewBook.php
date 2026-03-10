@@ -9,7 +9,7 @@
 <body>
     <?php include_once("inc/navMenu.php"); ?>
 
-    <table>
+    <table class="viewBookTable">
             <tr>
                 <th>ID</th>
                 <th>Title</th>

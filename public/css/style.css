@@ -161,7 +161,7 @@ nav a:hover {
     VIEW BOOK
 */
 
-table {
+.viewBookTable, .memberCrudTable {
     color: black;
     border-collapse: collapse;
     background-color: white;
@@ -171,7 +171,7 @@ table {
     overflow: scroll;
 }
 
-th {
+.viewBookTable th, .memberCrudTable th {
     background-color: #1d2f42; 
     color: white;
     text-align: center;
@@ -180,42 +180,42 @@ th {
     font-size: 1em;
 }
 
-td {
+.viewBookTable td, .memberCrudTable td {
     padding: 1em;
     border-bottom: 1px solid lightgrey;
     text-align: center;
 }
 
-tr:nth-of-type(even) {
+.viewBookTable tr:nth-child(even), .memberCrudTable tr:nth-child(even) {
     background-color: #f9f9f9;
 }
 
-tr:hover {
+.viewBookTable tr:hover, .memberCrudTable tr:hover {
     background-color: lightgrey;
     transition: background-color 0.3s ease;
 }
 
-td:last-child {
+.viewBookTable td:last-child, .memberCrudTable td:nth-child(10) {
     font-weight: bold;
 }
 
 @media screen and (max-width: 1090px) {
-    th:nth-child(8), td:nth-child(8),
-    th:nth-child(7), td:nth-child(7) {
+    .viewBookTable th:nth-child(8), .viewBookTable td:nth-child(8),
+    .viewBookTable th:nth-child(7), .viewBookTable td:nth-child(7) {
         display: none;
     }
 }
 
 @media screen and (max-width: 850px) {
-    th:nth-child(4), td:nth-child(4),
-    th:nth-child(5), td:nth-child(5),
-    th:nth-child(3), td:nth-child(3) {
+    .viewBookTable th:nth-child(4), .viewBookTable td:nth-child(4),
+    .viewBookTable th:nth-child(5), .viewBookTable td:nth-child(5),
+    .viewBookTable th:nth-child(3), .viewBookTable td:nth-child(3) {
         display: none;
     }
 }
 
 @media screen and (max-width: 550px) {
-    th:nth-child(1), td:nth-child(1){
+    .viewBookTable th:nth-child(1), .viewBookTable td:nth-child(1){
         display: none;
     }
 }
@@ -349,4 +349,83 @@ input[type="submit"]:hover {
 
 .successOutput i {
     color: #22c55e;
+}
+
+/*
+    UPDATE MEMBER TABLE
+*/
+
+@media screen and (max-width: 1450px) {
+    .memberCrudTable th:nth-child(9), .memberCrudTable td:nth-child(9),
+    .memberCrudTable th:nth-child(8), .memberCrudTable td:nth-child(8) {
+        display: none;
+    }
+}
+
+@media screen and (max-width: 1210px) {
+    .memberCrudTable th:nth-child(6), .memberCrudTable td:nth-child(6),
+    .memberCrudTable th:nth-child(7), .memberCrudTable td:nth-child(7) {
+        display: none;
+    }
+}
+
+@media screen and (max-width: 1025px) {
+    .memberCrudTable th:nth-child(3), .memberCrudTable td:nth-child(3),
+    .memberCrudTable th:nth-child(4), .memberCrudTable td:nth-child(4), 
+    .memberCrudTable th:nth-child(5), .memberCrudTable td:nth-child(5) {
+        display: none;
+    }
+}
+
+@media screen and (max-width: 580px) {
+    .memberCrudTable th:nth-child(1), .memberCrudTable td:nth-child(1),
+    .memberCrudTable th:nth-child(10), .memberCrudTable td:nth-child(10){
+        display: none;
+    }
+}
+
+.editMemberButton {
+    display: flex;
+    align-items: center;
+    gap: 0.5em;
+    padding: 0.8em;
+    background-color: #4a90d9;
+    color: white;
+    border: none;
+    border-radius: 0.5em;
+}
+
+.editMemberButton:hover {
+    transform: scale(1.05);
+}
+
+.editMemberButton:active {
+    transform: scale(0.97);
+}
+
+.editMemberButton i {
+    font-size: 1em;
+}
+
+.deleteMemberButton {
+    display: flex;
+    align-items: center;
+    gap: 0.5em;
+    padding: 0.8em;
+    background-color: #e74c3c;
+    color: white;
+    border: none;
+     border-radius: 0.5em;
+}
+
+.deleteMemberButton:hover {
+    transform: scale(1.05);
+}
+
+.deleteMemberButton:active {
+    transform: scale(0.97);
+}
+
+.deleteMemberButton i {
+    font-size: 1em;
 }
