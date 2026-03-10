@@ -88,6 +88,12 @@ nav a:hover {
     background: #1d2f42;
 }
 
+.menuItem-name {
+    display: flex;
+    align-items: center;
+    gap: 1em;
+}
+
 .menuItem button {
     display: flex;
     align-items: center;
@@ -107,7 +113,8 @@ nav a:hover {
 }
 
 .menuItem.open button svg { 
-    transform: rotate(180deg); opacity: 1; 
+    transform: rotate(180deg); 
+    opacity: 1; 
 }
 
 .submenu {
@@ -141,7 +148,7 @@ nav a:hover {
 .main h1 { 
     font-family: 'Playfair Display', serif; 
     color: #c8a96e; 
-    margin-bottom: 8px; 
+    margin-bottom: 0.5em; 
 }
 
 .main p  { 
@@ -160,6 +167,7 @@ table {
     background-color: white;
     width: 90%;
     height: fit-content;
+    height: 100%;
     overflow: scroll;
 }
 
@@ -189,6 +197,27 @@ tr:hover {
 
 td:last-child {
     font-weight: bold;
+}
+
+@media screen and (max-width: 1090px) {
+    th:nth-child(8), td:nth-child(8),
+    th:nth-child(7), td:nth-child(7) {
+        display: none;
+    }
+}
+
+@media screen and (max-width: 850px) {
+    th:nth-child(4), td:nth-child(4),
+    th:nth-child(5), td:nth-child(5),
+    th:nth-child(3), td:nth-child(3) {
+        display: none;
+    }
+}
+
+@media screen and (max-width: 550px) {
+    th:nth-child(1), td:nth-child(1){
+        display: none;
+    }
 }
 
 /*
@@ -299,4 +328,25 @@ input[type="submit"]:hover {
 
 .errorOutput i {
     color: #ef4444;
+}
+
+.successMessage {
+    color:#22c55e;
+    font-size: 0.8rem;
+    letter-spacing: 0.1em;
+}
+
+.successOutput {
+    display: flex;
+    align-items: center;
+    gap: 0.5em;
+    background-color: #152d1e;
+    border: 1px solid #14532d;
+    border-radius: 0.5em;
+    padding: 0.5em;
+    margin-bottom: 2em;
+}
+
+.successOutput i {
+    color: #22c55e;
 }

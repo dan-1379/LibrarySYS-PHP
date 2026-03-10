@@ -1,9 +1,11 @@
 <?php
     include("BookValidator.php");
     $inputErrors = [];
+    $success = "";
 
     function insertBookRecord() {
         global $inputErrors;
+        global $success;
 
         if (isset($_POST['submitBookDetails'])) {
             try {
@@ -68,6 +70,7 @@
                     $stmt->bindValue(':cstatus', $cstatus);
 
                     $stmt->execute();
+                    $success = "Book added successfully!";
                 }
             } catch (PDOException $e) {
                 $title = 'An error has occurred';

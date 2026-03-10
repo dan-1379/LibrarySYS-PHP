@@ -12,15 +12,24 @@
         include_once("functions.php");
         insertBookRecord();
         global $inputErrors;
+        global $success;
     ?>
 
     <div class="formContainer">
         <h2>Add Book</h2>
         <p>Killorglin Library System</p>
+        
         <form action="addBook.php" method="post">
+            <?php if (!empty($success)) : ?>
+                <div class="successOutput">
+                    <i class="fa fa-check-circle"></i>
+                    <span class="successMessage"><?php echo $success; ?></span>
+                </div>
+            <?php endif; ?>
+
             <div class="formGroup">
                 <label for="ctitle">Title</label>
-                <input type="text" name="ctitle" id="" placeholder="Enter title" value="<?php echo htmlspecialchars($_POST['ctitle']) ?>">
+                <input type="text" name="ctitle" id="ctitle" placeholder="Enter title" value="<?php echo htmlspecialchars($_POST['ctitle'] ?? '') ?>">
 
                 <?php if (!empty($inputErrors['ctitle'])): ?>
                     <div class="errorOutput">
@@ -32,7 +41,7 @@
 
             <div class="formGroup">
                 <label for="cauthor">Author</label>
-                <input type="text" name="cauthor" id="" placeholder="Enter author">
+                <input type="text" name="cauthor" id="" placeholder="Enter author" value="<?php echo htmlspecialchars($_POST['cauthor'] ?? '') ?>">
                 
                 <?php if (!empty($inputErrors['cauthor'])): ?>
                     <div class="errorOutput">
@@ -44,7 +53,7 @@
 
             <div class="formGroup">
                 <label for="cdescription">Description</label>
-                <input type="text" name="cdescription" id="" placeholder="Enter description">
+                <input type="text" name="cdescription" id="" placeholder="Enter description" value="<?php echo htmlspecialchars($_POST['cdescription'] ?? '') ?>">
 
                 <?php if (!empty($inputErrors['cdescription'])): ?>
                     <div class="errorOutput">
@@ -56,7 +65,7 @@
 
             <div class="formGroup">
                 <label for="cisbn">ISBN</label>
-                <input type="text" name="cisbn" id="" placeholder="Enter ISBN">
+                <input type="text" name="cisbn" id="" placeholder="Enter ISBN" value="<?php echo htmlspecialchars($_POST['cisbn'] ?? '') ?>">
 
                 <?php if (!empty($inputErrors['cisbn'])): ?>
                     <div class="errorOutput">
@@ -69,7 +78,9 @@
             <div class="formGroup">
                 <label for="cgenre">Genre</label>
                 <select name="cgenre" id="">
-                    <option disabled selected value> -- Select an option -- </option>
+                    <option disabled selected value name="genre"> -- Select an option -- </option>
+                    <!-- https://stackoverflow.com/questions/16458332/how-to-retain-selected-values-in-select-field-after-form-submission -->
+                    
                     <option value="sci-fi">Science Fiction</option>
                     <option value="fantasy">Fantasy</option>
                     <option value="mystery">Mystery</option>
@@ -87,7 +98,7 @@
 
             <div class="formGroup">
                 <label for="cpublisher">Publisher</label>
-                <input type="text" name="cpublisher" id="" placeholder="Enter publisher">
+                <input type="text" name="cpublisher" id="" placeholder="Enter publisher" value="<?php echo htmlspecialchars($_POST['cpublisher'] ?? '') ?>">
 
                 <?php if (!empty($inputErrors['cpublisher'])): ?>
                     <div class="errorOutput">
@@ -99,7 +110,7 @@
 
             <div class="formGroup">
                 <label for="cpublication">Publication</label>
-                <input type="date" name="cpublication" id="">
+                <input type="date" name="cpublication" id="" value="<?php echo htmlspecialchars($_POST['ctitle'] ?? '') ?>">
 
                 <?php if (!empty($inputErrors['cpublication'])): ?>
                     <div class="errorOutput">

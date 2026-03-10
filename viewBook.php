@@ -11,14 +11,14 @@
 
     <table>
             <tr>
-                <th>Book ID</th>
+                <th>ID</th>
                 <th>Title</th>
                 <th>Author</th>
                 <th>Description</th>
                 <th>ISBN</th>
                 <th>Genre</th>
                 <th>Publisher</th>
-                <th>Publication Date</th>
+                <th>Publication</th>
                 <th>Status</th>
             </tr>
 
@@ -26,6 +26,6 @@
                 include_once("functions.php"); 
                 fetchAllBooks();
             ?>
-        </table>
+    </table>
 </body>
 </html>
