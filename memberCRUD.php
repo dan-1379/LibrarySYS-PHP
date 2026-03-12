@@ -33,8 +33,10 @@
         ?>
     </table>
 
-    <div class="formContainer">
-        <form action="memberCRUD.php" method="post">
+    <div class="contentOverlay" id="overlay" onclick="closeEditMenu()"></div>
+
+    <div class="formContainerUpdate" id="updateMemberForm">
+        <form action="memberCRUD.php" method="post" class="">
             <?php if (!empty($success)) : ?>
                 <div class="successOutput">
                     <i class="fa fa-check-circle"></i>
@@ -42,74 +44,124 @@
                 </div>
             <?php endif; ?>
 
-            <label for="cFirstName">First Name</label>
-            <input type="text" name="" id="" placeholder="Enter first name">
+            <div class="formContainerUpdateSections">
+                <div class="formContainerUpdateSplit">
+                    <div class="formGroup">
+                        <label for="cFirstName">First Name</label>
+                        <input type="text" name="cFirstName" id="" placeholder="Enter first name" value="<?php echo htmlspecialchars($_POST['cFirstName'] ?? '') ?>">
+                    </div>
 
-            <label for="cLastName">First Name</label>
-            <input type="text" name="cLastName" id="" placeholder="Enter first name">
+                    <div class="formGroup">
+                        <label for="cLastName">Last Name</label>
+                        <input type="text" name="cLastName" id="" placeholder="Enter last name">
+                    </div>
 
-            <label for="cDOB">DOB</label>
-            <input type="date" name="cDOB" id="">
+                    <div class="formGroup">
+                        <label for="cDOB">DOB</label>
+                        <input type="date" name="cDOB" id="">
+                    </div>
 
-            <label for="cPhone">Phone</label>
-            <input type="tel" name="cPhone" id="">
+                    <div class="formGroup">
+                        <label for="cPhone">Phone</label>
+                        <input type="tel" name="cPhone" id="" placeholder="Enter phone number">
+                    </div>
 
-            <label for="cEmail">Email</label>
-            <input type="email" name="cEmail" id="">
+                    <div class="formGroup">
+                        <label for="cEmail">Email</label>
+                        <input type="email" name="cEmail" id="" placeholder="Enter email">
+                    </div>
 
-            <label for="cAddressLine1">Address Line 1</label>
-            <input type="text" name="cAddressLine1" id="">
+                    <div class="formGroup">
+                        <label for="cAddressLine1">Address Line 1</label>
+                        <input type="text" name="cAddressLine1" id="" placeholder="Enter address line 1">
+                    </div>
+                </div>
 
-            <label for="cAddressLine2">Address Line 2</label>
-            <input type="text" name="cAddressLine2" id="">
+                <div class="formContainerUpdateSplit">
+                    <div class="formGroup">
+                        <label for="cAddressLine2">Address Line 2</label>
+                        <input type="text" name="cAddressLine2" id="" placeholder="Enter address line 2">
+                    </div>
 
-            <label for="cCity">Town/City</label>
-            <input type="text" name="cCity" id="">
+                    <div class="formGroup">
+                        <label for="cCity">Town/City</label>
+                        <input type="text" name="cCity" id="" placeholder="Enter town/city">
+                    </div>
 
-            <label for="cCounty">County</label>
-            <select name="cCounty" id="">
-                <option disabled selected value>-- Select County --</option>
-                <option value="carlow">Carlow</option>
-                <option value="cavan">Cavan</option>
-                <option value="clare">Clare</option>
-                <option value="cork">Cork</option>
-                <option value="donegal">Donegal</option>
-                <option value="dublin">Dublin</option>
-                <option value="galway">Galway</option>
-                <option value="kerry">Kerry</option>
-                <option value="kildare">Kildare</option>
-                <option value="kilkenny">Kilkenny</option>
-                <option value="laois">laois</option>
-                <option value="leitrim">Leitrim</option>
-                <option value="limerick">Limerick</option>
-                <option value="longford">Longford</option>
-                <option value="louth">Louth</option>
-                <option value="mayo">Mayo</option>
-                <option value="meath">Meath</option>
-                <option value="monaghan">Monaghan</option>
-                <option value="offaly">Offaly</option>
-                <option value="roscommon">Roscommon</option>
-                <option value="sligo">Sligo</option>
-                <option value="tipperary">Tipperary</option>
-                <option value="waterford">Waterford</option>
-                <option value="westmeath">Westmeath</option>
-                <option value="wexford">Wexford</option>
-                <option value="wicklow">Wicklow</option>
-            </select>
+                    <div class="formGroup">
+                        <label for="cCounty">County</label>
+                        <select name="cCounty" id="">
+                            <option disabled selected value>-- Select County --</option>
+                            <option value="carlow">Carlow</option>
+                            <option value="cavan">Cavan</option>
+                            <option value="clare">Clare</option>
+                            <option value="cork">Cork</option>
+                            <option value="donegal">Donegal</option>
+                            <option value="dublin">Dublin</option>
+                            <option value="galway">Galway</option>
+                            <option value="kerry">Kerry</option>
+                            <option value="kildare">Kildare</option>
+                            <option value="kilkenny">Kilkenny</option>
+                            <option value="laois">laois</option>
+                            <option value="leitrim">Leitrim</option>
+                            <option value="limerick">Limerick</option>
+                            <option value="longford">Longford</option>
+                            <option value="louth">Louth</option>
+                            <option value="mayo">Mayo</option>
+                            <option value="meath">Meath</option>
+                            <option value="monaghan">Monaghan</option>
+                            <option value="offaly">Offaly</option>
+                            <option value="roscommon">Roscommon</option>
+                            <option value="sligo">Sligo</option>
+                            <option value="tipperary">Tipperary</option>
+                            <option value="waterford">Waterford</option>
+                            <option value="westmeath">Westmeath</option>
+                            <option value="wexford">Wexford</option>
+                            <option value="wicklow">Wicklow</option>
+                        </select>
+                    </div>
 
-            <label for="cEircode">Eircode</label>
-            <input type="text" name="cEircode" id="">
+                    <div class="formGroup">
+                        <label for="cEircode">Eircode</label>
+                        <input type="text" name="cEircode" id="" placeholder="Enter eircode">
+                    </div>
 
-            <label for="cRegistrationDate">Registration Date</label>
-            <input type="date" name="cRegistrationDate" id="">
+                    <div class="formGroup">
+                        <label for="cRegistrationDate">Registration Date</label>
+                        <input type="date" name="cRegistrationDate" id="">
+                    </div>
 
-            <label for="cStatus">County</label>
-            <select name="cStatus" id="">
-                <option disabled selected value>-- Select Status --</option>
-                <option value="A">Active</option>
-                <option value="I">Inactive</option>
-            </select>
+                    <div class="formGroup">
+                        <label for="cStatus">Status</label>
+                        <select name="cStatus" id="">
+                            <option disabled selected value>-- Select Status --</option>
+                            <option value="A">Active</option>
+                            <option value="I">Inactive</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+                <div class="formGroup">
+                    <input type="button" value="Cancel" onclick="closeEditMenu()">
+                    <input type="submit" value="Update Member" name="updateMemberDetails">
+                </div>
         </form>
     </div>
+
+    <script>
+        const overlay = document.getElementById("overlay");
+        const editForm = document.getElementById("updateMemberForm");
+
+        function showEditMenu() {
+            overlay.classList.add("open");
+            editForm.classList.add("open");
+        }
+
+        function closeEditMenu() {
+            overlay.classList.remove("open");
+            editForm.classList.remove("open");
+        }
+    </script>
 </body>
 </html>

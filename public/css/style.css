@@ -415,7 +415,7 @@ input[type="submit"]:hover {
     background-color: #e74c3c;
     color: white;
     border: none;
-     border-radius: 0.5em;
+    border-radius: 0.5em;
 }
 
 .deleteMemberButton:hover {
@@ -428,4 +428,47 @@ input[type="submit"]:hover {
 
 .deleteMemberButton i {
     font-size: 1em;
+}
+
+/*
+    MEMBER CRUD
+*/
+
+.contentOverlay {
+    display: none;
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.85);
+    z-index: 1;
+}
+
+.contentOverlay.open {
+    display: flex;
+}
+
+.formContainerUpdate {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    z-index: 2;
+    background: #0b1520;
+    border-radius: 1em;
+    padding: 2em;
+    width: 60%;
+    transform: translate(-50%, -50%);
+}
+
+.formContainerUpdate.open {
+    display: block;
+}
+
+.formContainerUpdateSections {
+    display: flex;
+    gap: 2em;
+    align-items: flex-start;
+}
+
+.formContainerUpdateSplit {
+    width: 50%;
 }
