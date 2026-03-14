@@ -106,6 +106,13 @@
                     </div>
                 </button>
             </div>
+
+            <div class="lightMode">
+                <button onclick="toggleLightMode()" class="lightModeButton">
+                    <i class="fa fa-sun-o"></i>
+                    <span class="lightModeText">Light Mode</span>
+                </button>
+            </div>
         </nav>  
     </aside>
 
@@ -129,6 +136,31 @@
                 arrowIcon.classList.remove("fa-angle-right");
             }
         }
+
+        function toggleLightMode() {
+            const lightIcon = document.querySelector(".colorMode i");
+            const root = document.documentElement;
+
+            root.classList.toggle("light");
+
+            if (root.classList.contains("light")) {
+                lightIcon.classList.remove("fa-sun-o");
+                lightIcon.classList.add("fa-moon-o");
+            } else {
+                ightIcon.classList.remove("fa-moon-o");
+                ightIcon.classList.add("fa-sun-o");
+            }
+
+            localStorage.setItem('colorMode', document.documentElement.classList.contains('dark') ? 'dark' : 'light');
+        }
+
+        document.addEventListener("DOMContentLoaded", () => {
+            const savedColorMode = localStorage.getItem("colorMode");
+
+            if (savedColorMode === "dark") {
+                toggleLightMode();
+            }
+        })
     </script>
 </body>
 </html>

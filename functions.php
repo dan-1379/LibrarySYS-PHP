@@ -1,5 +1,6 @@
 <?php
     include("BookValidator.php");
+    include("MemberValidator.php");
     $inputErrors = [];
     $success = "";
 
@@ -81,7 +82,8 @@
 
     function fetchAllBooks(){
         try {
-            $pdo = new PDO('mysql:host=localhost;dbname=LibrarySYS;charset=utf8', 'root', '');
+            // $pdo = new PDO('mysql:host=localhost;dbname=LibrarySYS;charset=utf8', 'root', '');
+            $pdo = new PDO('mysql:host=127.0.0.1;dbname=LibrarySYS;charset=utf8', 'root', '');
             $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION); 
 
             $sql = 'SELECT * FROM Books';
@@ -110,7 +112,8 @@
 
     function getTotalBooks() {
         try {
-            $pdo = new PDO('mysql:host=localhost;dbname=LibrarySYS;charset=utf8', 'root', '');
+            // $pdo = new PDO('mysql:host=localhost;dbname=LibrarySYS;charset=utf8', 'root', '');
+            $pdo = new PDO('mysql:host=127.0.0.1;dbname=LibrarySYS;charset=utf8', 'root', '');
             $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION); 
 
             $sql = 'SELECT COUNT(*) FROM Books';
@@ -127,7 +130,8 @@
 
     function fetchAllMembers(){
         try {
-            $pdo = new PDO('mysql:host=localhost;dbname=LibrarySYS;charset=utf8', 'root', '');
+            // $pdo = new PDO('mysql:host=localhost;dbname=LibrarySYS;charset=utf8', 'root', '');
+            $pdo = new PDO('mysql:host=127.0.0.1;dbname=LibrarySYS;charset=utf8', 'root', '');
             $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION); 
 
             $sql = 'SELECT * FROM Members';
@@ -149,8 +153,8 @@
                 echo "<td>{$row['RegistrationDate']}</td>";
                 echo "<td>$statusText</td>";
                 echo "<td><div class='editMember'>";
-                echo "<button onclick='showEditMenu()' class='editMemberButton'><i class='fa fa-edit'></i>EDIT</button>";
-                echo "</td></div>";
+                echo "<button onclick='showEditMenu(this)' class='editMemberButton'><i class='fa fa-edit'></i>EDIT</button>";
+                echo "</div></td>";
                 echo "<div class='deleteMember'>";
                 echo "<td><button onclick = 'deleteMember(this)' class='deleteMemberButton'><i class='fa fa-trash-o'></i>DELETE</button></td>";
                 echo "</div>";
@@ -160,4 +164,109 @@
             $output = 'Unable to connect to the database server: ' . $e->getMessage() . ' in ' . $e->getFile() . ':' . $e->getLine();  
         } 
     }
+
+    function insertMemberRecord() {
+        $inputErrors = [];
+        $success = "";
+
+        if (isset($_POST['updateMemberDetails'])) {
+                $cfirstName = $_POST['cFirstName'] ?? "";
+                $clastName = $_POST['cLastName'] ?? "";
+                $cDOB = $_POST['cDOB'] ?? "";
+                $cPhone = $_POST['cPhone'] ?? "";
+                $cEmail = $_POST['cEmail'] ?? "";
+                $cAddressLine1 = $_POST['cAddressLine1'] ?? "";
+                $cAddressLine2 = $_POST['cAddressLine2'] ?? "";
+                $cCity = $_POST['cCity'] ?? "";
+                $cCounty = $_POST['cCounty'] ?? "";
+                $cEircode = $_POST['cEircode'] ?? "";
+                $cRegistrationDate = $_POST['cRegistrationDate'] ?? "";
+                $cStatus = $_POST['cStatus'] ?? "";
+
+                if (!MemberValidator::isValidName($cfirstName)) {
+                    $inputErrors['cFirstName'] = "Invalid first name.";
+                }
+
+                if (!MemberValidator::isValidName($clastName)) {
+                    $inputErrors['cLastName'] = "Invalid last name.";
+                }
+
+                if (!MemberValidator::isValidDOB($cDOB)) {
+                    $inputErrors['cDOB'] = "Invalid DOB.";
+                }
+
+                $checkPhone = MemberValidator::isValidPhone($cPhone);
+
+                if ($checkPhone != "valid") {
+                    $inputErrors['cPhone'] = $checkPhone;
+                }
+
+                $checkEmail = MemberValidator::IsValidEmail($cEmail);
+
+                if ($checkEmail != "valid") {
+                    $inputErrors['cEmail'] = $checkEmail;
+                }
+
+                if (!MemberValidator::isValidAddressLine($cAddressLine1)) {
+                    $inputErrors['cAddressLine1'] = "Invalid address line 1";
+                }
+
+                if (!MemberValidator::isValidAddressLine($cAddressLine2)) {
+                    $inputErrors['cAddressLine2'] = "Invalid address line 2";
+                }
+
+                if (!MemberValidator::isValidCity($cCity)) {
+                    $inputErrors['cCity'] = "Invalid city";
+                }
+
+                if (!MemberValidator::isValidCounty($cCounty)) {
+                    $inputErrors['cCounty'] = "Invalid county";
+                }
+
+                $checkEircode = MemberValidator::isValidEircode($cEircode);
+
+                if ($checkEircode != "valid") {
+                    $inputErrors['cEircode'] = $checkEircode;
+                }
+                
+                if (empty($inputErrors)) {
+                    try {
+                        // $pdo = new PDO('mysql:host=localhost;dbname=LibrarySYS;charset=utf8', 'root', '');
+                        $pdo = new PDO('mysql:host=127.0.0.1;dbname=LibrarySYS;charset=utf8', 'root', '');
+                        $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+                        $sql = "UPDATE Members SET FirstName = :cfirstName, LastName = :clastName, DOB = :cDOB, Phone = :cPhone,
+                                Email = :cEmail, AddressLine1 = :cAddressLine1, AddressLine2 = :cAddressLine2, City = :cCity,
+                                County = :cCounty, Eircode = :cEircode, RegistrationDate = :cRegistrationDate,Status = :cStatus
+                                WHERE MemberID = :cMemberID";
+
+                        $stmt = $pdo->prepare($sql);
+                        $stmt->bindValue(":cMemberID", $_POST['cMemberID']);
+                        $stmt->bindValue(':cfirstName', $cfirstName);
+                        $stmt->bindValue(':clastName', $clastName);
+                        $stmt->bindValue(':cDOB', $cDOB);
+                        $stmt->bindValue(':cPhone', $cPhone);
+                        $stmt->bindValue(':cEmail', $cEmail);
+                        $stmt->bindValue(':cAddressLine1', $cAddressLine1);
+                        $stmt->bindValue(':cAddressLine2', $cAddressLine2);
+                        $stmt->bindValue(':cCity', $cCity);
+                        $stmt->bindValue(':cCounty', $cCounty);
+                        $stmt->bindValue(':cEircode', $cEircode);
+                        $stmt->bindValue(':cRegistrationDate', $cRegistrationDate);
+                        $stmt->bindValue(':cStatus', $cStatus);
+
+                        $stmt->execute();
+                        $success = "Member updated successfully!";
+            } catch (PDOException $e) {
+                $title = 'An error has occurred';
+                $output = 'Database error: ' . $e->getMessage() . ' in ' . $e->getFile() . ':' . $e->getLine();
+            }
+        }
+    }
+        return ['errors' => $inputErrors, 'success' => $success];
+    }
+
+    // function searchMemberRecords() {
+    //     if (isset($_POST['updateMemberDetails'])) {}
+    // }
 ?>

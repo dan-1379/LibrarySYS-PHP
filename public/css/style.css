@@ -1,6 +1,55 @@
+:root {
+    --body-bg-color:  #0b1520;
+    --text-white-color: white;
+    --text-black-color: black;
+    --aside-background-color:  #0f1923;
+    --aside-border-color: #1e3045;
+    --heading-font-color: #c8a96e;
+    --secondary-heading-color: #6b8099;
+    --nav-elements-color: #d4dde8;
+    --nav-elements-hover: #1d2f42;
+    --lightGrey-border-color: lightgrey;
+    --table-even-color: #f9f9f9;
+    --input-box-placeholder: #3a5068;
+
+    --table-bg-color: white;
+    --table-text-color: black;
+    --table-header-text: white;
+
+    --error-msg-text: #ef4444;
+    --error-message-bg: #2d1515;
+    --error-msg-border: #7f1d1d;
+
+    --success-msg-text:#22c55e;
+    --success-msg-bg: #152d1e;
+    --success-msg-border:#14532d;
+
+    --edit-button: #4a90d9;
+    --delete-button:  #e74c3c;
+}
+
+:root.light {
+    --body-bg-color: #f0f4f8;
+    --text-white-color: black;
+    --text-black-color: white;
+    --aside-background-color: #f8f9fb;
+    --aside-border-color: #dde3ea;
+    --heading-font-color: #a07840;
+    --secondary-heading-color: #4a6070;
+    --nav-elements-color: #1d2f42;
+    --nav-elements-hover: #c8d8e8;
+    --input-box-placeholder: #7a95a8;
+
+    --table-bg-color: white;
+    --table-text-color: #1d2f42;
+    --table-header-text: #1d2f42;
+    --table-even-color: #e8edf2;
+    --lightGrey-border-color: #c8d8e8;
+}
+
 body {
-    background: #0b1520;
-    color: white;
+    background: var(--body-bg-color);
+    color: var(--text-white-color);
     display: flex;
     min-height: 100vh;
 }
@@ -10,8 +59,8 @@ body {
 */
 aside {
     width: 30%;
-    background: #0f1923;
-    border-right: 1px solid #1e3045;
+    background: var(--aside-background-color);
+    border-right: 1px solid var(--aside-border-color);
     margin-right: 2em;
     transition: 0.8s ease;
 }
@@ -38,20 +87,25 @@ aside.collapsed .menuItem button {
     justify-content: center;
 }
 
+aside.collapsed .lightMode {
+    display: flex;
+    justify-content: center;
+}
+
 .logo {
     padding: 1em;
-    border-bottom: 1px solid #1e3045;
+    border-bottom: 1px solid var(--aside-border-color);
     position: relative;
 }
 
 .logo h1 {
     font-size: 1.25rem;
-    color: #c8a96e;
+    color: var(--heading-font-color);
 }
 
 .logo p {
     font-size: 0.9rem;
-    color: #6b8099;
+    color: var(--secondary-heading-color);
     text-transform: uppercase;
     letter-spacing: .10em;
 }
@@ -79,13 +133,13 @@ nav {
 nav a {
     display: flex;
     padding: 1em;
-    color: #d4dde8;
+    color: var(--nav-elements-color);
     font-size: 1em;
     text-decoration: none;
 }
 
 nav a:hover {
-    background: #1d2f42;
+    background: var(--nav-elements-hover);
 }
 
 .menuItem-name {
@@ -104,12 +158,12 @@ nav a:hover {
     border: none;
     font-size: 1em;
     cursor: pointer;
-    background-color: #0f1923;
-    color: white;
+    background-color: var(--aside-background-color);
+    color: var(--text-white-color);
 }
 
 .menuItem button:hover {
-    background: #1d2f42;
+    background-color: var(--nav-elements-hover);
 }
 
 .menuItem.open button svg { 
@@ -119,7 +173,7 @@ nav a:hover {
 
 .submenu {
     display: none;
-    background-color: #0b1520;
+    background-color: var(--body-bg-color);
 }
 
 .menuItem.open .submenu { 
@@ -129,16 +183,34 @@ nav a:hover {
 .submenu a {
     padding: 1em;
     font-size: 0.8em;
-    color: #6b8099;
+    color: var(--secondary-heading-color);
 }
 
 .submenu a:hover { 
-    background: #1d2f42; 
-    color: white;
+    background-color: var(--nav-elements-hover);
+    color: var(--text-white-color);
 }
 
 .logout {
-    border-top: 1px solid #1e3045;
+    border-top: 1px solid var(--aside-border-color);
+}
+
+.lightMode button {
+    display: flex;
+    align-items: center;
+    gap: 2em;
+    padding: 1em;
+    background-color: var(--nav-elements-hover);
+    color: var(--nav-elements-color);
+    border: 1px solid var(--aside-border-color);
+    border-radius: 0.5em;
+    font-size: 0.9em;
+    cursor: pointer;
+    transition: background 0.2s ease;
+}
+
+.lightMode button:hover {
+    background-color: var(--aside-border-color);
 }
 
 /*
@@ -147,13 +219,13 @@ nav a:hover {
 
 .main h1 { 
     font-family: 'Playfair Display', serif; 
-    color: #c8a96e; 
+    color: var(--heading-font-color);
     margin-bottom: 0.5em; 
 }
 
 .main p  { 
     font-size: 0.9rem;
-    color: #6b8099;
+    color: var(--secondary-heading-color);
     letter-spacing: 0.10em;
 }
 
@@ -162,18 +234,19 @@ nav a:hover {
 */
 
 .viewBookTable, .memberCrudTable {
-    color: black;
+    color: var(--table-text-color);
     border-collapse: collapse;
-    background-color: white;
-    width: 90%;
+    background-color: var(--table-bg-color);
+    width: 100%;
     height: fit-content;
     height: 100%;
     overflow: scroll;
+    margin-right: 2em;
 }
 
 .viewBookTable th, .memberCrudTable th {
-    background-color: #1d2f42; 
-    color: white;
+    background-color: var(--nav-elements-hover);
+    color: var(--table-header-text);
     text-align: center;
     padding: 0.5em;
     text-transform: uppercase;
@@ -182,16 +255,16 @@ nav a:hover {
 
 .viewBookTable td, .memberCrudTable td {
     padding: 1em;
-    border-bottom: 1px solid lightgrey;
+    border-bottom: 1px solid var(--light-border-color);
     text-align: center;
 }
 
 .viewBookTable tr:nth-child(even), .memberCrudTable tr:nth-child(even) {
-    background-color: #f9f9f9;
+    background-color: var(--table-even-color);
 }
 
 .viewBookTable tr:hover, .memberCrudTable tr:hover {
-    background-color: lightgrey;
+    background-color: var(--lightGrey-border-color);
     transition: background-color 0.3s ease;
 }
 
@@ -225,8 +298,8 @@ nav a:hover {
 */
 
 .formContainer {
-    background: #0f1923;
-    border: 1px solid #1e3045;
+    background-color: var(--aside-background-color);
+    border: 1px solid var(--aside-border-color);
     border-radius: 1em;
     padding: 2em;
     width: 70%;
@@ -234,13 +307,13 @@ nav a:hover {
 }
 
 .formContainer h2 {
-    color: #c8a96e;
+    color: var(--heading-font-color);
     margin-bottom: 0.25em;
 }
 
 .formContainer p {
     font-size: 0.9rem;
-    color: #6b8099;
+    color: var(--secondary-heading-color);
     letter-spacing: 0.10em;
     text-transform: uppercase;
     margin-bottom: 2em;
@@ -255,16 +328,16 @@ nav a:hover {
 
 .formGroup label {
     font-size: 0.8rem;
-    color: #6b8099;
+    color: var(--secondary-heading-color);
     text-transform: uppercase;
     letter-spacing: 0.10em;
 }
 
 .formGroup input, .formGroup select {
-    background: #0b1520;
-    border: 1px solid #1e3045;
+    background-color: var(--body-bg-color);
+    border: 1px solid var(--aside-border-color);
     border-radius: 0.5em;
-    color: white;
+    color: var(--text-white-color);
     padding: 0.75em 1em;
     font-size: 0.9em;
     outline: none;
@@ -274,15 +347,15 @@ nav a:hover {
 }
 
 .formGroup input::placeholder {
-    color: #3a5068;
+    color: var(--input-box-placeholder);
 }
 
 .formGroup input:focus, .formGroup select:focus {
-    border-color: #c8a96e;
+    border-color: var(--heading-font-color);
 }
 
 .formGroup select option {
-    background: #0f1923;
+    background-color: var(--aside-background-color);
 }
 
 /*https://stackoverflow.com/questions/14946091/are-there-any-style-options-for-the-html5-date-picker*/
@@ -295,9 +368,9 @@ input[type="submit"] {
     width: 100%;
     padding: 0.8em;
     margin-top: 0.5em;
-    background: #c8a96e;
-    color: #1d2f42;
-    border: 1px solid #c8a96e;
+    background-color: var(--heading-font-color);
+    color: var(--nav-elements-hover);
+    border: 1px solid var(--heading-font-color);
     border-radius: 0.5em;
     font-size: 1em;
     text-transform: uppercase;
@@ -306,12 +379,12 @@ input[type="submit"] {
 }
 
 input[type="submit"]:hover {
-    background: #c8a96e;
-    color: #0b1520;
+    background-color: var(--heading-font-color);
+    color: var(--body-bg-color);
 }
 
 .formContainer .formGroup .errorMessage {
-    color: #ef4444;
+    color: var(--error-bg-msg);
     font-size: 0.8rem;
     letter-spacing: 0.1em;
 }
@@ -320,18 +393,18 @@ input[type="submit"]:hover {
     display: flex;
     align-items: center;
     gap: 0.5em;
-    background-color: #2d1515;
-    border: 1px solid #7f1d1d;
+    background-color: var(--error-message-bg);
+    border: 1px solid var(--error-msg-border);
     border-radius: 0.5em;
     padding: 0.5em;
 }
 
 .errorOutput i {
-    color: #ef4444;
+    color: var(--error-msg-text);
 }
 
 .successMessage {
-    color:#22c55e;
+    color: var(--success-msg-text);
     font-size: 0.8rem;
     letter-spacing: 0.1em;
 }
@@ -340,15 +413,15 @@ input[type="submit"]:hover {
     display: flex;
     align-items: center;
     gap: 0.5em;
-    background-color: #152d1e;
-    border: 1px solid #14532d;
+    background-color: var(--success-msg-bg);
+    border: 1px solid var(--success-msg-border);
     border-radius: 0.5em;
     padding: 0.5em;
     margin-bottom: 2em;
 }
 
 .successOutput i {
-    color: #22c55e;
+    color: var(--success-msg-text);
 }
 
 /*
@@ -389,7 +462,7 @@ input[type="submit"]:hover {
     align-items: center;
     gap: 0.5em;
     padding: 0.8em;
-    background-color: #4a90d9;
+    background-color: var(--edit-button);
     color: white;
     border: none;
     border-radius: 0.5em;
@@ -412,7 +485,7 @@ input[type="submit"]:hover {
     align-items: center;
     gap: 0.5em;
     padding: 0.8em;
-    background-color: #e74c3c;
+    background-color: var(--delete-button);
     color: white;
     border: none;
     border-radius: 0.5em;
@@ -452,7 +525,7 @@ input[type="submit"]:hover {
     top: 50%;
     left: 50%;
     z-index: 2;
-    background: #0b1520;
+    background-color: var(--body-bg-color);
     border-radius: 1em;
     padding: 2em;
     width: 60%;
@@ -471,4 +544,49 @@ input[type="submit"]:hover {
 
 .formContainerUpdateSplit {
     width: 50%;
+}
+
+.memberAddSearch {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 1em;
+}
+
+.addMember button {
+    display: flex;
+    align-items: center;
+    gap: 1em;
+    padding: 1em 2em;
+    background-color: var(--heading-font-color);
+    color: var(--nav-elements-hover);
+    border: none;
+    border-radius: 0.5em;
+    font-size: 0.9em;
+    font-weight: bold;
+    letter-spacing: 0.05em;
+    cursor: pointer;
+}
+
+.addMember button:active {
+    transform: scale(0.97);
+}
+
+.searchMember input {
+    background-color: var(--aside-background-color);
+    border: 1px solid var(--aside-border-color);
+    border-radius: 0.5em;
+    color: var(--text-white-color);
+    padding: 1em 2em;
+    font-size: 0.9em;
+    outline: none;
+    transition: border-color 0.2s ease;
+}
+
+.searchMember input::placeholder {
+    color: var(--input-box-placeholder);
+}
+
+.searchMember input:focus {
+    border-color: var(--heading-font-color);
 }
