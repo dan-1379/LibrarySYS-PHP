@@ -1,6 +1,56 @@
 <?php
-ini_set('display_errors', 1);
-error_reporting(E_ALL);
+    ini_set('display_errors', 1);
+    error_reporting(E_ALL);
+
+    require_once("config/config.php");
+
+    $inputErrors = [];
+    $success = "";
+    
+    if (isset($_POST["updateMemberDetails"])) {
+        $cfirstName = $_POST['cFirstName'] ?? "";
+        $clastName = $_POST['cLastName'] ?? "";
+        $cDOB = $_POST['cDOB'] ?? "";
+        $cPhone = $_POST['cPhone'] ?? "";
+        $cEmail = $_POST['cEmail'] ?? "";
+        $cAddressLine1 = $_POST['cAddressLine1'] ?? "";
+        $cAddressLine2 = $_POST['cAddressLine2'] ?? "";
+        $cCity = $_POST['cCity'] ?? "";
+        $cCounty = $_POST['cCounty'] ?? "";
+        $cEircode = $_POST['cEircode'] ?? "";
+        $cRegistrationDate = $_POST['cRegistrationDate'] ?? "";
+        $cStatus = $_POST['cStatus'] ?? "";
+        $cID = (int) $_POST['cMemberID'] ?? 0;
+
+        $member = new Member($cfirstName, $clastName, $cDOB, $cPhone, $cEmail, $cAddressLine1, $cAddressLine2, $cCity,
+                             $cCounty, $cEircode, $cRegistrationDate, $cStatus, $cID);
+        $inputErrors = $libraryService->updateMember($member);
+
+        if (empty($inputErrors)) {
+            header("Location: memberCRUD.php");
+        }
+    } else if(isset($_POST["addMemberDetails"])) {
+        $cfirstName = $_POST['cFirstName'] ?? "";
+        $clastName = $_POST['cLastName'] ?? "";
+        $cDOB = $_POST['cDOB'] ?? "";
+        $cPhone = $_POST['cPhone'] ?? "";
+        $cEmail = $_POST['cEmail'] ?? "";
+        $cAddressLine1 = $_POST['cAddressLine1'] ?? "";
+        $cAddressLine2 = $_POST['cAddressLine2'] ?? "";
+        $cCity = $_POST['cCity'] ?? "";
+        $cCounty = $_POST['cCounty'] ?? "";
+        $cEircode = $_POST['cEircode'] ?? "";
+        $cRegistrationDate = $_POST['cRegistrationDate'] ?? "";
+        $cStatus = $_POST['cStatus'] ?? "";
+        $cID = (int) $_POST['cMemberID'] ?? 0;
+
+        $member = new Member($cfirstName, $clastName, $cDOB, $cPhone, $cEmail, $cAddressLine1, $cAddressLine2, $cCity,
+                             $cCounty, $cEircode, $cRegistrationDate, $cStatus, $cID);
+        $inputErrors = $libraryService->addMember($member);
+    }
+
+    $searchMember = $_POST['cSearchMember'] ?? '';
+    $members = $libraryService->searchMembers($searchMember);
 ?>
 
 <!DOCTYPE html>
@@ -13,13 +63,7 @@ error_reporting(E_ALL);
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <?php 
-        include_once("inc/navMenu.php"); 
-        include_once("functions.php");
-        $result = insertMemberRecord();
-        $inputErrors = $result['errors'];
-        $success = $result['success'];
-    ?>
+    <?php include_once("inc/navMenu.php"); ?>
 
     <main class="memberMain">
         <div class="memberAddSearch">
@@ -28,8 +72,8 @@ error_reporting(E_ALL);
             </div>
 
             <div class="searchMember">
-                <form action="">
-                    <input type="text" name="" id="" placeholder="Search library records...">
+                <form action="memberCRUD.php" method="post">
+                    <input type="text" name="cSearchMember" id="cSearchMember" placeholder="Search library records...">
                 </form>
             </div>
         </div>
@@ -51,9 +95,31 @@ error_reporting(E_ALL);
                     <th>Delete</th>
                 </tr>
 
-                <?php 
-                    fetchAllMembers();
-                ?>
+                <?php foreach($members as $member) : ?>
+                    <?php $statusText = ($member->getStatus() === 'A') ? 'Active' : 'Inactive'; ?>
+                    <tr>
+                        <td><?php echo $member->getId(); ?></td>
+                        <td><?php echo $member->getFirstName() . ' ' . $member->getLastName();; ?></td>
+                        <td><?php echo $member->getDob(); ?></td>
+                        <td><?php echo $member->getPhone(); ?></td>
+                        <td><?php echo $member->getEmail(); ?></td>
+                        <td><?php echo $member->getAddressLine1() . ', ' . $member->getAddressLine2() . ', ' . $member->getCity(); ?></td>
+                        <td><?php echo $member->getCounty(); ?></td>
+                        <td><?php echo $member->getEircode(); ?></td>
+                        <td><?php echo $member->getRegistrationDate(); ?></td>
+                        <td><?php echo $statusText ?></td>
+                        <td>
+                            <div class="editMember">
+                                <button onclick='showEditMenu(this)' class='editMemberButton'><i class='fa fa-edit'></i>EDIT</button>
+                            </div>
+                        </td>
+                        <td>
+                            <div class='deleteMember'>
+                                <button onclick = 'deleteMember(this)' class='deleteMemberButton'><i class='fa fa-trash-o'></i>DELETE</button>
+                            </div>
+                        </td>
+                    </tr>
+                <?php endforeach; ?>
             </table>
         </div>
     </main>
@@ -248,71 +314,13 @@ error_reporting(E_ALL);
 
                 <div class="formGroup">
                     <input type="button" value="Cancel" onclick="closeEditMenu()">
-                    <input type="submit" value="Update Member" name="updateMemberDetails">
+                    <input type="submit" value="Update Member" name="updateMemberDetails" id="submitMemberDetails">
                 </div>
         </form>
     </div>
-
+    
+    <script src="public/js/script.js"></script>
     <script>
-        const overlay = document.getElementById("overlay");
-        const editForm = document.getElementById("updateMemberForm");
-
-        function showEditMenu(editButton) {
-            // https://www.w3schools.com/jsref/met_element_closest.asp
-            const row = editButton.closest("tr");
-            const cells = row.querySelectorAll("td");
-
-            const nameSections = cells[1].innerText.split(" ");
-
-            document.getElementById('cFirstName').value = nameSections[0];
-            document.getElementById('cLastName').value = nameSections[1];
-
-            document.getElementById('cMemberID').value = cells[0].innerText;
-            document.getElementById('cDOB').value = cells[2].innerText;
-            document.getElementById('cPhone').value = cells[3].innerText;
-            document.getElementById('cEmail').value = cells[4].innerText;
-
-            const addressSections = cells[5].innerText.split(", ");
-
-            document.getElementById('cAddressLine1').value = addressSections[0];
-            document.getElementById('cAddressLine2').value = addressSections[1];
-            document.getElementById('cCity').value = addressSections[2];
-
-            document.getElementById('cCounty').value = cells[6].innerText.toLowerCase();
-            document.getElementById('cEircode').value = cells[7].innerText;
-            document.getElementById('cRegistrationDate').value = cells[8].innerText;
-            document.getElementById('cStatus').value = cells[9].innerText === 'Active' ? 'A' : 'I';
-
-            overlay.classList.add("open");
-            editForm.classList.add("open");
-        }
-
-        function closeEditMenu() {
-            overlay.classList.remove("open");
-            editForm.classList.remove("open");
-
-            const errorOutputs = document.querySelectorAll(".errorOutput");
-            errorOutputs.forEach(error => error.remove());
-        }
-
-        function openAddMenu() {
-            document.getElementById('cFirstName').value = "";
-            document.getElementById('cLastName').value = "";
-            document.getElementById('cDOB').value = "";
-            document.getElementById('cPhone').value = "";
-            document.getElementById('cEmail').value = "";
-            document.getElementById('cAddressLine1').value = "";
-            document.getElementById('cAddressLine2').value = "";
-            document.getElementById('cCity').value = "";
-            document.getElementById('cCounty').value = "";
-            document.getElementById('cEircode').value = "";
-            document.getElementById('cRegistrationDate').value = "";
-            document.getElementById('cStatus').value = "";
-
-            overlay.classList.add("open");
-            editForm.classList.add("open");
-        }
-
         <?php if (!empty($inputErrors)): ?>
             overlay.classList.add("open");
             editForm.classList.add("open");

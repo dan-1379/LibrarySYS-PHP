@@ -1,9 +1,17 @@
+<?php 
+    error_reporting(E_ALL);
+    ini_set('display_errors', 1);
+
+    require_once("config/config.php");
+    $books = $libraryService->getAllBooks();
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>View Book</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -22,10 +30,19 @@
                 <th>Status</th>
             </tr>
 
-            <?php 
-                include_once("functions.php"); 
-                fetchAllBooks();
-            ?>
+            <?php foreach($books as $book) :  ?>
+                <tr>
+                    <td><?php echo $book->getId(); ?></td>
+                    <td><?php echo $book->getTitle(); ?></td>
+                    <td><?php echo $book->getAuthor(); ?></td>
+                    <td><?php echo $book->getDescription(); ?></td>
+                    <td><?php echo $book->getIsbn(); ?></td>
+                    <td><?php echo $book->getGenre(); ?></td>
+                    <td><?php echo $book->getPublisher(); ?></td>
+                    <td><?php echo $book->getPublicationDate(); ?></td>
+                    <td><?php echo $book->getStatus(); ?></td>
+                </tr>
+            <?php endforeach; ?>
     </table>
 </body>
 </html>

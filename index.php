@@ -1,3 +1,8 @@
+<?php 
+    require_once("config/config.php");
+    $totalBooks = $libraryService->getTotalBooks();
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -18,7 +23,7 @@
 
         <div class="totalBooks">
             <h2>Total Books</h2>
-            <p><?php echo getTotalBooks() . " books"; ?></p>
+            <p><?php echo $totalBooks . " books"; ?></p>
         </div>
     </main>
 </body>
