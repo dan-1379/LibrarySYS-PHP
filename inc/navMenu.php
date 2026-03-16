@@ -84,6 +84,7 @@
                     <div class="submenu">
                         <a href="#">Process Loan</a>
                         <a href="#">Process Return</a>
+                        <a href="#">Forgive Fine</a>
                     </div>
                 </div>
             <?php endif; ?>

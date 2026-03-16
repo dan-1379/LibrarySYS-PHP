@@ -137,5 +137,18 @@
 
             return $members;
         }
+
+        public function alterMemberStatus(Member $member) : void {
+            try {
+                $sql = "UPDATE Members SET Status = 'I' WHERE MemberID = :cMemberID";
+
+                $stmt = $this->pdo->prepare($sql);
+                $stmt->bindValue(':cMemberID', $member->getId());
+
+                $stmt->execute();
+            } catch (PDOException $e) {
+                throw new Exception("Error updating member: " . $e->getMessage());
+            }
+        }
     }
 ?>

@@ -183,5 +183,9 @@
         public function searchMembers(string $searchKey) : array {
             return $this->memberRepo->searchMember($searchKey);
         }
+
+        public function alterMemberStatus(Member $member) : void {
+            $this->memberRepo->alterMemberStatus($member);
+        }
     }
 ?>

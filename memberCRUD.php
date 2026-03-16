@@ -49,6 +49,15 @@
         $inputErrors = $libraryService->addMember($member);
     }
 
+    if (isset($_POST["deleteMember"])) {
+        $id = $_POST['cMemberID'];
+
+        // echo "<script>alert(`You are now deleting member ${id}`)</script>";
+
+        $member = new Member('', '', '', '', '', '', '', '', '', '', '', '', $id);
+        $libraryService->alterMemberStatus($member);
+    }
+
     $searchMember = $_POST['cSearchMember'] ?? '';
     $members = $libraryService->searchMembers($searchMember);
 ?>
@@ -114,9 +123,12 @@
                             </div>
                         </td>
                         <td>
-                            <div class='deleteMember'>
-                                <button onclick = 'deleteMember(this)' class='deleteMemberButton'><i class='fa fa-trash-o'></i>DELETE</button>
-                            </div>
+                            <form action="memberCRUD.php" method="post">
+                                <div class='deleteMember'>
+                                    <input type="hidden" name="cMemberID" value="<?php echo $member->getId(); ?>">
+                                    <button onclick = 'deleteMember(this)' class='deleteMemberButton' name="deleteMember"><i class='fa fa-trash-o'></i>DELETE</button>
+                                </div>
+                            </form>
                         </td>
                     </tr>
                 <?php endforeach; ?>
@@ -324,6 +336,11 @@
         <?php if (!empty($inputErrors)): ?>
             overlay.classList.add("open");
             editForm.classList.add("open");
+
+            <?php if (isset($_POST['addMemberDetails'])): ?>
+                document.getElementById("submitMemberDetails").value = "Add Member";
+                document.getElementById("submitMemberDetails").name = "addMemberDetails";
+            <?php endif; ?>
         <?php endif; ?>
     </script>
 </body>
