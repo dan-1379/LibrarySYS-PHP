@@ -45,6 +45,14 @@
     --table-header-text: #1d2f42;
     --table-even-color: #e8edf2;
     --lightGrey-border-color: #c8d8e8;
+
+    --error-msg-text: #b91c1c;
+    --error-message-bg: #fee2e2;
+    --error-msg-border: #fca5a5;
+
+    --success-msg-text: #15803d;
+    --success-msg-bg: #dcfce7;
+    --success-msg-border: #86efac;
 }
 
 body {
@@ -304,6 +312,7 @@ nav a:hover {
     padding: 2em;
     width: 70%;
     height: fit-content;
+    margin-right: 2em;
 }
 
 .formContainer h2 {
@@ -333,7 +342,7 @@ nav a:hover {
     letter-spacing: 0.10em;
 }
 
-.formGroup input, .formGroup select {
+.formGroup input, .formGroup select, .searchMember, .searchISBN {
     background-color: var(--body-bg-color);
     border: 1px solid var(--aside-border-color);
     border-radius: 0.5em;
@@ -589,4 +598,85 @@ input[type="submit"]:hover {
 
 .searchMember input:focus {
     border-color: var(--heading-font-color);
+}
+
+/*
+    PROCESS LOAN
+*/
+
+.processLoansMain {
+    display: flex;
+    width: max-content;
+}
+
+.memberContainer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 2em;
+    border: 1px solid var(--aside-background-color);
+    border-radius: 1em;
+    background-color: var(--aside-background-color);
+    margin-bottom: 0.5em;
+    transition: 0.5s ease;
+}
+
+.memberContainer:hover {
+    background-color: var(--nav-elements-hover);
+}
+
+.memberCardLeft {
+    display: flex;
+    align-items: center;
+    gap: 1em;
+}
+
+.memberIcon {
+    width: 4em;
+    height: 4em;
+    border-radius: 50%;
+    background-color: var(--nav-elements-color);
+    border: 1ox solid var(--aside-border-color);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-black-color);
+    font-size: 1em;
+}
+
+.memberCardInfo {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5em;
+}
+
+.memberCardName {
+    margin: 0;
+    font-size: 1.2em;
+    font-weight: bold;
+}
+
+.memberCardId {
+    font-size: 1em;
+    color: var(--secondary-heading-color);
+}
+
+.memberCardActiveStatus {
+    padding: 1em 1.5em;
+    border-radius: 0.1em;
+    font-size: 0.9em;
+    font-weight: bold;
+    background: var(--success-msg-bg);
+    color: var(--success-msg-text);
+    border: 1px solid var(--success-msg-border);
+}
+
+.memberCardInactiveStatus {
+    padding: 1em 1.5em;
+    border-radius: 0.1em;
+    font-size: 0.9em;
+    font-weight: bold;
+    background: var(--error-message-bg);
+    color: var(--error-msg-text);
+    border: 1px solid var(--error-msg-border);
 }

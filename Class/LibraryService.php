@@ -68,15 +68,15 @@
             $inputErrors = [];
 
             if (!MemberValidator::isValidName($member->getFirstName())) {
-                $inputErrors['cFirstName'] = "Invalid first name.";
+                $inputErrors['cFirstName'] = "Invalid first name";
             }
 
             if (!MemberValidator::isValidName($member->getLastName())) {
-                $inputErrors['cLastName'] = "Invalid last name.";
+                $inputErrors['cLastName'] = "Invalid last name";
             }
 
             if (!MemberValidator::isValidDOB($member->getDob())) {
-                $inputErrors['cDOB'] = "Invalid DOB.";
+                $inputErrors['cDOB'] = "Invalid DOB";
             }
 
             $checkPhone = MemberValidator::isValidPhone($member->getPhone());
@@ -111,6 +111,14 @@
 
             if ($checkEircode != "valid") {
                 $inputErrors['cEircode'] = $checkEircode;
+            }
+
+            if (!MemberValidator::isValidRegistrationDate($member->getRegistrationDate())) {
+                $inputErrors['cRegistrationDate'] = "Invalid registration date";
+            }
+
+            if (!MemberValidator::isValidStatus($member->getStatus())) {
+                $inputErrors['cStatus'] = "Invalid status";
             }
 
             if (empty($inputErrors)) {

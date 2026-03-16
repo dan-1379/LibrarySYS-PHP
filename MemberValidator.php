@@ -222,5 +222,35 @@
 
             return "valid";
         }
+
+        /**
+        * Determines if the provided registration date is valid.
+        * @param string $registrationDate - The registration date of the member to be validated.
+        * @return bool - True if the registration date is the current date or a date before the current date.
+        */
+        public static function isValidRegistrationDate(string $registrationDate) : bool {
+            $date = DateTime::createFromFormat('Y-m-d', $registrationDate);
+
+            if (!$date) {
+                return false;
+            }
+
+            $today = new DateTime();
+
+            return $date <= $today;
+        }
+
+        /**
+         * Determines if the provided status is valid.
+         * @param string $status - The status of the book.
+         * @return bool - True if the status is:
+         *      A (Active)
+         *      I (Inactive)
+         * otherwise false.
+         */
+        public static function isValidStatus(string $status) : bool {
+            $validStatus = ['A', 'I'];
+            return in_array($status, $validStatus);
+        }
     } 
 ?>
