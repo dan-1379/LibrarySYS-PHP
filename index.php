@@ -12,10 +12,7 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <?php 
-        include_once("inc/navMenu.php"); 
-        include_once("functions.php"); 
-    ?>
+    <?php include_once("inc/navMenu.php"); ?>
 
     <main class="main">
         <h1>Killorglin Library Management System</h1>
