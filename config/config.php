@@ -2,16 +2,16 @@
     // Configuration files required
     require_once("db.php");
 
-    require_once("class/Book.php");
-    require_once("class/Member.php");
+    require_once("Class/Book.php");
+    require_once("Class/Member.php");
 
-    require_once("class/BookRepository.php");
-    require_once("class/MemberRepository.php");
+    require_once("Class/BookRepository.php");
+    require_once("Class/MemberRepository.php");
 
-    require_once("class/LibraryService.php");
+    require_once("Class/LibraryService.php");
 
-    require_once("class/BookValidator.php");
-    require_once("class/MemberValidator.php");
+    require_once("BookValidator.php");
+    require_once("MemberValidator.php");
 
     session_start();
     $_SESSION['username'] = "manager";
