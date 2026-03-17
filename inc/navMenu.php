@@ -24,6 +24,18 @@
             <h1>Killorglin Library</h1>
             <p>Management System</p>
             <i class="fa fa-angle-left" onclick="toggleAside()"></i>
+
+            <div class="systemUserContainer">
+                <div class="userCardLeft">
+                    <div class="userIcon">
+                        <i class="fa fa-user"></i>
+                    </div>
+
+                    <div class="userCardInfo">
+                        <h3 class="userCardName"><?php echo ucfirst($_SESSION['username']) ?></h3>
+                    </div>
+                </div>
+            </div>
         </div>
 
         <nav>

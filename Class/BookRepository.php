@@ -61,5 +61,39 @@
 
             $stmt->execute();
         }
+
+        public function searchBooks(string $searchKey) {
+            if (empty($searchKey)) {
+                return $this->getAllBooks();
+            }
+
+            $sql = "SELECT * FROM Books WHERE Title LIKE :search OR Author LIKE :search OR Description LIKE :search OR
+                    ISBN LIKE :search OR Genre LIKE :search OR Publisher LIKE :search OR PublicationDate LIKE :search OR
+                    Status LIKE :search";
+
+            $stmt = $this->pdo->prepare($sql);
+            $stmt->bindValue(":search", $searchKey);
+            $stmt->execute();
+
+            $rows = $stmt->fetchAll();
+
+            $books = [];
+
+            foreach($rows as $row) {
+                $books[] = new Book (
+                        $row['Title'],
+                        $row['Author'],
+                        $row['Description'],
+                        $row['ISBN'],
+                        $row['Genre'],
+                        $row['Publisher'],
+                        $row['Publication'],
+                        $row['Status'],
+                        $row['BookID']
+                );
+            }
+
+            return $books;
+        }
     }
 ?>

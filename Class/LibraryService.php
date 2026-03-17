@@ -64,6 +64,10 @@
             return $this->bookRepo->getTotalCount();
         }
 
+        public function searchBooks(string $searchKey) : array {
+            return $this->bookRepo->searchBooks($searchKey);
+        }
+
         public function addMember(Member $member) : array {
             $inputErrors = [];
 
