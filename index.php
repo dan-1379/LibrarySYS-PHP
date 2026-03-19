@@ -14,7 +14,6 @@
 <body>
     <?php 
         include_once("inc/navMenu.php"); 
-        include_once("functions.php"); 
     ?>
 
     <main class="main">

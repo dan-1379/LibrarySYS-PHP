@@ -101,41 +101,36 @@
 
         public function searchMember(string $searchKey) {
             if (empty($searchKey)) {
-                return $this->getAllMembers();
+                return null;
             }
 
-            $sql = "SELECT * FROM Members WHERE FirstName LIKE :search OR LastName LIKE :search OR DOB LIKE :search OR
-                    Phone LIKE :search OR Email LIKE :search OR AddressLine1 LIKE :search OR AddressLine2 LIKE :search OR
-                    City LIKE :search OR County LIKE :search OR Eircode LIKE :search OR RegistrationDate LIKE :search OR
-                    Status LIKE :search";
+            $sql = "SELECT * FROM Members WHERE MemberID = :search";
 
             $stmt = $this->pdo->prepare($sql);
             $stmt->bindValue(":search", $searchKey);
             $stmt->execute();
 
-            $rows = $stmt->fetchAll();
+            $row = $stmt->fetch();
 
-            $members = [];
-
-            foreach($rows as $row) {
-                $members[] = new Member (
-                        $row['FirstName'],
-                        $row['LastName'],
-                        $row['DOB'],
-                        $row['Phone'],
-                        $row['Email'],
-                        $row['AddressLine1'],
-                        $row['AddressLine2'],
-                        $row['City'],
-                        $row['County'],
-                        $row['Eircode'],
-                        $row['RegistrationDate'],
-                        $row['Status'],
-                        $row['MemberID']
-                );
+            if (!$row) {
+                return null;
             }
 
-            return $members;
+            return new Member (
+                    $row['FirstName'],
+                    $row['LastName'],
+                    $row['DOB'],
+                    $row['Phone'],
+                    $row['Email'],
+                    $row['AddressLine1'],
+                    $row['AddressLine2'],
+                    $row['City'],
+                    $row['County'],
+                    $row['Eircode'],
+                    $row['RegistrationDate'],
+                    $row['Status'],
+                    $row['MemberID']
+            );
         }
 
         public function alterMemberStatus(Member $member) : void {

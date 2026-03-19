@@ -7,11 +7,27 @@
     $searchMember = $_POST['cSearchMember'] ?? '';
     $searchBook = $_POST['cSearchISBN'] ?? '';
 
-    $members = $libraryService->searchMembers($searchMember);
-    $allMembers = $libraryService->getAllMembers();
+    $member = null;
+    $error= null;
+    $book = null;
 
-    $books = $libraryService->searchBooks($searchBook);
-    $allBooks = $libraryService->getAllBooks();
+    if (!empty($searchMember)) {
+        try {
+            $member = $libraryService->searchMembers($searchMember);
+            $_SESSION['Member'] = $member;
+        } catch (InvalidArgumentException $ex) {
+            $error = $ex->getMessage();
+        }
+    }
+
+    if (!empty($searchBook)) {
+        try {
+            $book = $libraryService->searchBooks($searchBook);
+            $_SESSION['BooksInCart'][] = $book;
+        } catch (InvalidArgumentException $ex) {
+            $error = $ex->getMessage();
+        }
+    }
 ?>
 
 <!DOCTYPE html>
@@ -27,6 +43,69 @@
     <?php include_once("inc/navMenu.php"); ?>
 
     <main class="processLoanMain">
+        <div class="formContainer">
+            <h2>Search Members</h2>
+
+            <form action="processLoan.php" method="post">
+                <input type="text" name="cSearchMember" id="cSearchMember" class="searchMember" placeholder="Search member by ID...">
+            </form>
+
+            <?php if($error) : ?>
+                <div class="errorOutput">
+                    <i class="fa fa-exclamation-triangle"></i>
+                    <span class="errorMessage"><?php echo $error; ?></span>
+                </div>
+            <?php endif; ?>
+
+            <?php if($member) : ?>
+            <div class="memberContainer">
+                    <div class="memberCardLeft">
+                        <div class="memberIcon">
+                            <i class="fa fa-user"></i>
+                        </div>
+
+                        <div class="memberCardInfo">
+                            <h3 class="memberCardName"><?php echo $member->getFirstName() . ' ' . $member->getLastName() ?></h3>
+                            <span class="memberCardId"><?php echo "ID:" . $member->getId(); ?></span>
+                        </div>
+                    </div>
+
+                    <div class="memberCardRight">
+                        <span class="<?php echo $member->getStatus() === 'A' ? "memberCardActiveStatus" : "memberCardInactiveStatus"?>"><?php echo $member->getStatus() === 'A' ? "Active" : "Inactive"; ?></span>
+                    </div>
+                </div>
+            <?php endif; ?>
+        </div>
+
+        <div class="formContainer">
+            <h2>Search Books</h2>
+
+            <form action="processLoan.php" method="post">
+                <input type="text" name="cSearchISBN" id="cSearchISBN" class="searchISBN" placeholder="Search ISBN...">
+            </form>
+
+            <?php if($book) : ?>
+                <div class="memberContainer">
+                    <div class="memberCardLeft">
+                        <div class="memberIcon">
+                            <i class="fa fa-book"></i>
+                        </div>
+
+                        <div class="memberCardInfo">
+                            <h3 class="memberCardName"><?php echo $book->getTitle() ?></h3>
+                            <span class="memberCardId"><?php echo "ID:" . $book->getISBN(); ?></span>
+                        </div>
+                    </div>
+
+                    <div class="memberCardRight">
+                        <span class="<?php echo $book->getStatus() === 'A' ? "memberCardActiveStatus" : "memberCardInactiveStatus"?>"><?php echo $book->getStatus() === 'A' ? "Active" : "Inactive"; ?></span>
+                    </div>
+                </div>
+            <?php endif; ?>
+        </div>
+    </main>
+
+    <!-- <main class="processLoanMain">
         <div class="formContainerInfo">
             <div class="formContainerMember">
                 <div class="formContainerMemberHeader">
@@ -132,6 +211,6 @@
                     </div>
             <?php endif; ?>
         </div>
-    </main>
+    </main> -->
 </body>
 </html>

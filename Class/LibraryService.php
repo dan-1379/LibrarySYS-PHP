@@ -64,7 +64,11 @@
             return $this->bookRepo->getTotalCount();
         }
 
-        public function searchBooks(string $searchKey) : array {
+        public function searchBooks(string $searchKey) : ?Book {
+            if (!BookValidator::isValidISBN($searchKey)) {
+                throw new InvalidArgumentException("Not a valid ISBN. Please try again.");
+            }
+
             return $this->bookRepo->searchBooks($searchKey);
         }
 
@@ -192,7 +196,11 @@
             return $this->memberRepo->getAllMembers();
         }
 
-        public function searchMembers(string $searchKey) : array {
+        public function searchMembers(string $searchKey) : ?Member {
+            if (!MemberValidator::isValidID($searchKey)) {
+                throw new InvalidArgumentException("Not a valid ID. Please try again.");
+            }
+
             return $this->memberRepo->searchMember($searchKey);
         }
 
