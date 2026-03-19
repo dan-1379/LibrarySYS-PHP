@@ -58,8 +58,12 @@
         $libraryService->alterMemberStatus($member);
     }
 
+    $members = $libraryService->getAllMembers();
     $searchMember = $_POST['cSearchMember'] ?? '';
-    $members = $libraryService->searchMembers($searchMember);
+
+    if (!empty($searchMember)) {
+        $members = $libraryService->searchMembers($searchMember);
+    }
 ?>
 
 <!DOCTYPE html>

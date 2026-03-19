@@ -101,6 +101,10 @@ aside.collapsed .lightMode {
     justify-content: center;
 }
 
+aside.collapsed .systemUserContainer {
+    justify-content: center;
+}
+
 .logo {
     padding: 1em;
     border-bottom: 1px solid var(--aside-border-color);
@@ -151,6 +155,10 @@ aside.collapsed .lightMode {
     align-items: center;
     justify-content: center;
     font-size: 0.9em;
+}
+
+aside.collapsed .userIcon i {
+    text-align: center;
 }
 
 .userCardName {
@@ -638,6 +646,36 @@ input[type="submit"]:hover {
     PROCESS LOAN
 */
 
+.processLoanMain {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5em;
+    padding: 2em;
+    width: 100%;
+}
+
+.formContainer {
+    background-color: var(--aside-background-color);
+    border: 1px solid var(--aside-border-color);
+    border-radius: 1em;
+    padding: 2em;
+    width: 100%;           /* changed from 70% */
+    box-sizing: border-box; /* prevents overflow */
+    margin-right: 0;        /* remove the right margin */
+    height: fit-content;
+}
+
+.loanSummaryContainer {
+    background-color: var(--aside-background-color);
+    border: 1px solid var(--aside-border-color);
+    border-radius: 1em;
+    padding: 2em;
+    width: 100%;           /* changed from 90% */
+    box-sizing: border-box;
+    margin-right: 0;
+    height: fit-content;   /* let content dictate height */
+}
+
 .formContainerInfo {
     display: flex;
     width: 100%;
@@ -736,14 +774,43 @@ input[type="submit"]:hover {
     border: 1px solid var(--error-msg-border);
 }
 
-.loanSummaryContainer {
-    background-color: var(--aside-background-color);
+.loanSummaryDetails {
+    display: flex;
+    justify-content: space-between;
+}
+
+.loanSummaryBooks, .loanSummaryMember {
+    background-color: var(--body-bg-color);
     border: 1px solid var(--aside-border-color);
     border-radius: 1em;
-    padding: 2em;
-    margin-top: 2em;
-    width: 90%;
-    height: 35vh;
-    overflow: scroll;
-    margin-right: 2em;
+    padding: 1.5em;
+    width: 40%;
+}
+
+.loanSummaryBooks h5, .loanSummaryMember h5 {
+    color: var(--heading-font-color);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    font-size: 0.9em;
+}
+
+.loanSummaryBook {
+    margin-bottom: 1em;
+}
+
+.loanSummaryBook p:first-child, .loanSummaryMember p:first-child {
+    font-weight: bold;
+    margin: 0;
+}
+
+.loanSummaryBook p:last-child, .loanSummaryMember p:last-child {
+    color: var(--secondary-heading-color);
+    font-size: 0.9em;
+    margin: 0;
+}
+
+.loanSummaryIcon {
+    color: var(--heading-font-color);
+    font-size: 1.5em;
+    align-content: center;
 }

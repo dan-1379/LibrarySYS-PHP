@@ -8,25 +8,39 @@
     $searchBook = $_POST['cSearchISBN'] ?? '';
 
     $member = null;
-    $error= null;
+    $memberError = null;
+
     $book = null;
+    $bookError = null;
 
     if (!empty($searchMember)) {
         try {
             $member = $libraryService->searchMembers($searchMember);
             $_SESSION['Member'] = $member;
         } catch (InvalidArgumentException $ex) {
-            $error = $ex->getMessage();
+            $memberError = $ex->getMessage();
         }
     }
 
     if (!empty($searchBook)) {
         try {
             $book = $libraryService->searchBooks($searchBook);
-            $_SESSION['BooksInCart'][] = $book;
+
+            if ($book === null) {
+                $bookError = "No book found with that ISBN";
+            } else if (in_array($book, $_SESSION['BooksInCart'] ?? [])) {
+                $bookError = "This book has already been added to the loan";
+            } else {
+                $_SESSION['BooksInCart'][] = $book;
+            }
         } catch (InvalidArgumentException $ex) {
-            $error = $ex->getMessage();
+            $bookError = $ex->getMessage();
         }
+    }
+
+    if (isset($_POST["clearCart"])) {
+        unset($_SESSION['BooksInCart']);
+        unset($_SESSION['Member']);
     }
 ?>
 
@@ -50,167 +64,105 @@
                 <input type="text" name="cSearchMember" id="cSearchMember" class="searchMember" placeholder="Search member by ID...">
             </form>
 
-            <?php if($error) : ?>
+            <?php if($memberError) : ?>
                 <div class="errorOutput">
                     <i class="fa fa-exclamation-triangle"></i>
-                    <span class="errorMessage"><?php echo $error; ?></span>
+                    <span class="errorMessage"><?php echo $memberError; ?></span>
                 </div>
             <?php endif; ?>
 
-            <?php if($member) : ?>
-            <div class="memberContainer">
+            <?php if(isset($_SESSION['Member'])) : ?>
+                <div class="memberContainer">
                     <div class="memberCardLeft">
                         <div class="memberIcon">
                             <i class="fa fa-user"></i>
                         </div>
 
                         <div class="memberCardInfo">
-                            <h3 class="memberCardName"><?php echo $member->getFirstName() . ' ' . $member->getLastName() ?></h3>
-                            <span class="memberCardId"><?php echo "ID:" . $member->getId(); ?></span>
+                            <h3 class="memberCardName"><?php echo $_SESSION['Member']->getFirstName() . ' ' . $_SESSION['Member']->getLastName() ?></h3>
+                            <span class="memberCardId"><?php echo "ID:" . $_SESSION['Member']->getId(); ?></span>
                         </div>
                     </div>
 
                     <div class="memberCardRight">
-                        <span class="<?php echo $member->getStatus() === 'A' ? "memberCardActiveStatus" : "memberCardInactiveStatus"?>"><?php echo $member->getStatus() === 'A' ? "Active" : "Inactive"; ?></span>
+                        <span class="<?php echo $_SESSION['Member']->getStatus() === 'A' ? "memberCardActiveStatus" : "memberCardInactiveStatus"?>"><?php echo $_SESSION['Member']->getStatus() === 'A' ? "Active" : "Inactive"; ?></span>
                     </div>
                 </div>
             <?php endif; ?>
         </div>
 
-        <div class="formContainer">
-            <h2>Search Books</h2>
-
-            <form action="processLoan.php" method="post">
-                <input type="text" name="cSearchISBN" id="cSearchISBN" class="searchISBN" placeholder="Search ISBN...">
-            </form>
-
-            <?php if($book) : ?>
-                <div class="memberContainer">
-                    <div class="memberCardLeft">
-                        <div class="memberIcon">
-                            <i class="fa fa-book"></i>
-                        </div>
-
-                        <div class="memberCardInfo">
-                            <h3 class="memberCardName"><?php echo $book->getTitle() ?></h3>
-                            <span class="memberCardId"><?php echo "ID:" . $book->getISBN(); ?></span>
-                        </div>
-                    </div>
-
-                    <div class="memberCardRight">
-                        <span class="<?php echo $book->getStatus() === 'A' ? "memberCardActiveStatus" : "memberCardInactiveStatus"?>"><?php echo $book->getStatus() === 'A' ? "Active" : "Inactive"; ?></span>
-                    </div>
-                </div>
-            <?php endif; ?>
-        </div>
-    </main>
-
-    <!-- <main class="processLoanMain">
-        <div class="formContainerInfo">
-            <div class="formContainerMember">
-                <div class="formContainerMemberHeader">
-                    <h2>Search Members</h2>
-
-                    <form action="processLoan.php" method="post">
-                        <input type="text" name="cSearchMember" id="cSearchMember" class="searchMember" placeholder="Search member...">
-                    </form>
-                </div>
-
-                <?php foreach($allMembers as $member) : ?>
-                    <div class="memberContainer">
-                        <div class="memberCardLeft">
-                            <div class="memberIcon">
-                                <i class="fa fa-user"></i>
-                            </div>
-
-                            <div class="memberCardInfo">
-                                <h3 class="memberCardName"><?php echo $member->getFirstName() . ' ' . $member->getLastName() ?></h3>
-                                <span class="memberCardId"><?php echo "ID:" . $member->getId(); ?></span>
-                            </div>
-                        </div>
-
-                        <div class="memberCardRight">
-                            <span class="<?php echo $member->getStatus() === 'A' ? "memberCardActiveStatus" : "memberCardInactiveStatus"?>"><?php echo $member->getStatus() === 'A' ? "Active" : "Inactive"; ?></span>
-                        </div>
-                    </div>
-                <?php endforeach; ?>
-            </div>
-
-            <div class="formContainerBook">
+        <?php if(isset($_SESSION['Member'])) : ?>
+            <div class="formContainer">
                 <h2>Search Books</h2>
 
                 <form action="processLoan.php" method="post">
                     <input type="text" name="cSearchISBN" id="cSearchISBN" class="searchISBN" placeholder="Search ISBN...">
                 </form>
 
-                <?php foreach($allBooks as $book) : ?>
-                    <div class="memberContainer">
-                        <div class="memberCardLeft">
-                            <div class="memberIcon">
-                                <i class="fa fa-book"></i>
-                            </div>
-
-                            <div class="memberCardInfo">
-                                <h3 class="memberCardName"><?php echo $book->getTitle() ?></h3>
-                                <span class="memberCardId"><?php echo "ID:" . $book->getISBN(); ?></span>
-                            </div>
-                        </div>
-
-                        <div class="memberCardRight">
-                            <span class="<?php echo $book->getStatus() === 'A' ? "memberCardActiveStatus" : "memberCardInactiveStatus"?>"><?php echo $book->getStatus() === 'A' ? "Active" : "Inactive"; ?></span>
-                        </div>
+                <?php if($bookError) : ?>
+                    <div class="errorOutput">
+                        <i class="fa fa-exclamation-triangle"></i>
+                        <span class="errorMessage"><?php echo $bookError; ?></span>
                     </div>
-                <?php endforeach; ?>
+                <?php endif; ?>
+
+                <?php if(isset($_SESSION['BooksInCart']) && !empty($_SESSION['BooksInCart'])) : ?>
+                    <?php foreach($_SESSION['BooksInCart'] as $bookInCart) : ?>
+                        <div class="memberContainer">
+                            <div class="memberCardLeft">
+                                <div class="memberIcon">
+                                    <i class="fa fa-book"></i>
+                                </div>
+                                <div class="memberCardInfo">
+                                    <h3 class="memberCardName"><?php echo $bookInCart->getTitle() ?></h3>
+                                    <span class="memberCardId"><?php echo "ID:" . $bookInCart->getISBN(); ?></span>
+                                </div>
+                            </div>
+                            <div class="memberCardRight">
+                                <span class="<?php echo $bookInCart->getStatus() === 'A' ? "memberCardActiveStatus" : "memberCardInactiveStatus"?>"><?php echo $bookInCart->getStatus() === 'A' ? "Active" : "Inactive"; ?></span>
+                            </div>
+                        </div>
+                    <?php endforeach; ?>
+                <?php endif; ?>
             </div>
-        </div>
 
-        <div class="loanSummaryContainer">
-            <h2>Loan Summary</h2>
-            
+            <?php if(isset($_SESSION['BooksInCart']) && !empty($_SESSION['BooksInCart'])) : ?>
+                <div class="loanSummaryContainer">
+                    <h2>Loan Summary</h2>
 
-            <h2>Member</h2>
-            <hr>
-            <?php if($members) : ?>
-                <?php $member = $members[0]; ?>
-                <div class="memberContainer">
-                        <div class="memberCardLeft">
-                            <div class="memberIcon">
-                                <i class="fa fa-user"></i>
-                            </div>
+                    <div class="loanSummaryDetails">
+                        <div class="loanSummaryBooks">
+                            <h5><i class="fa fa-book"></i>Books (<?php echo count($_SESSION["BooksInCart"]) ?>)</h5>
 
-                            <div class="memberCardInfo">
-                                <h3 class="memberCardName"><?php echo $member->getFirstName() . ' ' . $member->getLastName() ?></h3>
-                                <span class="memberCardId"><?php echo "ID:" . $member->getId(); ?></span>
-                            </div>
+                            <?php foreach($_SESSION['BooksInCart'] as $bookInCart) : ?>
+                                <div class="loanSummaryBook">
+                                    <p><?php echo $bookInCart->getTitle(); ?></p>
+                                    <p><?php echo $bookInCart->getAuthor(); ?></p>
+                                </div>
+                            <?php endforeach; ?>
                         </div>
 
-                        <div class="memberCardRight">
-                            <span class="<?php echo $member->getStatus() === 'A' ? "memberCardActiveStatus" : "memberCardInactiveStatus"?>"><?php echo $member->getStatus() === 'A' ? "Active" : "Inactive"; ?></span>
-                        </div>
-                    </div>
-            <?php endif; ?>
-
-            <h2>Books</h2>
-            <hr>
-            <?php if ($books) : ?>
-                <div class="memberContainer">
-                        <div class="memberCardLeft">
-                            <div class="memberIcon">
-                                <i class="fa fa-book"></i>
-                            </div>
-
-                            <div class="memberCardInfo">
-                                <h3 class="memberCardName"><?php echo $book->getTitle() ?></h3>
-                                <span class="memberCardId"><?php echo "ID:" . $book->getISBN(); ?></span>
-                            </div>
+                        <div class="loanSummaryIcon">
+                            <i class="fa fa-arrow-right"></i>
                         </div>
 
-                        <div class="memberCardRight">
-                            <span class="<?php echo $book->getStatus() === 'A' ? "memberCardActiveStatus" : "memberCardInactiveStatus"?>"><?php echo $book->getStatus() === 'A' ? "Active" : "Inactive"; ?></span>
+                        <div class="loanSummaryMember">
+                            <h5><i class="fa fa-user"></i>Member</h5>
+                            <p><?php echo $_SESSION['Member']->getFirstName() . ' ' . $_SESSION['Member']->getLastName() ?></p>
+                            <p><?php echo $_SESSION['Member']->getAddressLine1() . ', ' . $_SESSION['Member']->getAddressLine2() . ', ' . $_SESSION['Member']->getCity() ?></p>
                         </div>
                     </div>
+                </div>
+
+                <form action="processLoan.php" method="post">
+                    <input type="submit" value="Confirm Checkout (<?php echo count($_SESSION["BooksInCart"]) ?>)">
+                </form>
             <?php endif; ?>
-        </div>
-    </main> -->
+
+            <form action="processLoan.php" method="post">
+                <input type="submit" value="Cancel Loan" name="clearCart">
+            </form>
+        <?php endif; ?>
+    </main>
 </body>
 </html>
