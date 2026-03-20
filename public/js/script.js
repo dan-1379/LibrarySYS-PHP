@@ -84,9 +84,9 @@ function showEditMenu(editButton) {
     document.getElementById('cCity').value = addressSections[2];
 
     document.getElementById('cCounty').value = cells[6].innerText.toLowerCase();
-    document.getElementById('cEircode').value = cells[7].innerText;
-    document.getElementById('cRegistrationDate').value = cells[8].innerText;
-    document.getElementById('cStatus').value = cells[9].innerText === 'Active' ? 'A' : 'I';
+    document.getElementById('cEircode').value = addressSections[3];
+    document.getElementById('cRegistrationDate').value = cells[7].innerText;
+    document.getElementById('cStatus').value = cells[8].innerText === 'Active' ? 'A' : 'I';
 
     overlay.classList.add("open");
     editForm.classList.add("open");

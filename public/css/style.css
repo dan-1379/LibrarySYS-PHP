@@ -318,7 +318,7 @@ nav a:hover {
     transition: background-color 0.3s ease;
 }
 
-.viewBookTable td:last-child, .memberCrudTable td:nth-child(10) {
+.viewBookTable td:last-child, .memberCrudTable td:nth-child(9) {
     font-weight: bold;
 }
 
@@ -448,6 +448,7 @@ input[type="submit"]:hover {
     border: 1px solid var(--error-msg-border);
     border-radius: 0.5em;
     padding: 0.5em;
+    margin-top: 1em;
 }
 
 .errorOutput i {
@@ -813,4 +814,127 @@ input[type="submit"]:hover {
     color: var(--heading-font-color);
     font-size: 1.5em;
     align-content: center;
+}
+
+/*
+    LOAN CONFIRMATION SCREEN
+*/
+
+.content {
+    display: flex;
+    flex-direction: column;
+    gap: 2em;
+    padding: 2em;
+    width: 50%;
+}
+
+.successMessage {
+    display: flex;
+    align-items: center;
+    gap: 1em;
+    background-color: var(--success-msg-bg);
+    border: 1px solid var(--success-msg-border);
+    border-radius: 1em;
+    padding: 2em;
+}
+
+.successMessage i {
+    color: var(--success-msg-text);
+    background-color: var(--success-msg-border);
+    font-size: 1.5em;
+    padding: 1em;
+    border-radius: 50%;
+}
+
+.successMessage h3 {
+    color: var(--success-msg-text);
+    font-size: 1.2em;
+}
+
+.successMessage p {
+    color: var(--secondary-heading-color);
+    font-size: 1em;
+}
+
+.successMessage p span {
+    color: var(--heading-font-color);
+    font-weight: bold;
+}
+
+.datesContainer {
+    display: flex;
+    justify-content: space-between;
+    gap: 2em;
+}
+
+.loanDate, .dueDate {
+    background-color: var(--aside-background-color);
+    border: 1px solid var(--aside-border-color);
+    border-radius: 0.5em;
+    padding: 1em;
+    width: 50%;
+}
+
+.loanDate h4, .dueDate h4, .memberInfo h4, .booksContainer h4 {
+    font-size: 1em;
+    font-weight: bold;
+    color: var(--secondary-heading-color);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+}
+
+.loanDate p, .dueDate p {
+    font-size: 1em;
+    font-weight: bold;
+    color: var(--heading-font-color);
+}
+
+.memberInfo, .booksContainer {
+    background-color: var(--aside-background-color);
+    border: 1px solid var(--aside-border-color);
+    border-radius: 0.5em;
+    padding: 1em;
+}
+
+.returnWarning {
+    display: flex;
+    align-items: center;
+    gap: 1em;
+    background-color: var(--error-message-bg);
+    border: 1px solid var(--error-msg-border);
+    color: var(--error-msg-text);
+    border-radius: 0.5em;
+    padding: 0.5em;
+}
+
+.returnWarning p span {
+    color: var(--heading-font-color);
+}
+
+.actionButtons {
+    display: flex;
+    gap: 1em;
+}
+
+.printReceipt button {
+    padding: 1em;
+    border-radius: 0.5em;
+    font-size: 0.9em;
+    font-weight: bold;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+}
+
+.printReceipt button {
+    background-color: var(--secondary-heading-color);
+    color: var(--nav-elements-color);
+    border: 1px soid var(--heading-font-color);
+}
+
+.printReceipt button:hover {
+    color: var(--nav-elements-hover);
+}
+
+.printReceipt button:active {
+    transform: scale(0.9);
 }

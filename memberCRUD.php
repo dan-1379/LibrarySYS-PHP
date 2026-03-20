@@ -84,11 +84,11 @@
                 <button onclick="openAddMenu()"><i class="fa fa-plus"></i>Add Member</button>
             </div>
 
-            <div class="searchMember">
+            <!-- <div class="searchMember">
                 <form action="memberCRUD.php" method="post">
                     <input type="text" name="cSearchMember" id="cSearchMember" placeholder="Search library records...">
                 </form>
-            </div>
+            </div> -->
         </div>
 
         <div class="memberTable">
@@ -101,7 +101,6 @@
                     <th>Email</th>
                     <th>Address</th>
                     <th>County</th>
-                    <th>Eircode</th>
                     <th>Registration</th>
                     <th>Status</th>
                     <th>Edit</th>
@@ -116,9 +115,8 @@
                         <td><?php echo $member->getDob(); ?></td>
                         <td><?php echo $member->getPhone(); ?></td>
                         <td><?php echo $member->getEmail(); ?></td>
-                        <td><?php echo $member->getAddressLine1() . ', ' . $member->getAddressLine2() . ', ' . $member->getCity(); ?></td>
+                        <td><?php echo $member->getAddressLine1() . ', ' . $member->getAddressLine2() . ', ' . $member->getCity() . ', ' . $member->getEircode(); ?></td>
                         <td><?php echo $member->getCounty(); ?></td>
-                        <td><?php echo $member->getEircode(); ?></td>
                         <td><?php echo $member->getRegistrationDate(); ?></td>
                         <td><?php echo $statusText ?></td>
                         <td>

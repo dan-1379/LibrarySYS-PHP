@@ -15,8 +15,20 @@
 
     if (!empty($searchMember)) {
         try {
-            $member = $libraryService->searchMembers($searchMember);
-            $_SESSION['Member'] = $member;
+            $member = $libraryService->searchMembers(htmlspecialchars($searchMember));
+
+            if ($member == null) {
+                $memberError = "This is not a valid member";
+            } else if (!$member->isActive()) {
+                $memberError = "This member is inactive.";
+            } else if ($libraryService->hasOverdueBooks($member->getId()) > 0) {
+                $memberError = "This member has overdue books";
+            } else if ($libraryService->getUnpaidMemberFine($member->getId()) > 0) {
+                $memberError = "This member has outstanding fines.";
+            } else {
+                $_SESSION['Member'] = $member;
+            }
+
         } catch (InvalidArgumentException $ex) {
             $memberError = $ex->getMessage();
         }
@@ -24,12 +36,16 @@
 
     if (!empty($searchBook)) {
         try {
-            $book = $libraryService->searchBooks($searchBook);
+            $book = $libraryService->searchBooks(htmlspecialchars($searchBook));
 
             if ($book === null) {
                 $bookError = "No book found with that ISBN";
             } else if (in_array($book, $_SESSION['BooksInCart'] ?? [])) {
                 $bookError = "This book has already been added to the loan";
+            } else if (!$book->isAvailable()) {
+                $bookError = "This book is not currently available.";
+            } else if (count($_SESSION["BooksInCart"] ?? []) >= MAX_BOOKS_PER_LOAN) {
+                $bookError = "You cannot add more than " . MAX_BOOKS_PER_LOAN . " books to a loan";
             } else {
                 $_SESSION['BooksInCart'][] = $book;
             }
@@ -41,6 +57,33 @@
     if (isset($_POST["clearCart"])) {
         unset($_SESSION['BooksInCart']);
         unset($_SESSION['Member']);
+    }
+
+    if (isset($_POST["confirmProcessLoan"])) {
+        $member = $_SESSION["Member"];
+
+        if (!$member->isActive()) {
+            $memberError = "Cannot proceed with loan. Member is inactive.";
+        } else if ($libraryService->hasOverdueBooks($member->getId()) > 0) {
+            $memberError = "Cannot proceed with loan. Member has overdue books.";
+        } else if ($libraryService->getUnpaidMemberFine($member->getId()) > 0) {
+            $memberError = "Cannot proceed with loan. Member has outstanding fines.";
+        } else if ($libraryService->getCurrentLoanCount($member->getId()) + count($_SESSION["BooksInCart"]) > MAX_BOOKS_PER_LOAN) {
+            $memberError = "Cannot proceed with loan. Member has reached the maximum loan limit of " . MAX_BOOKS_PER_LOAN . " books.";
+        } else {
+            $loanDate = new DateTime();
+            $dueDate = (new DateTime())->modify("+" . LOAN_LENDING_PERIOD . " days");
+            $loan = new Loan($loanDate, $dueDate, $member->getId());
+
+            $_SESSION["LoanDate"] = $loanDate->format("Y-m-d");
+            $_SESSION["DueDate"] = $dueDate->format("Y-m-d");
+
+            $libraryService->processLoan($loan, $_SESSION["BooksInCart"]);
+
+            // unset($_SESSION['BooksInCart']);
+            // unset($_SESSION['Member']);
+            header("Location: loanConfirmation.php");
+        }
     }
 ?>
 
@@ -155,7 +198,7 @@
                 </div>
 
                 <form action="processLoan.php" method="post">
-                    <input type="submit" value="Confirm Checkout (<?php echo count($_SESSION["BooksInCart"]) ?>)">
+                    <input type="submit" value="Confirm Checkout (<?php echo count($_SESSION["BooksInCart"]) ?>)" name="confirmProcessLoan">
                 </form>
             <?php endif; ?>
 

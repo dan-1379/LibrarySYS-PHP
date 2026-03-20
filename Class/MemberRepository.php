@@ -1,14 +1,34 @@
 <?php 
     /** 
-     * Handles database interaction for Members
+     * Handles database operations for the members table in the library system.
+     * 
+     * Provides methods to retrieve, add, update and delete members from the database.
+     * 
+     * @author Dan
+     * @version 1.0
     */
     class MemberRepository {
+        /**
+         * The database connection.
+         * 
+         * @var pdo
+         */
         private PDO $pdo;
 
+        /**
+         * Creates a new MemberRepository instance.
+         * 
+         * @param PDO $pdo The database connection
+         */
         public function __construct(PDO $pdo) {
             $this->pdo = $pdo;
         }
 
+        /**
+         * Retrieves all members from the database.
+         * 
+         * @return array An array of member objects, or an empty array if none found.
+         */
         function getAllMembers() : array {
             try {
                 $sql = 'SELECT * FROM Members';
@@ -42,6 +62,13 @@
             } 
         }
 
+        /**
+         * Updates a specified Member in the database.
+         * 
+         * @param Member $member The member object to be updated.
+         * @throws PDOException If the member cannot be updated in the database.
+         * @return void
+         */
         function updateMember(Member $member) : void {
             try {
                 $sql = "UPDATE Members SET FirstName = :cfirstName, LastName = :clastName, DOB = :cDOB, Phone = :cPhone,
@@ -71,6 +98,13 @@
             }
         }
 
+        /**
+         * Inserts a new Member into the database.
+         * 
+         * @param Member $member The member object to be inserted.
+         * @throws PDOException If the member cannot be inserted into the database.
+         * @return void
+         */
         function addMember(Member $member) : void {
             try {
                 $sql = "INSERT INTO Members(FirstName, LastName, DOB, Phone, Email, AddressLine1, AddressLine2, City, County, 
@@ -99,6 +133,12 @@
             }
         }
 
+        /**
+         * Searches for a member in the database by its ISBN.
+         * 
+         * @param string $searchKey The ID of the member to locate.
+         * @return Member|null The member object if found. Otherwise, null.
+         */
         public function searchMember(string $searchKey) {
             if (empty($searchKey)) {
                 return null;
@@ -133,6 +173,13 @@
             );
         }
 
+        /**
+         * Updates the status of the member in the database.
+         * 
+         * @param Member $member The member object to be updated.
+         * @throws PDOException If the member cannot be altered in the database.
+         * @return void
+         */
         public function alterMemberStatus(Member $member) : void {
             try {
                 $sql = "UPDATE Members SET Status = 'I' WHERE MemberID = :cMemberID";
