@@ -40,7 +40,7 @@
                     <td><?php echo $book->getGenre(); ?></td>
                     <td><?php echo $book->getPublisher(); ?></td>
                     <td><?php echo $book->getPublicationDate(); ?></td>
-                    <td><?php echo $book->getStatus(); ?></td>
+                    <td><?php echo $book->getStatus() === "A" ? "Available" : "Unavailable"; ?></td>
                 </tr>
             <?php endforeach; ?>
     </table>

@@ -101,7 +101,9 @@
             </div>
 
             <div class="printReceipt">
-                <button>Print receipt</button>
+                <form action="receipt.php" method="post">
+                    <input type="submit" value="Print Receipt">
+                </form>
             </div>
         </div>
     </div>

@@ -65,5 +65,42 @@
          * @param string $status The new status of the fine, Unpaid ('U') or Paid ('P')
          */
         public function updateFineStatus(int $fineID, string $status) : void {}
+
+        public function getAllFines() : array {
+            try {
+                $sql = 'SELECT * FROM Fines';
+                $stmt = $this->pdo->prepare($sql);
+                $stmt->execute();
+
+                $rows = $stmt->fetchAll();
+                $fines = [];
+
+                foreach($rows as $row) {
+                    $fines[] = new Fine (
+                        $row['FineAmount'],
+                        $row['LoanID'],
+                        $row['BookID'],
+                        $row['FineID'],
+                        $row['Status'],
+                    );
+                }
+
+                return $fines;
+            } catch (PDOException $e) {  
+                return [];
+            }
+        }
+
+        public function deleteFine(int $fineID) : void {
+            try {
+                $sql = "DELETE FROM Fines WHERE FineID = :cfineID";
+                $stmt = $this->pdo->prepare($sql);
+
+                $stmt->bindValue("cfineID", $fineID);
+                $stmt->execute();
+            } catch(PDOException $e) {
+                throw $e;
+            }
+        }
     }
 ?>

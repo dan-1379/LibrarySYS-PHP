@@ -341,5 +341,13 @@
                 $this->bookRepo->alterBookStatus($bookInCart);
             }
         }
+
+        public function getAllFines() : array {
+            return $this->fineRepo->getAllFines();
+        }
+
+        public function deleteFine(int $fineID) : void {
+            $this->fineRepo->deleteFine($fineID);
+        }
     }
 ?>

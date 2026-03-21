@@ -55,13 +55,13 @@
                             <i class="fa fa-book"></i>
                             <span>Books</span>
                         </div>
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+                        <i class="fa fa-angle-down"></i>
                     </button>
 
                     <div class="submenu">
                         <a href="addBook.php">Add Book</a>
-                        <a href="#">Delete Book</a>
-                        <a href="#">Update Book</a>
+                        <!-- <a href="#">Delete Book</a> -->
+                        <!-- <a href="#">Update Book</a> -->
                         <a href="viewBook.php">View Book</a>
                     </div>
                 </div>
@@ -74,7 +74,7 @@
                             <i class="fa fa-user"></i>
                             <span>Members</span>
                         </div>
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+                        <i class="fa fa-angle-down"></i>
                     </button>
 
                     <div class="submenu">
@@ -90,13 +90,13 @@
                             <i class="fa fa-cart-plus"></i>
                             <span>Loans</span>
                         </div>
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+                        <i class="fa fa-angle-down"></i>
                     </button>
 
                     <div class="submenu">
                         <a href="processLoan.php">Process Loan</a>
-                        <a href="#">Process Return</a>
-                        <a href="#">Forgive Fine</a>
+                        <!-- <a href="#">Process Return</a> -->
+                        <a href="processFine.php">Process Fine</a>
                     </div>
                 </div>
             <?php endif; ?>
@@ -108,7 +108,7 @@
                             <i class="fa fa-area-chart"></i>
                             <span>Admin</span>
                         </div>
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+                        <i class="fa fa-angle-down"></i>
                     </button>
 
                     <div class="submenu">

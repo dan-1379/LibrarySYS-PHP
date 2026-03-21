@@ -82,7 +82,7 @@ aside.collapsed .userCardName,
 aside.collapsed .logo p,
 aside.collapsed span,
 aside.collapsed .submenu,
-aside.collapsed svg {
+aside.collapsed .menuItem button > i {
     display: none;
 }
 
@@ -216,7 +216,7 @@ nav a:hover {
     background-color: var(--nav-elements-hover);
 }
 
-.menuItem.open button svg { 
+.menuItem.open button > i { 
     transform: rotate(180deg); 
     opacity: 1; 
 }
@@ -937,4 +937,34 @@ input[type="submit"]:hover {
 
 .printReceipt button:active {
     transform: scale(0.9);
+}
+
+/*
+    PROCESS FINE
+*/
+
+.deleteFine {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.deleteFineButton {
+    padding: 0.8em;
+    background-color: var(--delete-button);
+    color: white;
+    border: none;
+    border-radius: 0.5em;
+}
+
+.deleteFineButton:hover {
+    transform: scale(1.05);
+}
+
+.deleteFineButton:active {
+    transform: scale(0.97);
+}
+
+.deleteFineButton i {
+    font-size: 1em;
 }
