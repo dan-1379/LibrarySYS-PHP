@@ -3,6 +3,7 @@
     ini_set('display_errors', 1);
 
     require_once("config/config.php");
+    validateRoleForPage(['reception', 'manager']);
 
     if (isset($_POST["deleteFine"])) {
         $fineID = (int) $_POST["cfineID"];

@@ -91,6 +91,11 @@
             }
         }
 
+        /**
+         * Hard deletes a fine from the database.
+         * 
+         * @param int $fineID The unique identifier of the fine to be deleted.
+         */
         public function deleteFine(int $fineID) : void {
             try {
                 $sql = "DELETE FROM Fines WHERE FineID = :cfineID";

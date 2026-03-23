@@ -19,7 +19,14 @@
     require_once("class/MemberValidator.php");
 
     session_start();
-    $_SESSION['username'] = "manager";
+    $_SESSION['username'] = "manager"; // librarian, reception, manager are valid users
+
+    function validateRoleForPage(array $validRole) {
+        if (!in_array($_SESSION['username'], $validRole)) {
+            header("Location:index.php");
+            exit();
+        }
+    }
 
     define("LOAN_LENDING_PERIOD", 5);
     define("MAX_BOOKS_PER_LOAN", 5);
