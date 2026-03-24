@@ -968,3 +968,13 @@ input[type="submit"]:hover {
 .deleteFineButton i {
     font-size: 1em;
 }
+
+/*
+    PROCESS RETURN
+*/
+
+input[type = "checkbox"] {
+    width: 1.5em;
+    height: 1.5em;
+    border: 1px solid var(--aside-border-color);
+}

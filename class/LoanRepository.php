@@ -182,18 +182,34 @@
             }
         }
 
-        public function processReturn() : void {
+        public function processReturn($loanID, $bookID) : void {
             // https://www.php.net/manual/en/pdo.begintransaction.php
             $this->pdo->beginTransaction();
 
             try {
+                $this->updateLoanReturnDate($loanID, $bookID);
+                
+                $this->pdo->commit();
+                } catch(Exception $e) {
+                $this->pdo->rollBack();
+                throw $e;
+            }
+        }
+
+        public function updateLoanReturnDate($loanID, $bookID) : void {
+            try {
                 $sql = "UPDATE LoanItems 
-                        SET ReturnDate = CURDATE 
+                        SET ReturnDate = CURDATE() 
                         WHERE LoanID = :cloanID
                         AND BookID = :cbookID";
-                }
+
+                $stmt = $this->pdo->prepare($sql);
+                $stmt->bindValue(':cloanID', $loanID);
+                $stmt->bindValue(':cbookID', $bookID);
+
+                $stmt->execute();
                 $this->pdo->commit();
-            } catch(Exception $e) {
+                } catch(Exception $e) {
                 $this->pdo->rollBack();
                 throw $e;
             }

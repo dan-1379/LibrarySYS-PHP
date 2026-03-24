@@ -384,8 +384,8 @@
             }
         }
 
-        public function processReturn() : void {
-            $this->loanRepo->processReturn();
+        public function processReturn($loanID, $bookID) : void {
+            $this->loanRepo->processReturn($loanID, $bookID);
         }
 
         /**

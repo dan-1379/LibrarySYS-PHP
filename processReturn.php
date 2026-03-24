@@ -47,7 +47,7 @@
 
     if (isset($_POST["processReturn"])) {
         foreach($_SESSION['SelectedBooks'] as $selectedBook) {
-            $libraryService->processReturn();
+            $libraryService->processReturn((int) $selectedBook, );
         }
     }
 ?>
@@ -107,7 +107,6 @@
                     <?php else : ?>
                         <p><?php echo $_SESSION['Member']->getFirstName() . " " . $_SESSION['Member']->getLastName(); ?> has no active loans</p>
                     <?php endif; ?>
-                    <!-- Add all books here -->
                     <?php foreach($_SESSION['LoanedBooks'] as $book) : ?>
                         <div class="memberContainer">
                             <div class="memberCardLeft">
