@@ -95,7 +95,7 @@
 
                     <div class="submenu">
                         <a href="processLoan.php">Process Loan</a>
-                        <!-- <a href="#">Process Return</a> -->
+                        <a href="processReturn.php">Process Return</a>
                         <a href="processFine.php">Process Fine</a>
                     </div>
                 </div>

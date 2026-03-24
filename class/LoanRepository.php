@@ -144,5 +144,36 @@
                 throw $e;
             }
         }
+
+        public function getLoanedBooks(int $memberID) : array {
+             try {
+                $sql = "SELECT li.LoanID, li.BookID, li.ReturnDate, b.BookID, b.Title, b.Author
+                        FROM LoanItems li
+                        JOIN Loans l ON li.LoanID = l.LoanID
+                        JOIN Books b ON li.BookID = b.BookID
+                        WHERE l.MemberID = :cmemberID
+                        AND li.ReturnDate IS NULL";
+
+                $stmt = $this->pdo->prepare($sql);
+                $stmt->bindValue(':cmemberID', $memberID);
+
+                $stmt->execute();
+                $rows = $stmt->fetchAll();
+
+                $loans = [];
+
+                foreach($rows as $row) {
+                    $loans[] = new LoanItem(
+                        $row['LoanID'],
+                        $row['BookID'],
+                        $row['ReturnDate']
+                    );
+                }
+
+                return $loans;
+            } catch (PDOException $e) {  
+                throw $e;
+            }
+        }
     }
 ?>

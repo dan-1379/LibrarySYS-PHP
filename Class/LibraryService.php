@@ -353,6 +353,10 @@
         public function getCurrentLoanCount(int $member) : int {
             return $this->loanRepo->getCurrentLoanCount($member);
         }
+
+        public function getLoanedBooks(int $memberID) : array {
+            return $this->loanRepo->getLoanedBooks($memberID);
+        }
         
         /**
          * Retrieves the total unpaid fine amount for a member.
