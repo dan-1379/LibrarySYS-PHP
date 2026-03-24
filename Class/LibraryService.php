@@ -384,6 +384,10 @@
             }
         }
 
+        public function processReturn() : void {
+            $this->loanRepo->processReturn();
+        }
+
         /**
          * Retrieves all fines from the database.
          * 

@@ -7,6 +7,7 @@
     validateRoleForPage(['reception', 'manager']);
 
     $searchMember = $_POST['cSearchMember'] ?? '';
+    $selectedBooks = $_POST['selectBook'] ?? [];
 
     $member = null;
     $memberError = null;
@@ -14,6 +15,8 @@
     $booksLoaned = [];
 
     if (!empty($searchMember)) {
+        unset($_SESSION['SelectedBooks']);
+
         try {
             $member = $libraryService->searchMembers(htmlspecialchars($searchMember));
 
@@ -23,11 +26,28 @@
                 $memberError = "This member is inactive.";
             } else {
                 $_SESSION['Member'] = $member;
+
                 $booksLoaned = $libraryService->getLoanedBooks($member->getId());
+                $_SESSION['LoanedBooks'] = $booksLoaned;
             }
 
         } catch (InvalidArgumentException $ex) {
             $memberError = $ex->getMessage();
+        }
+    }
+
+    if (isset($_POST["clearCart"])) {
+        unset($_SESSION['Member']);
+        unset($_SESSION['SelectedBooks']);
+    }
+
+    if (!empty($selectedBooks)) {
+        $_SESSION['SelectedBooks'] = $selectedBooks;
+    }
+
+    if (isset($_POST["processReturn"])) {
+        foreach($_SESSION['SelectedBooks'] as $selectedBook) {
+            $libraryService->processReturn();
         }
     }
 ?>
@@ -78,60 +98,37 @@
         </div>
 
         <?php if(isset($_SESSION['Member'])) : ?>
-            <div class="formContainer">
-                <h2>Active Book Loans</h2>
+            <form action="processReturn.php" method="post">
+                <div class="formContainer">
+                    <h2>Active Book Loans</h2>
 
-                <!-- Add all books here -->
-                <?php foreach($booksLoaned as $book) : ?>
-                    <div class="memberContainer">
+                    <?php if(count($_SESSION['LoanedBooks']) != 0) : ?>
+                        <p>Select all books to be returned</p>
+                    <?php else : ?>
+                        <p><?php echo $_SESSION['Member']->getFirstName() . " " . $_SESSION['Member']->getLastName(); ?> has no active loans</p>
+                    <?php endif; ?>
+                    <!-- Add all books here -->
+                    <?php foreach($_SESSION['LoanedBooks'] as $book) : ?>
+                        <div class="memberContainer">
                             <div class="memberCardLeft">
                                 <div class="memberIcon">
                                     <i class="fa fa-book"></i>
                                 </div>
                                 <div class="memberCardInfo">
-                                    <h3 class="memberCardName"><?php echo $book->getLoanID(); ?></h3>
-                                    <span class="memberCardId"><?php echo "ID:" . $book->getBookID(); ?></span>
+                                    <h3 class="memberCardName"><?php echo $book->getTitle(); ?></h3>
+                                    <span class="memberCardId"><?php echo "ID:" . $book->getAuthor(); ?></span>
                                 </div>
                             </div>
+
                             <div class="memberCardRight">
-                                <span class="<?php echo $book->getStatus() === 'A' ? "memberCardActiveStatus" : "memberCardInactiveStatus"?>"><?php echo $book->getStatus() === 'A' ? "Active" : "Inactive"; ?></span>
+                                <input type="checkbox" name="selectBook[]" value="<?php echo $book->getId(); ?>" <?php echo in_array($book->getId(), $_SESSION["SelectedBooks"] ?? []) ? "checked" : ""; ?>>
                             </div>
                         </div>
-                <?php endforeach; ?>
-            </div>
-
-            <!-- <?php if(isset($_SESSION['BooksInCart']) && !empty($_SESSION['BooksInCart'])) : ?>
-                <div class="loanSummaryContainer">
-                    <h2>Loan Summary</h2>
-
-                    <div class="loanSummaryDetails">
-                        <div class="loanSummaryBooks">
-                            <h5><i class="fa fa-book"></i>Books (<?php echo count($_SESSION["BooksInCart"]) ?>)</h5>
-
-                            <?php foreach($_SESSION['BooksInCart'] as $bookInCart) : ?>
-                                <div class="loanSummaryBook">
-                                    <p><?php echo $bookInCart->getTitle(); ?></p>
-                                    <p><?php echo $bookInCart->getAuthor(); ?></p>
-                                </div>
-                            <?php endforeach; ?>
-                        </div>
-
-                        <div class="loanSummaryIcon">
-                            <i class="fa fa-arrow-right"></i>
-                        </div>
-
-                        <div class="loanSummaryMember">
-                            <h5><i class="fa fa-user"></i>Member</h5>
-                            <p><?php echo $_SESSION['Member']->getFirstName() . ' ' . $_SESSION['Member']->getLastName() ?></p>
-                            <p><?php echo $_SESSION['Member']->getAddressLine1() . ', ' . $_SESSION['Member']->getAddressLine2() . ', ' . $_SESSION['Member']->getCity() ?></p>
-                        </div>
-                    </div>
+                    <?php endforeach; ?>
                 </div>
 
-                <form action="processLoan.php" method="post">
-                    <input type="submit" value="Confirm Checkout (<?php echo count($_SESSION["BooksInCart"]) ?>)" name="confirmProcessLoan">
-                </form>
-            <?php endif; ?> -->
+                <input type="submit" value="Return Books" name="processReturn">
+            </form>
 
             <form action="processReturn.php" method="post">
                 <input type="submit" value="Cancel Return" name="clearCart">

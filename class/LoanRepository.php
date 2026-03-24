@@ -147,7 +147,7 @@
 
         public function getLoanedBooks(int $memberID) : array {
              try {
-                $sql = "SELECT li.LoanID, li.BookID, li.ReturnDate, b.BookID, b.Title, b.Author
+                $sql = "SELECT b.*
                         FROM LoanItems li
                         JOIN Loans l ON li.LoanID = l.LoanID
                         JOIN Books b ON li.BookID = b.BookID
@@ -163,15 +163,38 @@
                 $loans = [];
 
                 foreach($rows as $row) {
-                    $loans[] = new LoanItem(
-                        $row['LoanID'],
-                        $row['BookID'],
-                        $row['ReturnDate']
+                    $loans[] = new Book (
+                        $row['Title'],
+                        $row['Author'],
+                        $row['Description'],
+                        $row['ISBN'],
+                        $row['Genre'],
+                        $row['Publisher'],
+                        $row['PublicationDate'],
+                        $row['Status'],
+                        $row['BookID']
                     );
                 }
 
                 return $loans;
             } catch (PDOException $e) {  
+                throw $e;
+            }
+        }
+
+        public function processReturn() : void {
+            // https://www.php.net/manual/en/pdo.begintransaction.php
+            $this->pdo->beginTransaction();
+
+            try {
+                $sql = "UPDATE LoanItems 
+                        SET ReturnDate = CURDATE 
+                        WHERE LoanID = :cloanID
+                        AND BookID = :cbookID";
+                }
+                $this->pdo->commit();
+            } catch(Exception $e) {
+                $this->pdo->rollBack();
                 throw $e;
             }
         }

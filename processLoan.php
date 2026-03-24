@@ -80,9 +80,6 @@
             $_SESSION["DueDate"] = $dueDate->format("Y-m-d");
 
             $libraryService->processLoan($loan, $_SESSION["BooksInCart"]);
-
-            // unset($_SESSION['BooksInCart']);
-            // unset($_SESSION['Member']);
             header("Location: loanConfirmation.php");
         }
     }
