@@ -138,6 +138,32 @@
             );
         }
 
+        public function getBookById(int $bookID) {
+            $sql = "SELECT * FROM Books WHERE BookID = :cbookID";
+
+            $stmt = $this->pdo->prepare($sql);
+            $stmt->bindValue(":cbookID", $bookID);
+            $stmt->execute();
+
+            $row = $stmt->fetch();
+
+            if (!$row) {
+                return null;
+            }
+
+            return new Book (
+                    $row['Title'],
+                    $row['Author'],
+                    $row['Description'],
+                    $row['ISBN'],
+                    $row['Genre'],
+                    $row['Publisher'],
+                    $row['PublicationDate'],
+                    $row['Status'],
+                    $row['BookID']
+            );
+        }
+
         /**
          * Updates the status of the book in the database.
          * 

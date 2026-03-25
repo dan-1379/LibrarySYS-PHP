@@ -509,7 +509,7 @@ input[type="submit"]:hover {
     }
 }
 
-.editMemberButton {
+.editMemberButton, .payFineButton {
     display: flex;
     align-items: center;
     gap: 0.5em;
@@ -520,15 +520,15 @@ input[type="submit"]:hover {
     border-radius: 0.5em;
 }
 
-.editMemberButton:hover {
+.editMemberButton:hover, .payFineButton:hover {
     transform: scale(1.05);
 }
 
-.editMemberButton:active {
+.editMemberButton:active, .payFineButton:active {
     transform: scale(0.97);
 }
 
-.editMemberButton i {
+.editMemberButton i, .payFineButton i {
     font-size: 1em;
 }
 
@@ -977,4 +977,12 @@ input[type = "checkbox"] {
     width: 1.5em;
     height: 1.5em;
     border: 1px solid var(--aside-border-color);
+}
+
+/*
+    PAY FINE
+*/
+.payFine {
+    display: flex;
+    justify-content: center;
 }

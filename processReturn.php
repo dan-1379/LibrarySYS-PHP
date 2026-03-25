@@ -16,6 +16,7 @@
 
     if (!empty($searchMember)) {
         unset($_SESSION['SelectedBooks']);
+        unset($_SESSION['FineErrors']);
 
         try {
             $member = $libraryService->searchMembers(htmlspecialchars($searchMember));
@@ -46,9 +47,15 @@
     }
 
     if (isset($_POST["processReturn"])) {
-        foreach($_SESSION['SelectedBooks'] as $selectedBook) {
-            $libraryService->processReturn((int) $selectedBook, );
+        $selectedToReturn =  $_SESSION['SelectedBooks'] ?? [];
+
+        if (!empty($selectedToReturn)) {
+            $errors = $libraryService->processReturn($selectedToReturn);
+            $_SESSION['FineErrors'] = $errors;
         }
+
+        $updatedLoans = $libraryService->getLoanedBooks($_SESSION['Member']->getId());
+        $_SESSION['LoanedBooks'] = $updatedLoans;
     }
 ?>
 
@@ -102,11 +109,22 @@
                 <div class="formContainer">
                     <h2>Active Book Loans</h2>
 
+                    <?php if (!empty($_SESSION['FineErrors'])) : ?>
+                        <h2>Fines to be paid</h2>
+                        <?php foreach($_SESSION['FineErrors'] as $fineError) : ?>
+                            <div class="errorOutput">
+                                <i class="fa fa-exclamation-triangle"></i>
+                                <span class="errorMessage"><?php echo $fineError; ?></span>
+                            </div>
+                        <?php endforeach; ?>
+                    <?php endif; ?>
+
                     <?php if(count($_SESSION['LoanedBooks']) != 0) : ?>
                         <p>Select all books to be returned</p>
                     <?php else : ?>
                         <p><?php echo $_SESSION['Member']->getFirstName() . " " . $_SESSION['Member']->getLastName(); ?> has no active loans</p>
                     <?php endif; ?>
+
                     <?php foreach($_SESSION['LoanedBooks'] as $book) : ?>
                         <div class="memberContainer">
                             <div class="memberCardLeft">

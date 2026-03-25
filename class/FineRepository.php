@@ -30,7 +30,22 @@
          * @param Fine $fine The fine object to be inserted.
          * @return void
          */
-        public function insertFine(Fine $fine) : void {}
+        public function insertFine(Fine $fine) : void {
+            try {
+                $sql = "INSERT INTO FINES (FineAmount, Status, LoanID, BookID)
+                        VALUES (:cfineAmount, :cstatus, :cloanID, :cbookID)";
+
+                $stmt = $this->pdo->prepare($sql);
+                $stmt->bindValue(':cfineAmount', $fine->getFineAmount());
+                $stmt->bindValue(':cstatus', $fine->getStatus());
+                $stmt->bindValue(':cloanID', $fine->getLoanID());
+                $stmt->bindValue(':cbookID', $fine->getBookID());
+
+                $stmt->execute();         
+            } catch (PDOException $e) {  
+                throw $e;
+            } 
+        }
 
         /**
          * Retrieves the total unpaid fine amount for a member.
@@ -106,6 +121,47 @@
             } catch(PDOException $e) {
                 throw $e;
             }
+        }
+
+        public function alterFineStatus(int $fineID) {
+            try {
+                $sql = "UPDATE FINES SET Status = 'P' WHERE FineID = :cfineID";
+
+                $stmt = $this->pdo->prepare($sql);
+                $stmt->bindValue(':cfineID', $fineID);
+                $stmt->execute();
+            } catch(PDOException $e) {
+                throw $e;
+            }
+        }
+
+        public function calculateOverdueDays(int $loanID) : int {
+            try {
+                $sql = "SELECT DueDate FROM LOANS WHERE LoanID = :cloanID";
+                $stmt = $this->pdo->prepare($sql);
+
+                $stmt->bindValue(":cloanID", $loanID);
+                $stmt->execute();
+
+                $row = $stmt->fetch();
+
+                if (!$row) {
+                    return 0;
+                }
+
+                $dueDate = new DateTime($row['DueDate']);
+                $today = new DateTime();
+
+                // https://www.php.net/manual/en/datetime.diff.php
+                return (int) $today->diff($dueDate)->days;
+
+            } catch(PDOException $e) {
+                throw $e;
+            }
+        }
+
+        public function calculateFineAmount($daysOverdue) : float {
+            return $daysOverdue * FINE_RATE_PER_DAY;
         }
     }
 ?>

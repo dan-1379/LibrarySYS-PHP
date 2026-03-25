@@ -22,6 +22,9 @@ function toggleAside() {
         arrowIcon.classList.add("fa-angle-left");
         arrowIcon.classList.remove("fa-angle-right");
     }
+
+    localStorage.setItem('asideMenuOption', aside.classList.contains('collapsed') ? 'collapsed' : 'not-collapsed');
+
 }
 
 function toggleLightMode() {
@@ -45,9 +48,14 @@ function toggleLightMode() {
 
 document.addEventListener("DOMContentLoaded", () => {
     const savedColorMode = localStorage.getItem("colorMode");
-
+    const savedAsideMenuOption = localStorage.getItem("asideMenuOption");
+    
     if (savedColorMode === "light") {
         toggleLightMode();
+    }
+
+    if (savedAsideMenuOption === "collapsed") {
+        toggleAside();
     }
 })
 
@@ -56,7 +64,7 @@ document.addEventListener("DOMContentLoaded", () => {
  */
 
 const overlay = document.getElementById("overlay");
-    const editForm = document.getElementById("updateMemberForm");
+const editForm = document.getElementById("updateMemberForm");
 
 function showEditMenu(editButton) {
     // https://www.w3schools.com/jsref/met_element_closest.asp

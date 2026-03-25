@@ -384,8 +384,32 @@
             }
         }
 
-        public function processReturn($loanID, $bookID) : void {
-            $this->loanRepo->processReturn($loanID, $bookID);
+        public function processReturn($selectedToReturn) : array {
+            $finedBooks = [];
+
+            foreach($selectedToReturn as $bookID) {
+                $loanID = $this->loanRepo->getLoanByBookID((int) $bookID);
+
+                if ($loanID) {
+                    $daysOverdue = $this->fineRepo->calculateOverdueDays($loanID);
+
+                    if ($daysOverdue > 0) {
+                        $fineAmount = $this->fineRepo->calculateFineAmount($daysOverdue);
+                        $newFine = new Fine($fineAmount, $loanID, (int) $bookID);
+                        $this->fineRepo->insertFine($newFine);
+
+                        $finedBooks[] = "A fine of €" . number_format($fineAmount, 2) . 
+                                        " has been added for book " . $bookID . " for days overdue: " . $daysOverdue;
+                    }
+                }
+
+                $book = $this->bookRepo->getBookById((int) $bookID);
+                $this->bookRepo->alterBookStatus($book);
+
+            }
+
+            $this->loanRepo->processReturn($selectedToReturn);
+            return $finedBooks;
         }
 
         /**
@@ -404,6 +428,10 @@
          */
         public function deleteFine(int $fineID) : void {
             $this->fineRepo->deleteFine($fineID);
+        }
+
+        public function alterFineStatus(int $fineID) : void {
+            $this->fineRepo->alterFineStatus($fineID);
         }
     }
 ?>

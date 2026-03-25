@@ -10,6 +10,11 @@
         $libraryService->deleteFine($fineID);
     }
 
+    if (isset($_POST["payFine"])) {
+        $fineID = (int) $_POST["cfineID"];
+        $libraryService->alterFineStatus($fineID);
+    }
+
     $fines = $libraryService->getAllFines();
 ?>
 
@@ -32,6 +37,7 @@
                 <th>Status</th>
                 <th>Loan ID</th>
                 <th>Book ID</th>
+                <th>Pay</th>
                 <th>Forgive</th>
             </tr>
 
@@ -42,6 +48,21 @@
                     <td><?php echo $fine->getStatus() === "U" ? "Unpaid" : "Paid"; ?></td>
                     <td><?php echo $fine->getLoanID(); ?></td>
                     <td><?php echo $fine->getBookID(); ?></td>
+
+                    <?php if ($fine->getStatus() === "U") : ?>
+                        <td>
+                            <form action="processFine.php" method="post">
+                                <div class='payFine'>
+                                    <input type="hidden" name="cfineID" value="<?php echo $fine->getFineID(); ?>">
+                                    <button class='payFineButton' name="payFine"><i class="fa fa-credit-card"></i>PAY FINE</button>
+                                </div>
+                            </form>
+                        </td>
+                    <?php else : ?>
+                        <td>
+                            Fine Paid
+                        </td>
+                    <?php endif; ?>
 
                     <td>
                         <form action="processFine.php" method="post">

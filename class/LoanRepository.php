@@ -182,35 +182,52 @@
             }
         }
 
-        public function processReturn($loanID, $bookID) : void {
+        public function processReturn($selectedToReturn) : void {
             // https://www.php.net/manual/en/pdo.begintransaction.php
             $this->pdo->beginTransaction();
 
             try {
-                $this->updateLoanReturnDate($loanID, $bookID);
+                foreach($selectedToReturn as $bookID) {
+                    $this->updateLoanReturnDate($bookID);
+                }
                 
                 $this->pdo->commit();
+                } catch(Exception $e) {
+                    $this->pdo->rollBack();
+                    throw $e;
+                }
+        }
+
+        public function updateLoanReturnDate($bookID) : void {
+            try {
+                $sql = "UPDATE LoanItems 
+                        SET ReturnDate = CURDATE() 
+                        WHERE BookID = :cbookID";
+
+                $stmt = $this->pdo->prepare($sql);
+                $stmt->bindValue(':cbookID', $bookID);
+
+                $stmt->execute();
                 } catch(Exception $e) {
                 $this->pdo->rollBack();
                 throw $e;
             }
         }
 
-        public function updateLoanReturnDate($loanID, $bookID) : void {
+        public function getLoanByBookID(int $bookID) : int {
             try {
-                $sql = "UPDATE LoanItems 
-                        SET ReturnDate = CURDATE() 
-                        WHERE LoanID = :cloanID
-                        AND BookID = :cbookID";
+                $sql = "SELECT l.LoanID FROM loans l
+                        JOIN LoanItems li ON l.LoanID = li.LoanID
+                        WHERE li.BookID = :cbookID
+                        AND li.ReturnDate IS NULL";
 
                 $stmt = $this->pdo->prepare($sql);
-                $stmt->bindValue(':cloanID', $loanID);
                 $stmt->bindValue(':cbookID', $bookID);
-
-                $stmt->execute();
-                $this->pdo->commit();
-                } catch(Exception $e) {
-                $this->pdo->rollBack();
+                $stmt->execute();  
+                
+                $row = $stmt->fetch();
+                return (int) $row['LoanID'];
+            }  catch(Exception $e) {
                 throw $e;
             }
         }
