@@ -379,6 +379,10 @@
         public function getLoanTotalByMonth() : array {
             return $this->loanRepo->getLoanTotalByMonth();
         }
+
+        public function getRecentLoans() : array {
+            return $this->loanRepo->getRecentLoans();
+        }
         
         /**
          * Retrieves the total unpaid fine amount for a member.

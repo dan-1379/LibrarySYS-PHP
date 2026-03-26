@@ -1,9 +1,11 @@
 <!-- https://canvasjs.com/php-charts/spline-area-chart/ -->
+<!-- https://canvasjs.com/php-charts/spline-area-chart/ -->
 
 <?php
 	require_once("config/config.php");
 	$dataPoints = $libraryService->getLoanTotalByMonth();
- 
+
+	echo json_encode($dataPoints);
 ?>
 
 <!DOCTYPE HTML>

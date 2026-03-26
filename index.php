@@ -8,6 +8,8 @@
     $totalLoans = $libraryService->getTotalLoans();
 
     $totalFines = number_format($libraryService->getTotalFines(), 2);
+
+    $recentLoans = $libraryService->getRecentLoans();
 ?>
 
 <!DOCTYPE html>
@@ -25,9 +27,9 @@
         <h1>Analytics Overview</h1>
         <p>Your products key performance metrics at a glance.</p>
 
-        <div class="dataContainer" style="display:flex; gap:2em;">
+        <div class="dataContainer">
             <div class="chartContainer">
-                <?php include_once("inc/chart.php"); ?>
+                
             </div>
 
             <div class="totalsContainer">
@@ -57,6 +59,23 @@
                     <span><?php echo "€" . $totalFines; ?></span>
                     <p>total</p>
                 </div>
+            </div>
+
+            <div class="recentsContainer">
+                <table>
+                    <tr>
+                        <th>Book</th>
+                        <th>Member</th>
+                        <th>Borrowed Date</th>
+                        <th>Due Date</th>
+                        <th>Status</th>
+                    </tr>
+
+                    <?php foreach($recentLoans as $recent) : ?>
+                        <td><?php  ?></td>
+                    <?php endforeach; ?>
+
+                </table>
             </div>
         </div>
     </main>

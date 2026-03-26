@@ -257,12 +257,16 @@
                 $stmt = $this->pdo->prepare($sql);
                 $stmt->execute();
 
-                $rows = $stmt->fetchAll();
+                $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 $loans = [];
 
                 foreach($rows as $row) {
+                    echo json_encode($row);
+
                     // https://www.w3schools.com/php/func_date_mktime.asp
                     $timestamp = mktime(0, 0, 0, $row['loanMonth'], 1, date('Y')) * 1000;
+
+                     echo date('Y-m-d', $timestamp / 1000) . "<br>";
 
                     $loans[] = array(
                         "x" => $timestamp,
@@ -274,6 +278,32 @@
             } catch(Exception $e) {
                 throw $e;
             }
+        }
+
+        public function getRecentLoans() : array {
+            $sql = "SELECT b.BookID, m.MemberID, l.LoanDate, l.DueDate
+                    FROM Loans l
+                    JOIN LoanItems li ON l.LoanID = li.LoanID
+                    JOIN Books b ON li.BookID = b.BookID
+                    JOIN Members m ON l.MemberID = m.MemberID";
+
+            $stmt = $this->pdo->prepare($sql);
+            $stmt->execute();
+
+            $rows = $stmt->fetchAll();
+            $loans = [];
+
+            foreach($rows as $row) {
+                echo json_encode($row);
+                $loans[] = array(
+                    "book" => $row["BookID"],
+                    "member" => $row["MemberID"],
+                    "loanDate" => $row["LoanDate"],
+                    "dueDate" => $row["DueDate"]
+                );
+            }
+
+            return $loans;
         }
     }
 ?>
