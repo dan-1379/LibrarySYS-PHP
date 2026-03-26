@@ -231,5 +231,18 @@
                 throw $e;
             }
         }
+
+        public function getTotalLoans() : int {
+            try {
+                $sql = "SELECT COUNT(DISTINCT LoanID) FROM LoanItems 
+                        WHERE ReturnDate IS NULL";
+
+                $stmt = $this->pdo->prepare($sql);
+                $stmt->execute();
+                return $stmt->fetchColumn();
+            } catch(Exception $e) {
+                throw $e;
+            }
+        }
     }
 ?>

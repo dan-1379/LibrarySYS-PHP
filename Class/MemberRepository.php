@@ -180,14 +180,28 @@
          * @throws PDOException If the member cannot be altered in the database.
          * @return void
          */
-        public function alterMemberStatus(Member $member) : void {
+        public function alterMemberStatus(int $memberID) : void {
             try {
                 $sql = "UPDATE Members SET Status = 'I' WHERE MemberID = :cMemberID";
 
                 $stmt = $this->pdo->prepare($sql);
-                $stmt->bindValue(':cMemberID', $member->getId());
+                $stmt->bindValue(':cMemberID', $memberID);
 
                 $stmt->execute();
+            } catch (PDOException $e) {
+                throw new Exception("Error updating member: " . $e->getMessage());
+            }
+        }
+
+        public function getTotalMembers(string $status) : int {
+            try {
+                $sql = "SELECT COUNT(*) FROM Members WHERE Status = :cstatus";
+
+                $stmt = $this->pdo->prepare($sql);
+                $stmt->bindValue(":cstatus", $status);
+                $stmt->execute();
+
+                return $stmt->fetchColumn();
             } catch (PDOException $e) {
                 throw new Exception("Error updating member: " . $e->getMessage());
             }

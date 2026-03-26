@@ -163,5 +163,20 @@
         public function calculateFineAmount($daysOverdue) : float {
             return $daysOverdue * FINE_RATE_PER_DAY;
         }
+
+        public function getTotalFines() : float {
+            try {
+                $sql = "SELECT SUM(FineAmount) FROM Fines";
+
+                $stmt = $this->pdo->prepare($sql);
+                $stmt->execute();
+
+                $result = $stmt->fetchColumn();
+
+                return $result === 0.00 ? 0.00 : (float) $result;
+            } catch(PDOException $e) {
+                throw $e;
+            }
+        }
     }
 ?>

@@ -51,12 +51,8 @@
     }
 
     if (isset($_POST["deleteMember"])) {
-        $id = $_POST['cMemberID'];
-
-        // echo "<script>alert(`You are now deleting member ${id}`)</script>";
-
-        $member = new Member('', '', '', '', '', '', '', '', '', '', '', '', $id);
-        $libraryService->alterMemberStatus($member);
+        $memberID = (int) $_POST['cMemberID'];
+        $errors = $libraryService->alterMemberStatus($memberID);
     }
 
     $members = $libraryService->getAllMembers();
@@ -91,6 +87,13 @@
                 </form>
             </div> -->
         </div>
+
+        <?php if (!empty($errors)): ?>
+            <div class="errorOutput">
+                <i class="fa fa-exclamation-triangle"></i>
+                <span class="errorMessage"><?php echo $errors . " Please rectify to continue."; ?></span>
+            </div>
+        <?php endif; ?>
 
         <div class="memberTable">
             <table class="memberCrudTable">

@@ -287,6 +287,10 @@
             return $this->memberRepo->getAllMembers();
         }
 
+        public function getTotalMembers($status) : int {
+            return $this->memberRepo->getTotalMembers($status);
+        }
+
         /**
          * Searches for a member in the database by their ID.
          * 
@@ -310,8 +314,18 @@
          * @param Member $member The Member object whose status is to be altered.
          * @return void
          */
-        public function alterMemberStatus(Member $member) : void {
-            $this->memberRepo->alterMemberStatus($member);
+        public function alterMemberStatus(int $memberID) : ?string {
+            $memberError = "";
+
+            if ($this->hasOverdueBooks($memberID) > 0) {
+                $memberError = "This member has overdue books";
+            } else if ($this->getUnpaidMemberFine($memberID) > 0) {
+                $memberError = "This member has outstanding fines.";
+            } else {
+               $this->memberRepo->alterMemberStatus($memberID);
+            }
+
+            return $memberError;
         }
 
         /**
@@ -356,6 +370,10 @@
 
         public function getLoanedBooks(int $memberID) : array {
             return $this->loanRepo->getLoanedBooks($memberID);
+        }
+
+        public function getTotalLoans() : int {
+            return $this->loanRepo->getTotalLoans();
         }
         
         /**
@@ -432,6 +450,10 @@
 
         public function alterFineStatus(int $fineID) : void {
             $this->fineRepo->alterFineStatus($fineID);
+        }
+
+        public function getTotalFines() : float {
+            return $this->fineRepo->getTotalFines();
         }
     }
 ?>
