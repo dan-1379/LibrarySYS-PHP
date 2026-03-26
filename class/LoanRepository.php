@@ -244,5 +244,36 @@
                 throw $e;
             }
         }
+
+        public function getLoanTotalByMonth() : array {
+            try {
+                $sql = "SELECT MONTH(LoanDate) AS loanMonth,
+                        COUNT(*) AS totalLoan
+                        FROM Loans
+                        WHERE YEAR(LoanDate) = YEAR(CURDATE())
+                        GROUP BY MONTH(LoanDate)
+                        ORDER BY loanMonth ASC";
+
+                $stmt = $this->pdo->prepare($sql);
+                $stmt->execute();
+
+                $rows = $stmt->fetchAll();
+                $loans = [];
+
+                foreach($rows as $row) {
+                    // https://www.w3schools.com/php/func_date_mktime.asp
+                    $timestamp = mktime(0, 0, 0, $row['loanMonth'], 1, date('Y')) * 1000;
+
+                    $loans[] = array(
+                        "x" => $timestamp,
+                        "y" => (int)$row['totalLoan']
+                    );
+                }
+
+                return $loans;
+            } catch(Exception $e) {
+                throw $e;
+            }
+        }
     }
 ?>

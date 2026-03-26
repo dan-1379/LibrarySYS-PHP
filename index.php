@@ -19,42 +19,44 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <?php 
-        include_once("inc/navMenu.php"); 
-    ?>
+    <?php include_once("inc/navMenu.php"); ?>
 
     <main class="main">
         <h1>Analytics Overview</h1>
         <p>Your products key performance metrics at a glance.</p>
 
-        <?php include_once("inc/chart.php"); ?>
-
-        <div class="totalsContainer">
-            <div class="totalInfo">
-                <h2>Books</h2>
-                <span><?php echo $totalBooks; ?></span>
-                <p>in catalogue</p>
+        <div class="dataContainer" style="display:flex; gap:2em;">
+            <div class="chartContainer">
+                <?php include_once("inc/chart.php"); ?>
             </div>
 
-            <div class="totalInfo">
-                <h2>Members</h2>
-                <span><?php echo $totalActiveMembers; ?></span>
-                <p>active</p>
+            <div class="totalsContainer">
+                <div class="totalInfo">
+                    <h2>Books</h2>
+                    <span><?php echo $totalBooks; ?></span>
+                    <p>in catalogue</p>
+                </div>
 
-                <span><?php echo $totalInactiveMembers; ?></span>
-                <p>inactive</p>
-            </div>
+                <div class="totalInfo">
+                    <h2>Members</h2>
+                    <span><?php echo $totalActiveMembers; ?></span>
+                    <p>active</p>
 
-            <div class="totalInfo">
-                <h2>Loans</h2>
-                <span><?php echo $totalLoans; ?></span>
-                <p>current loans</p>
-            </div>
+                    <span><?php echo $totalInactiveMembers; ?></span>
+                    <p>inactive</p>
+                </div>
 
-            <div class="totalInfo">
-                <h2>Fines</h2>
-                <span><?php echo "€" . $totalFines; ?></span>
-                <p>total</p>
+                <div class="totalInfo">
+                    <h2>Loans</h2>
+                    <span><?php echo $totalLoans; ?></span>
+                    <p>current loans</p>
+                </div>
+
+                <div class="totalInfo">
+                    <h2>Fines</h2>
+                    <span><?php echo "€" . $totalFines; ?></span>
+                    <p>total</p>
+                </div>
             </div>
         </div>
     </main>
