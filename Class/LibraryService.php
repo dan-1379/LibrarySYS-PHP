@@ -35,15 +35,51 @@
         private FineRepository $fineRepo;
 
         /**
+         * The repository for the user database operations.
+         * @var AuthenticationRepository
+         */
+        private AuthenticationRepository $authRepo;
+
+        /**
          * Creates a new LibraryService instance.
          * @param BookRepository $bookRepo The repository for the book database operations.
          * @param MemberRepository $memberRepo The repository for the member database operations.
          */
-        public function __construct(BookRepository $bookRepo, MemberRepository $memberRepo, LoanRepository $loanRepo, FineRepository $fineRepo) {
+        public function __construct(BookRepository $bookRepo, MemberRepository $memberRepo, LoanRepository $loanRepo, FineRepository $fineRepo, AuthenticationRepository $authRepo) {
             $this->bookRepo = $bookRepo;
             $this->memberRepo = $memberRepo;
             $this->loanRepo = $loanRepo;
             $this->fineRepo = $fineRepo;
+            $this->authRepo = $authRepo;
+        }
+
+        public function processLogin($username, $password) : ?array {
+            $credentialErrors = [];
+
+            $checkUsername = AuthenticationValidator::isValidUsername($username);
+            $checkPassword = AuthenticationValidator::isValidPassword($password);
+
+            if ($checkUsername != "valid") {
+                $credentialErrors['usernameError'] = $checkUsername;
+            }
+
+            if ($checkPassword != "valid") {
+                $credentialErrors['passwordError'] = $checkPassword;
+            }
+
+            if (!empty($credentialErrors)) {
+                return $credentialErrors;
+            }
+
+            $user =  $this->authRepo->processLogin($username, $password);
+
+            if (!$user) {
+                $credentialErrors['login'] = "Invalid username or password.";
+                return $credentialErrors;
+            }
+
+            return $user;
+
         }
 
         /**
@@ -374,10 +410,6 @@
 
         public function getTotalLoans() : int {
             return $this->loanRepo->getTotalLoans();
-        }
-
-        public function getLoanTotalByMonth() : array {
-            return $this->loanRepo->getLoanTotalByMonth();
         }
 
         public function getRecentLoans() : array {

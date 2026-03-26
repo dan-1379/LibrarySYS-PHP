@@ -75,7 +75,7 @@
 <body>
     <?php include_once("inc/navMenu.php"); ?>
 
-    <main class="memberMain">
+    <main class="main">
         <div class="memberAddSearch">
             <div class="addMember">
                 <button onclick="openAddMenu()"><i class="fa fa-plus"></i>Add Member</button>

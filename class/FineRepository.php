@@ -152,6 +152,10 @@
                 $dueDate = new DateTime($row['DueDate']);
                 $today = new DateTime();
 
+                if ($today <= $dueDate) {
+                    return 0;
+                }
+
                 // https://www.php.net/manual/en/datetime.diff.php
                 return (int) $today->diff($dueDate)->days;
 

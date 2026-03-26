@@ -4,6 +4,19 @@
  * - TOGGLE LIGHT MODE
  */
 
+document.addEventListener("DOMContentLoaded", () => {
+    const savedColorMode = localStorage.getItem("colorMode");
+    const savedAsideMenuOption = localStorage.getItem("asideMenuOption");
+    
+    if (savedColorMode === "light") {
+        toggleLightMode();
+    }
+
+    if (savedAsideMenuOption === "collapsed") {
+        toggleAside();
+    }
+})
+
 // https://www.w3schools.com/jsref/prop_element_classlist.asp
 function toggleMenu(button) {
     const menuItem = button.parentElement;
@@ -45,19 +58,6 @@ function toggleLightMode() {
 
     localStorage.setItem('colorMode', document.documentElement.classList.contains('light') ? 'light' : 'dark');
 }
-
-document.addEventListener("DOMContentLoaded", () => {
-    const savedColorMode = localStorage.getItem("colorMode");
-    const savedAsideMenuOption = localStorage.getItem("asideMenuOption");
-    
-    if (savedColorMode === "light") {
-        toggleLightMode();
-    }
-
-    if (savedAsideMenuOption === "collapsed") {
-        toggleAside();
-    }
-})
 
 /**
  * ELEMENTS FOR MEMBERS MODULE

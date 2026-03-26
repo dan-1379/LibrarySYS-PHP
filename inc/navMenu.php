@@ -9,6 +9,13 @@
  * Modified: No modifications made. Using icons.
 -->
 
+<?php 
+    if (!isset($_SESSION['username'])) {
+        header("Location: login.php");
+        exit();
+    }
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -121,7 +128,7 @@
             <div class="divider"></div>
 
             <div class="menuItem">
-                <button>
+                <button onclick="logout" id="logoutButton">
                     <div class="menuItem-name">
                         <i class="fa fa-sign-out"></i>
                         <span>Logout</span>
@@ -139,5 +146,13 @@
     </aside>
 
     <script src="public/js/script.js" defer></script>
+
+    <script>
+        const logout = document.getElementById("logoutButton");
+
+        logout.addEventListener("click", function() {
+            window.location.href = "logout.php";
+        })
+    </script>
 </body>
 </html>

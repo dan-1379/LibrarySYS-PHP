@@ -245,47 +245,14 @@
             }
         }
 
-        public function getLoanTotalByMonth() : array {
-            try {
-                $sql = "SELECT MONTH(LoanDate) AS loanMonth,
-                        COUNT(*) AS totalLoan
-                        FROM Loans
-                        WHERE YEAR(LoanDate) = YEAR(CURDATE())
-                        GROUP BY MONTH(LoanDate)
-                        ORDER BY loanMonth ASC";
-
-                $stmt = $this->pdo->prepare($sql);
-                $stmt->execute();
-
-                $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
-                $loans = [];
-
-                foreach($rows as $row) {
-                    echo json_encode($row);
-
-                    // https://www.w3schools.com/php/func_date_mktime.asp
-                    $timestamp = mktime(0, 0, 0, $row['loanMonth'], 1, date('Y')) * 1000;
-
-                     echo date('Y-m-d', $timestamp / 1000) . "<br>";
-
-                    $loans[] = array(
-                        "x" => $timestamp,
-                        "y" => (int)$row['totalLoan']
-                    );
-                }
-
-                return $loans;
-            } catch(Exception $e) {
-                throw $e;
-            }
-        }
-
         public function getRecentLoans() : array {
-            $sql = "SELECT b.BookID, m.MemberID, l.LoanDate, l.DueDate
+            $sql = "SELECT b.BookID, m.MemberID, l.LoanDate, l.DueDate, li.ReturnDate
                     FROM Loans l
                     JOIN LoanItems li ON l.LoanID = li.LoanID
                     JOIN Books b ON li.BookID = b.BookID
-                    JOIN Members m ON l.MemberID = m.MemberID";
+                    JOIN Members m ON l.MemberID = m.MemberID
+                    ORDER BY l.LoanDate DESC
+                    LIMIT 5";
 
             $stmt = $this->pdo->prepare($sql);
             $stmt->execute();
@@ -294,12 +261,12 @@
             $loans = [];
 
             foreach($rows as $row) {
-                echo json_encode($row);
                 $loans[] = array(
                     "book" => $row["BookID"],
                     "member" => $row["MemberID"],
                     "loanDate" => $row["LoanDate"],
-                    "dueDate" => $row["DueDate"]
+                    "dueDate" => $row["DueDate"],
+                    "returnDate" => $row["ReturnDate"]
                 );
             }
 
