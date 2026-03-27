@@ -170,7 +170,7 @@
 
         public function getTotalFines() : float {
             try {
-                $sql = "SELECT SUM(FineAmount) FROM Fines";
+                $sql = "SELECT SUM(FineAmount) FROM Fines WHERE Status = 'U'";
 
                 $stmt = $this->pdo->prepare($sql);
                 $stmt->execute();
