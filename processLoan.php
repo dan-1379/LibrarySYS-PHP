@@ -120,7 +120,7 @@
                         </div>
 
                         <div class="memberCardInfo">
-                            <h3 class="memberCardName"><?php echo $_SESSION['Member']->getFirstName() . ' ' . $_SESSION['Member']->getLastName() ?></h3>
+                            <h3 class="memberCardName"><?php echo $_SESSION['Member']->getFirstName() . ' ' . $_SESSION['Member']->getLastName(); ?></h3>
                             <span class="memberCardId"><?php echo "ID:" . $_SESSION['Member']->getId(); ?></span>
                         </div>
                     </div>

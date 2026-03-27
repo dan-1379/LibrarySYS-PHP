@@ -1,6 +1,4 @@
 <?php 
-    session_start();
-
     // Configuration files required
     require_once("db.php");
 
@@ -21,6 +19,8 @@
     require_once("class/BookValidator.php");
     require_once("class/MemberValidator.php");
     require_once("class/AuthenticationValidator.php");
+
+    session_start();
 
     $publicPage = ['login.php'];
 

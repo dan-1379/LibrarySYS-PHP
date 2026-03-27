@@ -76,7 +76,7 @@
 
                     <div class="totalInfoBody">
                         <p class="totalInfoTitle">Total Fines</p>
-                        <span class="totalInfoValue"><?php echo $totalFines; ?></span>
+                        <span class="totalInfoValue">€<?php echo $totalFines; ?></span>
                         <p class="totalInfoSubHeading">outstanding</p>
                     </div>
                 </div>
