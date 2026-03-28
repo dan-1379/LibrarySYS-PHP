@@ -13,6 +13,8 @@
     $totalFines = number_format($libraryService->getTotalFines(), 2);
 
     $recentLoans = $libraryService->getRecentLoans();
+
+    $topBorrowers = $libraryService->getTopBorrowers();
 ?>
 
 <!DOCTYPE html>
@@ -84,6 +86,7 @@
 
             <div class="recentsContainer">
                 <h2>Recent Activity</h2>
+                <p>Most recent loans in order</p>
                 <table>
                     <tr>
                         <th>Book</th>
@@ -95,15 +98,52 @@
 
                     <?php foreach($recentLoans as $recent) : ?>
                         <tr>
-                            <td><?php echo $recent['book'] ?></td>
-                            <td><?php echo $recent['member'] ?></td>
+                            <td>
+                                <div class="recentBookContainer">
+                                    <i class="fa fa-book"></i>
+                                    <?php echo $recent['book']->getTitle(); ?>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="recentMemberContainer">
+                                    <div class="recentMemberInitials">
+                                        <?php echo $recent['member']->getFirstName()[0] . $recent['member']->getLastName()[0]; ?>
+                                    </div>
+                                    <?php echo $recent['member']->getFirstName() . " " . $recent['member']->getLastName(); ?>
+                                </div>
+                            </td>
                             <td><?php echo $recent['loanDate'] ?></td>
                             <td><?php echo $recent['dueDate'] ?></td>
-                            <td><?php echo empty($recent['ReturnDate']) ? 'Loaned' : 'Returned' ?></td>
+                            <td>
+                                <?php echo empty($recent['returnDate'])
+                                    ? "<span class='loanedStatus'>Loaned</span>" 
+                                    : "<span class='returnedStatus'>Returned</span>";  ?>
+                            </td>
                         </tr>
                     <?php endforeach; ?>
-
                 </table>
+            </div>
+
+            <div class="leaderboardContainer">
+                <h2>Top Borrowers</h2>
+                <p>Top 3 members by loan count</p>
+
+                <?php foreach($topBorrowers as $topBorrower) : ?>
+                    <div class="memberContainer">
+                            <div class="memberCardLeft">
+                                <div class="memberIcon">
+                                    <i class="fa fa-user"></i>
+                                </div>
+                                <div class="memberCardInfo">
+                                    <h3 class="memberCardName"><?php echo $topBorrower["member"]->getFirstName() . " " . $topBorrower["member"]->getLastName(); ?></h3>
+                                    <span class="memberCardId"><?php echo $topBorrower["member"]->getAddressLine1() . ", " . $topBorrower["member"]->getAddressLine2() . ", " . $topBorrower["member"]->getCity(); ?></span>
+                                </div>
+                            </div>
+                            <div class="memberCardCount">
+                               <?php echo $topBorrower["loanCount"]; ?> Loans
+                            </div>
+                        </div>
+                <?php endforeach; ?>
             </div>
         </div>
     </main>

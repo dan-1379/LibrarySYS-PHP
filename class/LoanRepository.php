@@ -246,31 +246,78 @@
         }
 
         public function getRecentLoans() : array {
-            $sql = "SELECT b.BookID, m.MemberID, l.LoanDate, l.DueDate, li.ReturnDate
-                    FROM Loans l
-                    JOIN LoanItems li ON l.LoanID = li.LoanID
-                    JOIN Books b ON li.BookID = b.BookID
-                    JOIN Members m ON l.MemberID = m.MemberID
-                    ORDER BY l.LoanDate DESC
-                    LIMIT 5";
+            try {
+                $sql = "SELECT b.*, m.*, l.LoanDate, l.DueDate, li.ReturnDate
+                        FROM Loans l
+                        JOIN LoanItems li ON l.LoanID = li.LoanID
+                        JOIN Books b ON li.BookID = b.BookID
+                        JOIN Members m ON l.MemberID = m.MemberID
+                        ORDER BY l.LoanDate DESC
+                        LIMIT 5";
 
-            $stmt = $this->pdo->prepare($sql);
-            $stmt->execute();
+                $stmt = $this->pdo->prepare($sql);
+                $stmt->execute();
 
-            $rows = $stmt->fetchAll();
-            $loans = [];
+                $rows = $stmt->fetchAll();
+                $loans = [];
 
-            foreach($rows as $row) {
-                $loans[] = array(
-                    "book" => $row["BookID"],
-                    "member" => $row["MemberID"],
-                    "loanDate" => $row["LoanDate"],
-                    "dueDate" => $row["DueDate"],
-                    "returnDate" => $row["ReturnDate"]
-                );
+                foreach($rows as $row) {
+                    $loans[] = array(
+                        "book" => new Book($row["Title"], $row["Author"], $row["Description"], $row["ISBN"], $row["Genre"],
+                                        $row["Publisher"], $row["PublicationDate"], $row["Status"]),
+                        "member" => new Member($row["FirstName"], $row["LastName"], $row["DOB"], $row["Phone"], 
+                                            $row["Email"],$row["AddressLine1"], $row["AddressLine2"], $row["City"], 
+                                            $row["County"], $row["Eircode"], $row["RegistrationDate"], $row["Status"]),
+                        "loanDate" => DateTime::createFromFormat('Y-m-d', $row["LoanDate"])->format("l d M Y"),
+                        "dueDate" => DateTime::createFromFormat('Y-m-d', $row["DueDate"])->format("l d M Y"),
+                        "returnDate" => $row["ReturnDate"]
+                    );
+                }
+
+                return $loans;
+            } catch (Exception $e) {
+                throw $e;
             }
+        }
 
-            return $loans;
+        public function getTopBorrowers() : array {
+            try {
+                $sql = "SELECT m.*, COUNT(*) as LoanCount FROM Loans l
+                    JOIN Members m ON l.MemberID = m.MemberID
+                    GROUP BY m.MemberID
+                    ORDER BY LoanCount DESC
+                    LIMIT 3";
+
+                $stmt = $this->pdo->prepare($sql);
+                $stmt->execute();
+
+                $rows = $stmt->fetchAll();
+                $loans = [];
+
+                foreach($rows as $row) {
+                    $loans[] = [
+                        "member" => new Member (
+                        $row["FirstName"], 
+                        $row["LastName"], 
+                        $row["DOB"], 
+                        $row["Phone"], 
+                        $row["Email"],
+                        $row["AddressLine1"], 
+                        $row["AddressLine2"], 
+                        $row["City"], 
+                        $row["County"], 
+                        $row["Eircode"], 
+                        $row["RegistrationDate"], 
+                        $row["Status"]
+                        ),
+                        "loanCount" => $row["LoanCount"]
+                    ];
+                } 
+
+                return $loans;
+            } catch (Exception $e) {
+                throw $e;
+            }
         }
     }
 ?>

@@ -79,7 +79,6 @@
             }
 
             return $user;
-
         }
 
         /**
@@ -126,6 +125,10 @@
 
             if (!BookValidator::isValidStatus($book->getStatus())) {
                 $inputErrors['cstatus'] = "Invalid status. Please enter a valid status.";
+            }
+
+            if ($this->searchBooks($book->getIsbn()) !== null) {
+                $inputErrors['cisbn'] = "ISBN already in use. Please enter a valid ISBN.";
             }
 
             if (empty($inputErrors)) {
@@ -357,6 +360,8 @@
                 $memberError = "This member has overdue books";
             } else if ($this->getUnpaidMemberFine($memberID) > 0) {
                 $memberError = "This member has outstanding fines.";
+            } else if ($this->getCurrentLoanCount($memberID) > 0) {
+                $memberError = "This member books loaned.";
             } else {
                $this->memberRepo->alterMemberStatus($memberID);
             }
@@ -414,6 +419,10 @@
 
         public function getRecentLoans() : array {
             return $this->loanRepo->getRecentLoans();
+        }
+
+        public function getTopBorrowers() : array {
+            return $this->loanRepo->getTopBorrowers();
         }
         
         /**
