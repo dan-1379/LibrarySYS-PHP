@@ -2,24 +2,22 @@
     require_once("config/config.php");
 
     $inputErrors = [];
-    $success = '';
 
     if (isset($_POST['submitBookDetails'])) {
-        $ctitle = $_POST['ctitle'] ?? "";
-        $cauthor = $_POST['cauthor'] ?? "";
-        $cdescription = $_POST['cdescription'] ?? "";
-        $cisbn = $_POST['cisbn'] ?? "";
-        $cgenre = $_POST['cgenre'] ?? "";
-        $cpublisher = $_POST['cpublisher'] ?? "";
-        $cpublication = $_POST['cpublication'] ?? "";
-        $cstatus = $_POST['cstatus'] ?? "";
+        $ctitle = htmlspecialchars($_POST['ctitle'] ?? "");
+        $cauthor = htmlspecialchars($_POST['cauthor'] ?? "");
+        $cdescription = htmlspecialchars($_POST['cdescription'] ?? "");
+        $cisbn = htmlspecialchars($_POST['cisbn'] ?? "");
+        $cgenre = htmlspecialchars($_POST['cgenre'] ?? "");
+        $cpublisher = htmlspecialchars($_POST['cpublisher'] ?? "");
+        $cpublication = htmlspecialchars($_POST['cpublication'] ?? "");
+        $cstatus = htmlspecialchars($_POST['cstatus'] ?? "");
 
         $book = new Book($ctitle, $cauthor, $cdescription, $cisbn, $cgenre, $cpublisher, $cpublication, $cstatus);
         $inputErrors = $libraryService->addBook($book);
 
         if (empty($inputErrors)) {
             $success = "Book added successfully";
-            header("Location: addBook.php");
         }
     }
 ?>
@@ -31,6 +29,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Add Book</title>
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
 <body>
     <?php include_once("inc/navMenu.php"); ?>
@@ -44,7 +43,7 @@
                 <?php if (!empty($success)) : ?>
                     <div class="successOutput">
                         <i class="fa fa-check-circle"></i>
-                        <span class="successMessage"><?php echo $success; ?></span>
+                        <span class="successText"><?php echo $success; ?></span>
                     </div>
                 <?php endif; ?>
 

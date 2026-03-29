@@ -23,9 +23,7 @@
     session_start();
 
     $publicPage = ['login.php'];
-
-    $currentPage = basename($_SERVER['PHP_SELF']); 
-    // full path of file being run stripped by basename down to file name
+    $currentPage = basename($_SERVER['PHP_SELF']);  // full path of file being run stripped by basename down to file name
 
     if (!in_array($currentPage, $publicPage) && !isset($_SESSION['username'])) {
         header("Location: login.php");

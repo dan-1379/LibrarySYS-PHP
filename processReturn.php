@@ -93,7 +93,7 @@
 
                         <div class="memberCardInfo">
                             <h3 class="memberCardName"><?php echo $_SESSION['Member']->getFirstName() . ' ' . $_SESSION['Member']->getLastName() ?></h3>
-                            <span class="memberCardId"><?php echo "ID:" . $_SESSION['Member']->getId(); ?></span>
+                            <span class="memberCardId"><?php echo "ID: " . $_SESSION['Member']->getId(); ?></span>
                         </div>
                     </div>
 
@@ -133,7 +133,7 @@
                                 </div>
                                 <div class="memberCardInfo">
                                     <h3 class="memberCardName"><?php echo $book->getTitle(); ?></h3>
-                                    <span class="memberCardId"><?php echo "ID:" . $book->getAuthor(); ?></span>
+                                    <span class="memberCardId"><?php echo "ID: " . $book->getISBN(); ?></span>
                                 </div>
                             </div>
 

@@ -270,6 +270,28 @@ nav a:hover {
     background-color: var(--aside-border-color);
 }
 
+.infoMessage {
+    display: flex;
+    align-items: center;
+    gap: 0.5em;
+    background-color: var(--error-message-bg);
+    color: var(--error-msg-text);
+    border: 1px solid var(--error-msg-border);
+    border-radius: 0.5em;
+    padding: 0.5em 1em;
+    height: 10%;
+    margin-left: 2em;
+}
+
+.infoMessage i {
+    font-size: 1em;
+    color: var(--error-msg-text);
+}
+
+.infoMessage p {
+    font-size: 0.90em;
+}
+
 /*
     DASHBOARD MAIN MENU
 */
@@ -694,11 +716,11 @@ input[type="submit"]:hover {
     margin-top: 1em;
 }
 
-.errorOutput i {
+.errorOutput i, .infoMessage i {
     color: var(--error-msg-text);
 }
 
-.successMessage {
+.successText {
     color: var(--success-msg-text);
     font-size: 0.8rem;
     letter-spacing: 0.1em;

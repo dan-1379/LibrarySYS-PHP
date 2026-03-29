@@ -119,8 +119,8 @@
                     </button>
 
                     <div class="submenu">
-                        <a href="#">Produce Fine Report</a>
-                        <a href="#">Produce Genre Report</a>
+                        <!-- <a href="#">Produce Fine Report</a>
+                        <a href="#">Produce Genre Report</a> -->
                     </div>
                 </div>
             <?php endif; ?>
@@ -128,12 +128,14 @@
             <div class="divider"></div>
 
             <div class="menuItem">
-                <button onclick="logout" id="logoutButton">
-                    <div class="menuItem-name">
-                        <i class="fa fa-sign-out"></i>
-                        <span>Logout</span>
-                    </div>
-                </button>
+                <form action="logout.php" method="post">
+                    <button type="submit" id="logoutButton">
+                        <div class="menuItem-name">
+                            <i class="fa fa-sign-out"></i>
+                            <span>Logout</span>
+                        </div>
+                    </button>
+                </form>
             </div>
 
             <div class="lightMode">

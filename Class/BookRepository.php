@@ -54,7 +54,7 @@
 
                 return $books;
             } catch (PDOException $e) {  
-                return [];
+                throw new Exception("Could not retrieve books from the database.");
             } 
         }
 
@@ -70,7 +70,7 @@
                 $stmt->execute();
                 return $stmt->fetchColumn();
             } catch (PDOException $e) {  
-                return 0;
+                throw $e;
             } 
         }
 
@@ -98,7 +98,7 @@
 
                 $stmt->execute();
             } catch (PDOException $e) {  
-                throw $e;
+                throw new Exception("This book could not be saved to the database.");
             } 
         }
 
@@ -108,60 +108,74 @@
          * @param string $searchKey The ISBN of the book to locate.
          * @return Book|null The book object if found. Otherwise, null.
          */
-        public function searchBooks(string $searchKey) {
-            if (empty($searchKey)) {
-                return null;
-            }
+        public function searchBooks(string $searchKey) : ?Book {
+            try {    
+                if (empty($searchKey)) {
+                        return null;
+                    }
 
-            $sql = "SELECT * FROM Books WHERE ISBN = :search";
+                    $sql = "SELECT * FROM Books WHERE ISBN = :search";
 
-            $stmt = $this->pdo->prepare($sql);
-            $stmt->bindValue(":search", $searchKey);
-            $stmt->execute();
+                    $stmt = $this->pdo->prepare($sql);
+                    $stmt->bindValue(":search", $searchKey);
+                    $stmt->execute();
 
-            $row = $stmt->fetch();
+                    $row = $stmt->fetch();
 
-            if (!$row) {
-                return null;
-            }
+                    if (!$row) {
+                        return null;
+                    }
 
-            return new Book (
-                    $row['Title'],
-                    $row['Author'],
-                    $row['Description'],
-                    $row['ISBN'],
-                    $row['Genre'],
-                    $row['Publisher'],
-                    $row['PublicationDate'],
-                    $row['Status'],
-                    $row['BookID']
-            );
+                    return new Book (
+                            $row['Title'],
+                            $row['Author'],
+                            $row['Description'],
+                            $row['ISBN'],
+                            $row['Genre'],
+                            $row['Publisher'],
+                            $row['PublicationDate'],
+                            $row['Status'],
+                            $row['BookID']
+                    );
+            } catch (PDOException $e) {  
+                throw $e;
+            } 
         }
 
-        public function getBookById(int $bookID) {
-            $sql = "SELECT * FROM Books WHERE BookID = :cbookID";
+        /**
+         * Searches for a book in the database by its ID number.
+         * 
+         * @param int $bookID The ID of the book to locate.
+         * @return Book|null The book object if found. Otherwise, null.
+         */
+        public function getBookById(int $bookID) : ?Book {
+            try {    
+                $sql = "SELECT * FROM Books WHERE BookID = :cbookID";
 
-            $stmt = $this->pdo->prepare($sql);
-            $stmt->bindValue(":cbookID", $bookID);
-            $stmt->execute();
+                $stmt = $this->pdo->prepare($sql);
+                $stmt->bindValue(":cbookID", $bookID);
+                $stmt->execute();
 
-            $row = $stmt->fetch();
+                $row = $stmt->fetch();
 
-            if (!$row) {
-                return null;
-            }
+                if (!$row) {
+                    return null;
+                }
 
-            return new Book (
-                    $row['Title'],
-                    $row['Author'],
-                    $row['Description'],
-                    $row['ISBN'],
-                    $row['Genre'],
-                    $row['Publisher'],
-                    $row['PublicationDate'],
-                    $row['Status'],
-                    $row['BookID']
-            );
+                return new Book (
+                        $row['Title'],
+                        $row['Author'],
+                        $row['Description'],
+                        $row['ISBN'],
+                        $row['Genre'],
+                        $row['Publisher'],
+                        $row['PublicationDate'],
+                        $row['Status'],
+                        $row['BookID']
+                );
+            } catch (PDOException $e) {  
+                throw $e;
+            } 
         }
 
         /**

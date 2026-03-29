@@ -158,7 +158,6 @@
 
                 // https://www.php.net/manual/en/datetime.diff.php
                 return (int) $today->diff($dueDate)->days;
-
             } catch(PDOException $e) {
                 throw $e;
             }

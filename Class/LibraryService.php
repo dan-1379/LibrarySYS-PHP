@@ -132,7 +132,11 @@
             }
 
             if (empty($inputErrors)) {
-                $this->bookRepo->insertBook($book);
+                try {
+                    $this->bookRepo->insertBook($book);
+                } catch (Exception $e) {
+                    $inputErrors["db_con"] = $e->getMessage();
+                }
             }
 
             return $inputErrors;
@@ -144,7 +148,11 @@
          * @return array An array of Book objects, or an empty array if none found.
          */
         public function getAllBooks() : array {
-            return $this->bookRepo->getAllBooks();
+            try {
+                return $this->bookRepo->getAllBooks();
+            } catch (Exception $e) {
+                return [];
+            }
         }
 
         /**
