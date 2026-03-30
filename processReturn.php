@@ -14,6 +14,8 @@
     
     $booksLoaned = [];
 
+    $success = "";
+
     if (!empty($searchMember)) {
         unset($_SESSION['SelectedBooks']);
         unset($_SESSION['FineErrors']);
@@ -56,6 +58,7 @@
 
         $updatedLoans = $libraryService->getLoanedBooks($_SESSION['Member']->getId());
         $_SESSION['LoanedBooks'] = $updatedLoans;
+        $success = "Books returned successfully";
     }
 ?>
 
@@ -108,6 +111,13 @@
             <form action="processReturn.php" method="post">
                 <div class="formContainer">
                     <h2>Active Book Loans</h2>
+
+                    <?php if (!empty($success)) : ?>
+                        <div class="successOutput">
+                            <i class="fa fa-check-circle"></i>
+                            <span class="successText"><?php echo $success; ?></span>
+                        </div>
+                    <?php endif; ?>
 
                     <?php if (!empty($_SESSION['FineErrors'])) : ?>
                         <h2>Fines to be paid</h2>

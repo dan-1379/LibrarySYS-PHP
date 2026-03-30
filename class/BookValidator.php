@@ -137,15 +137,6 @@
         }
 
         /**
-         * Helper method to check if the provided ISBN is unique in the database.
-         * @param string $isbn - The ISBN of the book.
-         * @return bool - True if the ISBN is unique; otherwise, false.
-         */
-        public static function isUniqueISBN(string $isbn) : bool {
-            return true;
-        }
-
-        /**
          * Determines if the provided genre is valid.
          * @param string $genre - The genre of the book.
          * @return bool - True if the genre is valid; otherwise false.
