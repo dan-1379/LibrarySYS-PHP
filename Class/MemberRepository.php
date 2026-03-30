@@ -58,7 +58,7 @@
 
                 return $members;
             } catch (PDOException $e) {  
-                return [];
+                throw new Exception("Could not retrieve members from the database.");
             } 
         }
 
@@ -94,7 +94,7 @@
 
                 $stmt->execute();
             } catch (PDOException $e) {
-                throw new Exception("Error updating member: " . $e->getMessage());
+                throw new Exception("Error updating member. Please try again.");
             }
         }
 
@@ -129,7 +129,7 @@
 
                 $stmt->execute();
             } catch (PDOException $e) {
-                throw new Exception("Error updating member: " . $e->getMessage());
+                throw new Exception("Error adding member. Please try again.");
             }
         }
 
@@ -140,37 +140,41 @@
          * @return Member|null The member object if found. Otherwise, null.
          */
         public function searchMember(string $searchKey) {
-            if (empty($searchKey)) {
-                return null;
+            try {
+                if (empty($searchKey)) {
+                    return null;
+                }
+
+                $sql = "SELECT * FROM Members WHERE MemberID = :search";
+
+                $stmt = $this->pdo->prepare($sql);
+                $stmt->bindValue(":search", $searchKey);
+                $stmt->execute();
+
+                $row = $stmt->fetch();
+
+                if (!$row) {
+                    return null;
+                }
+
+                return new Member (
+                        $row['FirstName'],
+                        $row['LastName'],
+                        $row['DOB'],
+                        $row['Phone'],
+                        $row['Email'],
+                        $row['AddressLine1'],
+                        $row['AddressLine2'],
+                        $row['City'],
+                        $row['County'],
+                        $row['Eircode'],
+                        $row['RegistrationDate'],
+                        $row['Status'],
+                        $row['MemberID']
+                );
+            } catch (PDOException $e) {  
+                throw new Exception("An error occurred while searching. Please try again.");
             }
-
-            $sql = "SELECT * FROM Members WHERE MemberID = :search";
-
-            $stmt = $this->pdo->prepare($sql);
-            $stmt->bindValue(":search", $searchKey);
-            $stmt->execute();
-
-            $row = $stmt->fetch();
-
-            if (!$row) {
-                return null;
-            }
-
-            return new Member (
-                    $row['FirstName'],
-                    $row['LastName'],
-                    $row['DOB'],
-                    $row['Phone'],
-                    $row['Email'],
-                    $row['AddressLine1'],
-                    $row['AddressLine2'],
-                    $row['City'],
-                    $row['County'],
-                    $row['Eircode'],
-                    $row['RegistrationDate'],
-                    $row['Status'],
-                    $row['MemberID']
-            );
         }
 
         /**
@@ -193,6 +197,13 @@
             }
         }
 
+        /**
+         * Retrieves the total count of members in the database.
+         * 
+         * @param $status The count of members the status applies to i.e. 'A' for active
+         *  or 'I' for inactive.
+         * @return int An integer count of the members.
+         */
         public function getTotalMembers(string $status) : int {
             try {
                 $sql = "SELECT COUNT(*) FROM Members WHERE Status = :cstatus";
@@ -201,9 +212,9 @@
                 $stmt->bindValue(":cstatus", $status);
                 $stmt->execute();
 
-                return $stmt->fetchColumn();
+                return (int) $stmt->fetchColumn();
             } catch (PDOException $e) {
-                throw new Exception("Error updating member: " . $e->getMessage());
+                throw new Exception("Error updating member. Please try again.");
             }
         }
     }

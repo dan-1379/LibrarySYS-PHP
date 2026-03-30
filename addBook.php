@@ -47,6 +47,13 @@
                     </div>
                 <?php endif; ?>
 
+                <?php if (!empty($inputErrors['db_con'])): ?>
+                        <div class="errorOutput">
+                            <i class="fa fa-exclamation-triangle"></i>
+                            <span class="errorMessage"><?php echo $inputErrors['db_con'] ?></span>
+                        </div>
+                    <?php endif; ?>
+
                 <div class="formGroup">
                     <label for="ctitle">Title</label>
                     <input type="text" name="ctitle" id="ctitle" placeholder="Enter title" value="<?php echo htmlspecialchars($_POST['ctitle'] ?? '') ?>">

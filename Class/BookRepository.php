@@ -66,11 +66,13 @@
         public function getTotalCount() : int {
             try {
                 $sql = 'SELECT COUNT(*) FROM Books';
+
                 $stmt = $this->pdo->prepare($sql);
                 $stmt->execute();
+
                 return $stmt->fetchColumn();
             } catch (PDOException $e) {  
-                throw $e;
+                throw new Exception("Could not retrieve book count.");
             } 
         }
 
@@ -110,35 +112,31 @@
          */
         public function searchBooks(string $searchKey) : ?Book {
             try {    
-                if (empty($searchKey)) {
-                        return null;
-                    }
+                $sql = "SELECT * FROM Books WHERE ISBN = :search";
 
-                    $sql = "SELECT * FROM Books WHERE ISBN = :search";
+                $stmt = $this->pdo->prepare($sql);
+                $stmt->bindValue(":search", $searchKey);
+                $stmt->execute();
 
-                    $stmt = $this->pdo->prepare($sql);
-                    $stmt->bindValue(":search", $searchKey);
-                    $stmt->execute();
+                $row = $stmt->fetch();
 
-                    $row = $stmt->fetch();
+                if (!$row) {
+                    return null;
+                }
 
-                    if (!$row) {
-                        return null;
-                    }
-
-                    return new Book (
-                            $row['Title'],
-                            $row['Author'],
-                            $row['Description'],
-                            $row['ISBN'],
-                            $row['Genre'],
-                            $row['Publisher'],
-                            $row['PublicationDate'],
-                            $row['Status'],
-                            $row['BookID']
-                    );
+                return new Book (
+                        $row['Title'],
+                        $row['Author'],
+                        $row['Description'],
+                        $row['ISBN'],
+                        $row['Genre'],
+                        $row['Publisher'],
+                        $row['PublicationDate'],
+                        $row['Status'],
+                        $row['BookID']
+                );
             } catch (PDOException $e) {  
-                throw $e;
+                throw new Exception("An error occurred while searching. Please try again.");
             } 
         }
 
@@ -161,7 +159,7 @@
                 if (!$row) {
                     return null;
                 }
-
+                
                 return new Book (
                         $row['Title'],
                         $row['Author'],
@@ -174,7 +172,7 @@
                         $row['BookID']
                 );
             } catch (PDOException $e) {  
-                throw $e;
+                throw new Exception("An error occurred while searching. Please try again.");
             } 
         }
 
@@ -195,7 +193,7 @@
 
                 $stmt->execute();
             } catch (PDOException $e) {
-                throw $e;
+                throw new Exception("An error occured. Please try again");
             }
         }
     }

@@ -35,8 +35,23 @@
             }
         }
 
+        /**
+         * Retrieves login credentials for user with specified username to check users entry
+         * against.
+         * 
+         * If username exists in the database, the username and password are extracted.
+         * The password entered is hashed and compared to the password in the database.
+         * If this is successful, the login is successful and the username is returned for 
+         * the session.
+         * 
+         * @param $username The username of the user.
+         * @param $password The password of the user prior to hashing.
+         * 
+         * @return null|array An array of errors if errors occur or null if login is successful.
+         */
         public function processLogin($username, $password) : ?array {
             $sql = "SELECT * FROM Users WHERE Username = ?";
+            
             $stmt = $this->pdo->prepare($sql);
             $stmt->execute([$username]);
             $user = $stmt->fetch();
@@ -49,9 +64,7 @@
                 return null;
             }
 
-            return [
-                    "username" => $user['Username']
-                ];
+            return ["username" => $user['Username']];
         }
     }
 ?>

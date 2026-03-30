@@ -43,7 +43,7 @@
 
                 $stmt->execute();         
             } catch (PDOException $e) {  
-                throw $e;
+                throw new Exception("Error inserting fine.");
             } 
         }
 
@@ -69,18 +69,15 @@
 
                 return $result > 0 ? (float) $result : 0.00;
             } catch (PDOException $e) {  
-                throw $e;
+                throw new Exception("Error retrieving unpaid member fine.");
             }
         }
 
         /**
-         * Updates the status of a fine in the database
+         * Retrieves all fines from the database.
          * 
-         * @param int $fineID The unique identifier of the fine to be updated.
-         * @param string $status The new status of the fine, Unpaid ('U') or Paid ('P')
+         * @return array An array of fine objects, or an empty array if none found.
          */
-        public function updateFineStatus(int $fineID, string $status) : void {}
-
         public function getAllFines() : array {
             try {
                 $sql = 'SELECT * FROM Fines';
@@ -102,7 +99,7 @@
 
                 return $fines;
             } catch (PDOException $e) {  
-                return [];
+                throw new Exception("Error retrieving all fines.");
             }
         }
 
@@ -119,11 +116,17 @@
                 $stmt->bindValue("cfineID", $fineID);
                 $stmt->execute();
             } catch(PDOException $e) {
-                throw $e;
+                throw new Exception("Error deleting fine record.");
             }
         }
 
-        public function alterFineStatus(int $fineID) {
+        /**
+         * Changes the status of the fine to signify paid.
+         * 
+         * @param int $fineID The unique identifier of the fine to be deleted.
+         * @return void
+         */
+        public function alterFineStatus(int $fineID) : void {
             try {
                 $sql = "UPDATE FINES SET Status = 'P' WHERE FineID = :cfineID";
 
@@ -131,10 +134,16 @@
                 $stmt->bindValue(':cfineID', $fineID);
                 $stmt->execute();
             } catch(PDOException $e) {
-                throw $e;
+                throw new Exception("Error changing fine status.");
             }
         }
 
+        /**
+         * Compares the due date of the loan to todays date to check days overdue.
+         * 
+         * @param int $loanID The unique identifier of the loan.
+         * @return int The number of days the book is overdue.
+         */
         public function calculateOverdueDays(int $loanID) : int {
             try {
                 $sql = "SELECT DueDate FROM LOANS WHERE LoanID = :cloanID";
@@ -159,14 +168,26 @@
                 // https://www.php.net/manual/en/datetime.diff.php
                 return (int) $today->diff($dueDate)->days;
             } catch(PDOException $e) {
-                throw $e;
+                throw new Exception("Error calculating overdue days.");
             }
         }
 
+        /**
+         * Calculates the total fine.
+         * Uses a defined constant in the configuration file to calculate.
+         * 
+         * @param int $daysOverdue The number of days overdue.
+         * @return float The total fine for the loanitem.
+         */
         public function calculateFineAmount($daysOverdue) : float {
             return $daysOverdue * FINE_RATE_PER_DAY;
         }
 
+        /**
+         * Retrieves the total number of fines in the database.
+         * 
+         * @return float The total value of fines that are unpaid.
+         */
         public function getTotalFines() : float {
             try {
                 $sql = "SELECT SUM(FineAmount) FROM Fines WHERE Status = 'U'";
@@ -178,7 +199,7 @@
 
                 return $result === 0.00 ? 0.00 : (float) $result;
             } catch(PDOException $e) {
-                throw $e;
+                throw new Exception("Error retrieving total fines.");
             }
         }
     }

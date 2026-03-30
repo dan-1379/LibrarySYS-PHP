@@ -95,51 +95,58 @@
             </div>
         <?php endif; ?>
 
-        <div class="memberTable">
-            <table class="memberCrudTable">
-                <tr>
-                    <th>ID</th>
-                    <th>Name</th>
-                    <th>DOB</th>
-                    <th>Phone</th>
-                    <th>Email</th>
-                    <th>Address</th>
-                    <th>County</th>
-                    <th>Registration</th>
-                    <th>Status</th>
-                    <th>Edit</th>
-                    <th>Delete</th>
-                </tr>
-
-                <?php foreach($members as $member) : ?>
-                    <?php $statusText = ($member->getStatus() === 'A') ? 'Active' : 'Inactive'; ?>
+        <?php if(empty($members)) : ?>
+            <div class="infoMessage">
+                <i class="fa fa-warning"></i>
+                <p>No members currently in the library</p>
+            </div>
+        <?php else : ?>
+            <div class="memberTable">
+                <table class="memberCrudTable">
                     <tr>
-                        <td><?php echo $member->getId(); ?></td>
-                        <td><?php echo $member->getFirstName() . ' ' . $member->getLastName();; ?></td>
-                        <td><?php echo $member->getDob(); ?></td>
-                        <td><?php echo $member->getPhone(); ?></td>
-                        <td><?php echo $member->getEmail(); ?></td>
-                        <td><?php echo $member->getAddressLine1() . ', ' . $member->getAddressLine2() . ', ' . $member->getCity() . ', ' . $member->getEircode(); ?></td>
-                        <td><?php echo $member->getCounty(); ?></td>
-                        <td><?php echo $member->getRegistrationDate(); ?></td>
-                        <td><?php echo $statusText ?></td>
-                        <td>
-                            <div class="editMember">
-                                <button onclick='showEditMenu(this)' class='editMemberButton'><i class='fa fa-edit'></i>EDIT</button>
-                            </div>
-                        </td>
-                        <td>
-                            <form action="memberCRUD.php" method="post">
-                                <div class='deleteMember'>
-                                    <input type="hidden" name="cMemberID" value="<?php echo $member->getId(); ?>">
-                                    <button onclick = 'deleteMember(this)' class='deleteMemberButton' name="deleteMember"><i class='fa fa-trash-o'></i>DELETE</button>
-                                </div>
-                            </form>
-                        </td>
+                        <th>ID</th>
+                        <th>Name</th>
+                        <th>DOB</th>
+                        <th>Phone</th>
+                        <th>Email</th>
+                        <th>Address</th>
+                        <th>County</th>
+                        <th>Registration</th>
+                        <th>Status</th>
+                        <th>Edit</th>
+                        <th>Delete</th>
                     </tr>
-                <?php endforeach; ?>
-            </table>
-        </div>
+
+                    <?php foreach($members as $member) : ?>
+                        <?php $statusText = ($member->getStatus() === 'A') ? 'Active' : 'Inactive'; ?>
+                        <tr>
+                            <td><?php echo $member->getId(); ?></td>
+                            <td><?php echo $member->getFirstName() . ' ' . $member->getLastName();; ?></td>
+                            <td><?php echo $member->getDob(); ?></td>
+                            <td><?php echo $member->getPhone(); ?></td>
+                            <td><?php echo $member->getEmail(); ?></td>
+                            <td><?php echo $member->getAddressLine1() . ', ' . $member->getAddressLine2() . ', ' . $member->getCity() . ', ' . $member->getEircode(); ?></td>
+                            <td><?php echo $member->getCounty(); ?></td>
+                            <td><?php echo $member->getRegistrationDate(); ?></td>
+                            <td><?php echo $statusText ?></td>
+                            <td>
+                                <div class="editMember">
+                                    <button onclick='showEditMenu(this)' class='editMemberButton'><i class='fa fa-edit'></i>EDIT</button>
+                                </div>
+                            </td>
+                            <td>
+                                <form action="memberCRUD.php" method="post">
+                                    <div class='deleteMember'>
+                                        <input type="hidden" name="cMemberID" value="<?php echo $member->getId(); ?>">
+                                        <button onclick = 'deleteMember(this)' class='deleteMemberButton' name="deleteMember"><i class='fa fa-trash-o'></i>DELETE</button>
+                                    </div>
+                                </form>
+                            </td>
+                        </tr>
+                    <?php endforeach; ?>
+                </table>
+            </div>
+        <?php endif; ?>
     </main>
 
     <div class="contentOverlay" id="overlay" onclick="closeEditMenu()"></div>
@@ -150,6 +157,13 @@
                 <div class="formContainerUpdateSplit">
                     <input type="hidden" name="cMemberID" id="cMemberID">
 
+                    <?php if (!empty($inputErrors['db_con'])): ?>
+                        <div class="errorOutput">
+                            <i class="fa fa-exclamation-triangle"></i>
+                            <span class="errorMessage"><?php echo $inputErrors['db_con'] ?></span>
+                        </div>
+                    <?php endif; ?>
+                    
                     <div class="formGroup">
                         <label for="cFirstName">First Name</label>
                         <input type="text" name="cFirstName" id="cFirstName" placeholder="Enter first name" value="<?php echo htmlspecialchars($_POST['cFirstName'] ?? '') ?>">

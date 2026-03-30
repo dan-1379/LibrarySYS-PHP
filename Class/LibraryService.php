@@ -53,6 +53,21 @@
             $this->authRepo = $authRepo;
         }
 
+        /**
+         * Validates a users login credentials.
+         * 
+         * Validates the username and password fields and checks the credentials against
+         * the users table.
+         * 
+         * @param $username The username of the user.
+         * @param $password The password of the user prior to hashing.
+         * 
+         * @return null|array An array of errors if errors occur or null if login is successful.
+         * 
+         * @see AuthenticationValidator::isValidUsername()
+         * @see AuthenticationValidator::isValidPassword()
+         * @see AuthenticationRepository::processLogin()
+         */
         public function processLogin($username, $password) : ?array {
             $credentialErrors = [];
 
@@ -89,6 +104,9 @@
          * 
          * @param Book $book The Book object to be validated and added.
          * @return array An array of the validation errors, or empty array if successful.
+         * 
+         * @see BookValidator
+         * @see BookRepository::insertBook()
          */
         public function addBook(Book $book) : array {
             $inputErrors = [];
@@ -146,6 +164,8 @@
          * Retrieves all books from the database using the BookRepository operation.
          * 
          * @return array An array of Book objects, or an empty array if none found.
+         * 
+         * @see BookRepository::getAllBooks()
          */
         public function getAllBooks() : array {
             try {
@@ -159,9 +179,15 @@
          * Retrieves the total number of books in the database using the BookRepository operation.
          * 
          * @return int The total number of books.
+         * 
+         * @see BookRepository::getTotalCount()
          */
         public function getTotalBooks() : int {
-            return $this->bookRepo->getTotalCount();
+            try {
+                return $this->bookRepo->getTotalCount();
+            } catch (Exception $e) {
+                return 0;
+            }
         }
 
         /**
@@ -170,19 +196,21 @@
          * Validates the ISBN before searching the database.
          * 
          * @param string $searchKey The ISBN of the book to search for.
-         * @throws InvalidArgumentException If the ISBN is not valid.
          * @return Book|null The Book object if found, null otherwise.
+         * 
+         * @see BookValidator::isValidISBN()
+         * @see BookRepository::searchBooks()
          */
         public function searchBooks(string $searchKey) : ?Book {
             if (!BookValidator::isValidISBN($searchKey)) {
-                throw new InvalidArgumentException("Not a valid ISBN. Please try again.");
+                return null;
             }
 
-            return $this->bookRepo->searchBooks($searchKey);
-        }
-
-        public function alterBookStatus(Book $book) : void {
-            $this->bookRepo->alterBookStatus($book);
+            try {
+                return $this->bookRepo->searchBooks($searchKey);
+            } catch (Exception $e) {
+                return null;
+            }
         }
 
         /**
@@ -194,6 +222,9 @@
          * 
          * @param Member $member The Member object to be validated and added.
          * @return array An array of validation errors, or empty if successful.
+         * 
+         * @see MemberValidator
+         * @see MemberRepository::addMember()
          */
         public function addMember(Member $member) : array {
             $inputErrors = [];
@@ -253,7 +284,11 @@
             }
 
             if (empty($inputErrors)) {
-                $this->memberRepo->addMember($member);
+                try {
+                    $this->memberRepo->addMember($member);
+                } catch (Exception $e) {
+                    $inputErrors["db_con"] = $e->getMessage();
+                }
             }
 
             return $inputErrors;
@@ -268,6 +303,9 @@
          * 
          * @param Member $member The Member object with updated details.
          * @return array An array of validation errors, or empty if successful.
+         * 
+         * @see MemberValidator
+         * @see MemberRepository::updateMember()
          */
         public function updateMember(Member $member) : array {
             $inputErrors = [];
@@ -319,7 +357,11 @@
             }
 
             if (empty($inputErrors)) {
-                $this->memberRepo->updateMember($member);
+                try {
+                    $this->memberRepo->updateMember($member);
+                } catch (Exception $e) {
+                    $inputErrors['db_con'] = $e->getMessage();
+                }
             }
 
             return $inputErrors;
@@ -329,13 +371,31 @@
          * Retrieves all members from the database.
          * 
          * @return array An array of Member objects, or an empty array if none found.
+         * 
+         * @see MemberRepository::getAllMembers()
          */
         public function getAllMembers() : array {
-            return $this->memberRepo->getAllMembers();
+            try {
+                return $this->memberRepo->getAllMembers();
+            } catch (Exception $e) {
+                return [];
+            }
         }
 
+        /**
+         * Retrieves the total count of members in the database.
+         * 
+         * @param $status The count of members the status applies to i.e. 'A' or 'I'
+         * @return int An integer count of the members.
+         * 
+         * @see MemberRepository::getTotalMembers()
+         */
         public function getTotalMembers($status) : int {
-            return $this->memberRepo->getTotalMembers($status);
+            try {
+                return $this->memberRepo->getTotalMembers($status);
+            } catch (Exception $e) {
+                return 0;
+            }
         }
 
         /**
@@ -346,13 +406,20 @@
          * @param string $searchKey The ID of the member to search for.
          * @throws InvalidArgumentException If the member ID is not valid.
          * @return Member|null The Member object if found, null otherwise.
+         * 
+         * @see MemberValidator::isValidID()
+         * @see MemberRepository::searchMember()
          */
         public function searchMembers(string $searchKey) : ?Member {
             if (!MemberValidator::isValidID($searchKey)) {
-                throw new InvalidArgumentException("Not a valid ID. Please try again.");
+                return null;
             }
 
-            return $this->memberRepo->searchMember($searchKey);
+            try {
+                return $this->memberRepo->searchMember($searchKey);
+            } catch (Exception $e) {
+                return null;
+            }
         }
 
         /**
@@ -360,41 +427,31 @@
          * 
          * @param Member $member The Member object whose status is to be altered.
          * @return void
+         * 
+         * @see LoanRepository::hasOverDueBooks()
+         * @see FineRepository::getUnpaidMemberFine()
+         * @see LoanRepository::getCurrentLoanCount()
+         * @see MemberRepository::alterMemberStatus()
          */
         public function alterMemberStatus(int $memberID) : ?string {
-            $memberError = "";
-
             if ($this->hasOverdueBooks($memberID) > 0) {
-                $memberError = "This member has overdue books";
-            } else if ($this->getUnpaidMemberFine($memberID) > 0) {
-                $memberError = "This member has outstanding fines.";
-            } else if ($this->getCurrentLoanCount($memberID) > 0) {
-                $memberError = "This member books loaned.";
-            } else {
-               $this->memberRepo->alterMemberStatus($memberID);
+                return "This member has overdue books";
+            }
+            
+            if ($this->getUnpaidMemberFine($memberID) > 0) {
+                return "This member has outstanding fines.";
+            } 
+            
+            if ($this->getCurrentLoanCount($memberID) > 0) {
+                return "This member books loaned.";
             }
 
-            return $memberError;
-        }
-
-        /**
-         * Adds a new loan transaction to the database.
-         * 
-         * @param Loan $loan The Loan object to be added.
-         * @return int The loan ID automatically generated by MariaDB which will be used when inserting
-         * loan items.
-         */
-        public function insertLoan(Loan $loan) : int {
-            return $this->loanRepo->insertLoan($loan);
-        } 
-
-        /**
-         * Adds a new loan item transaction to the database.
-         * 
-         * @param LoanItem $loanItem The LoanItem object to be added.
-         */
-        public function insertLoanItem(LoanItem $loanItem) : void {
-            $this->loanRepo->insertLoanItem($loanItem);
+            try {
+                $this->memberRepo->alterMemberStatus($memberID);
+                return null;
+            } catch (Exception $e) {
+                return $e->getMessage();
+            }
         }
 
         /**
@@ -402,9 +459,15 @@
          * 
          * @param int $member The member id.
          * @return int The count of books.
+         * 
+         * @see LoanRepository::hasOverDueBooks()
          */
         public function hasOverdueBooks(int $member) : int {
-            return $this->loanRepo->hasOverDueBooks($member);
+            try {
+                return $this->loanRepo->hasOverDueBooks($member);
+            } catch (Exception $e) {
+                return 0;
+            }
         }
 
         /**
@@ -412,25 +475,78 @@
          * 
          * @param int $member The member id.
          * @return int The count of books.
+         * 
+         * @see LoanRepository::getCurrentLoanCount()
          */
         public function getCurrentLoanCount(int $member) : int {
             return $this->loanRepo->getCurrentLoanCount($member);
+            try {
+                return $this->loanRepo->getCurrentLoanCount($member);
+            } catch (Exception $e) {
+                return 0;
+            }
         }
 
+        /**
+         * Retrieves the books currently on loan to a member.
+         * 
+         * @param int $member The member id.
+         * @return array An array of Book objects.
+         * 
+         * @see LoanRepository::getLoanedBooks()
+         */
         public function getLoanedBooks(int $memberID) : array {
-            return $this->loanRepo->getLoanedBooks($memberID);
+            try {
+                return $this->loanRepo->getLoanedBooks($memberID);
+            } catch (Exception $e) {
+                return [];
+            }
         }
 
+        /**
+         * Retrieves the count of loans on the system.
+         * 
+         * @return int The total count of loans.
+         * 
+         * @see LoanRepository::getTotalLoans()
+         */
         public function getTotalLoans() : int {
-            return $this->loanRepo->getTotalLoans();
+            try {
+                return $this->loanRepo->getTotalLoans();
+            } catch (Exception $e) {
+                return 0;
+            }
         }
 
+        /**
+         * Retrieves the five most recent loans from the system.
+         * 
+         * @return array An array of the five most recent loans containing 
+         * member, book and loan information.
+         * 
+         *  @see LoanRepository::getRecentLoans()
+         */
         public function getRecentLoans() : array {
-            return $this->loanRepo->getRecentLoans();
+            try {
+                return $this->loanRepo->getRecentLoans();
+            } catch (Exception $e) {
+                return [];
+            }
         }
 
+        /**
+         * Retrieves the top three members with the highest loan count.
+         * 
+         * @return array An array of the three members along with loan count.
+         * 
+         * @see LoanRepository::getTopBorrowers()
+         */
         public function getTopBorrowers() : array {
-            return $this->loanRepo->getTopBorrowers();
+            try {
+                return $this->loanRepo->getTopBorrowers();
+            } catch (Exception $e) {
+                return [];
+            }
         }
         
         /**
@@ -438,9 +554,15 @@
          * 
          * @param int $memberID The unique identifer of the member.
          * @return float The total unpaid fine amount, or 0.00 if no unpaid fines.
+         * 
+         * @see FineRepository::getUnpaidMemberFine()
          */
         public function getUnpaidMemberFine(int $memberID) : float {
-            return $this->fineRepo->getUnpaidMemberFine($memberID);
+            try {
+                return $this->fineRepo->getUnpaidMemberFine($memberID);
+            } catch (Exception $e) {
+                return 0.00;
+            }
         }
 
          /**
@@ -450,67 +572,137 @@
          * each book in the cart.
          * 
          * @param LoanItem $loanItem The LoanItem object to be added.
+         * 
+         * @see LoanRepository::processLoan()
+         * @see BookRepository::alterBookStatus()
          */
         public function processLoan(Loan $loan, array $booksInCart) : void {
-            $this->loanRepo->processLoan($loan, $booksInCart);
+            try {
+                $this->loanRepo->processLoan($loan, $booksInCart);
 
-            foreach($booksInCart as $bookInCart) {
-                $this->bookRepo->alterBookStatus($bookInCart);
+                foreach($booksInCart as $bookInCart) {
+                    $this->bookRepo->alterBookStatus($bookInCart);
+                }
+            } catch (Exception $e) {
+                throw $e;
             }
         }
 
-        public function processReturn($selectedToReturn) : array {
-            $finedBooks = [];
+        /**
+         * Executes the secondary transaction process.
+         * 
+         * Processes the return by checking the dates to ensure loan is not overdue.
+         * If overdue books are returned, a fine is calculated and inserted into the database.
+         * Updates return date for loan items and status of book.
+         * 
+         * @param array $selectedToReturn An array of book ID's the user has selected to be 
+         * returned.
+         * 
+         * @return array An array of fine strings for each book that now contains a fine,
+         * containing the value of the fine and amount of days overdue.
+         * 
+         * @see LoanRepository::getLoanByBookID()
+         * @see FineRepository::calculateOverdueDays()
+         * @see FineRepository::calculateFineAmount()
+         * @see Fine
+         * @see FineRepository::insertFine()
+         * @see BookRepository::alterBookStatus()
+         * @see LoanRepository::processReturn()
+         */
+        public function processReturn(array $selectedToReturn) : array {
+            try {
+                $finedBooks = [];
 
-            foreach($selectedToReturn as $bookID) {
-                $loanID = $this->loanRepo->getLoanByBookID((int) $bookID);
+                foreach($selectedToReturn as $bookID) {
+                    $loanID = $this->loanRepo->getLoanByBookID((int) $bookID);
 
-                if ($loanID) {
-                    $daysOverdue = $this->fineRepo->calculateOverdueDays($loanID);
+                    if ($loanID) {
+                        $daysOverdue = $this->fineRepo->calculateOverdueDays($loanID);
 
-                    if ($daysOverdue > 0) {
-                        $fineAmount = $this->fineRepo->calculateFineAmount($daysOverdue);
-                        $newFine = new Fine($fineAmount, $loanID, (int) $bookID);
-                        $this->fineRepo->insertFine($newFine);
+                        if ($daysOverdue > 0) {
+                            $fineAmount = $this->fineRepo->calculateFineAmount($daysOverdue);
+                            $newFine = new Fine($fineAmount, $loanID, (int) $bookID);
+                            $this->fineRepo->insertFine($newFine);
 
-                        $finedBooks[] = "A fine of €" . number_format($fineAmount, 2) . 
-                                        " has been added for book " . $bookID . " for days overdue: " . $daysOverdue;
+                            $finedBooks[] = "A fine of €" . number_format($fineAmount, 2) . 
+                                            " has been added for book " . $bookID . " for days overdue: " . $daysOverdue;
+                        }
+                    }
+
+                    $book = $this->bookRepo->getBookById((int) $bookID);
+
+                    if ($book) {
+                        $this->bookRepo->alterBookStatus($book);
                     }
                 }
 
-                $book = $this->bookRepo->getBookById((int) $bookID);
-                $this->bookRepo->alterBookStatus($book);
-
+                $this->loanRepo->processReturn($selectedToReturn);
+                return $finedBooks;
+            } catch(Exception $e) {
+                return [];
             }
-
-            $this->loanRepo->processReturn($selectedToReturn);
-            return $finedBooks;
         }
 
         /**
          * Retrieves all fines from the database.
          * 
          * @return array An array of Fine objects, or an empty array if none found.
+         * 
+         * @see FineRepository::getAllFines()
          */
         public function getAllFines() : array {
-            return $this->fineRepo->getAllFines();
+            try {
+                return $this->fineRepo->getAllFines();
+            } catch (Exception $e) {
+                return [];
+            }
         }
 
         /**
          * Hard deletes a fine from the database.
          * 
          * @param int $fineID The unique identifier of the fine to be deleted.
+         * @return void
+         * 
+         * @see FineRepository::deleteFine()
          */
         public function deleteFine(int $fineID) : void {
-            $this->fineRepo->deleteFine($fineID);
+            try {
+                $this->fineRepo->deleteFine($fineID);
+            } catch (Exception $e) {
+                throw $e;
+            }
         }
 
+        /**
+         * Changes the status of the fine to signify paid.
+         * 
+         * @param int $fineID The unique identifier of the fine to be deleted.
+         * @return void
+         * 
+         * @see FineRepository::alterFineStatus()
+         */
         public function alterFineStatus(int $fineID) : void {
-            $this->fineRepo->alterFineStatus($fineID);
+            try {
+                $this->fineRepo->alterFineStatus($fineID);
+            } catch (Exception $e) {
+                throw $e;
+            }
         }
 
+        /**
+         * Retrieves the total number of fines in the database.
+         * 
+         * @return float The total value of fines that are unpaid.
+         * 
+         * @see FineRepository::getTotalFines()
+         */
         public function getTotalFines() : float {
-            return $this->fineRepo->getTotalFines();
+            try {
+                return $this->fineRepo->getTotalFines();
+            } catch (Exception $e) {
+                return 0.00;
+            }
         }
     }
 ?>
