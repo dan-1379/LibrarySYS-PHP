@@ -1,4 +1,17 @@
 <?php 
+    /*******************************************************************************
+     * Title: Input Validation Methods
+     * Author: Daniel Courtney
+     * Site: N/A
+     * Date: 09/03/26
+     * Code Version: N/A
+     * Availability: https://github.com/dan-1379/LibrarySYS/blob/master/LibrarySYS/MemberValidator.cs
+     * Accessed: 31/03/26
+     * Modified: Code taken from MemberValidator class in SWE project for the purposes of validating
+     *           member entry fields. Code taken and modified for PHP usage.
+     *******************************************************************************/
+
+
     /*
     * 
     * Provides validation logic for member-related data within the Library System.

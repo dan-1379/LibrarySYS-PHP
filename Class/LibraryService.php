@@ -96,19 +96,7 @@
             return $user;
         }
 
-        /**
-         * Validates and adds a new Book to the database.
-         * 
-         * Validates all book fields before inserting into the database.
-         * Returns an array of errors if validation fails, or an empty array if book was added successfully.
-         * 
-         * @param Book $book The Book object to be validated and added.
-         * @return array An array of the validation errors, or empty array if successful.
-         * 
-         * @see BookValidator
-         * @see BookRepository::insertBook()
-         */
-        public function addBook(Book $book) : array {
+        private function validateBookDetails(Book $book) : array {
             $inputErrors = [];
 
             if (!BookValidator::isValidTitle($book->getTitle())) {
@@ -148,6 +136,24 @@
             if ($this->searchBooks($book->getIsbn()) !== null) {
                 $inputErrors['cisbn'] = "ISBN already in use. Please enter a valid ISBN.";
             }
+
+            return $inputErrors;
+        }
+
+        /**
+         * Validates and adds a new Book to the database.
+         * 
+         * Validates all book fields before inserting into the database.
+         * Returns an array of errors if validation fails, or an empty array if book was added successfully.
+         * 
+         * @param Book $book The Book object to be validated and added.
+         * @return array An array of the validation errors, or empty array if successful.
+         * 
+         * @see BookValidator
+         * @see BookRepository::insertBook()
+         */
+        public function addBook(Book $book) : array {
+            $inputErrors = $this->validateBookDetails($book);
 
             if (empty($inputErrors)) {
                 try {
@@ -213,20 +219,7 @@
             }
         }
 
-        /**
-         * Validates and adds a new member to the database.
-         * 
-         * Validates all member fields before inserting into the database.
-         * Returns an array of errors if validation fails, or an empty
-         * array if the member was successfully added.
-         * 
-         * @param Member $member The Member object to be validated and added.
-         * @return array An array of validation errors, or empty if successful.
-         * 
-         * @see MemberValidator
-         * @see MemberRepository::addMember()
-         */
-        public function addMember(Member $member) : array {
+        private function validateMemberDetails(Member $member) : array {
             $inputErrors = [];
 
             if (!MemberValidator::isValidName($member->getFirstName())) {
@@ -283,6 +276,25 @@
                 $inputErrors['cStatus'] = "Invalid status";
             }
 
+            return $inputErrors;
+        }
+
+        /**
+         * Validates and adds a new member to the database.
+         * 
+         * Validates all member fields before inserting into the database.
+         * Returns an array of errors if validation fails, or an empty
+         * array if the member was successfully added.
+         * 
+         * @param Member $member The Member object to be validated and added.
+         * @return array An array of validation errors, or empty if successful.
+         * 
+         * @see MemberValidator
+         * @see MemberRepository::addMember()
+         */
+        public function addMember(Member $member) : array {
+            $inputErrors = $this->validateMemberDetails($member);
+
             if (empty($inputErrors)) {
                 try {
                     $this->memberRepo->addMember($member);
@@ -308,53 +320,7 @@
          * @see MemberRepository::updateMember()
          */
         public function updateMember(Member $member) : array {
-            $inputErrors = [];
-
-            if (!MemberValidator::isValidName($member->getFirstName())) {
-                $inputErrors['cFirstName'] = "Invalid first name.";
-            }
-
-            if (!MemberValidator::isValidName($member->getLastName())) {
-                $inputErrors['cLastName'] = "Invalid last name.";
-            }
-
-            if (!MemberValidator::isValidDOB($member->getDob())) {
-                $inputErrors['cDOB'] = "Invalid DOB.";
-            }
-
-            $checkPhone = MemberValidator::isValidPhone($member->getPhone());
-
-            if ($checkPhone != "valid") {
-                $inputErrors['cPhone'] = $checkPhone;
-            }
-
-            $checkEmail = MemberValidator::IsValidEmail($member->getEmail());
-
-            if ($checkEmail != "valid") {
-                $inputErrors['cEmail'] = $checkEmail;
-            }
-
-            if (!MemberValidator::isValidAddressLine($member->getAddressLine1())) {
-                $inputErrors['cAddressLine1'] = "Invalid address line 1";
-            }
-
-            if (!MemberValidator::isValidAddressLine($member->getAddressLine2())) {
-                $inputErrors['cAddressLine2'] = "Invalid address line 2";
-            }
-
-            if (!MemberValidator::isValidCity($member->getCity())) {
-                $inputErrors['cCity'] = "Invalid city";
-            }
-
-            if (!MemberValidator::isValidCounty($member->getCounty())) {
-                $inputErrors['cCounty'] = "Invalid county";
-            }
-
-            $checkEircode = MemberValidator::isValidEircode($member->getEircode());
-
-            if ($checkEircode != "valid") {
-                $inputErrors['cEircode'] = $checkEircode;
-            }
+            $inputErrors = $this->validateMemberDetails($member);
 
             if (empty($inputErrors)) {
                 try {
@@ -479,7 +445,6 @@
          * @see LoanRepository::getCurrentLoanCount()
          */
         public function getCurrentLoanCount(int $member) : int {
-            return $this->loanRepo->getCurrentLoanCount($member);
             try {
                 return $this->loanRepo->getCurrentLoanCount($member);
             } catch (Exception $e) {

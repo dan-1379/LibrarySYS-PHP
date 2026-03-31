@@ -12,9 +12,7 @@
      *******************************************************************************/
 
 
-
-    /*
-     * 
+    /**
      * Provides validation logic for book-related data within the Library System.
      * This class is responsible for validating individual book fields such as
      * title, author, ISBN, publication date, and publisher, as well as enforcing
@@ -48,11 +46,25 @@
             return !empty(trim($description)) && strlen(trim($description)) <= 30;
         }
 
+        /*******************************************************************************
+         * Title: What is an ISBN?  
+         * Author: International ISBN Agency
+         * Site: https://www.isbn-international.org/
+         * Date: 31/03/2026
+         * Code Version: -
+         * Availability: https://www.isbn-international.org/content/what-isbn/10
+         * Accessed: 31/03/26
+         * Modified: No modifications made. Information taken to understand structure of
+         * ISBN for validation purposes.
+         *******************************************************************************/
+
         /**
          * Determines if the provided ISBN is valid.
          * @param string $isbn - The book ISBN to be validated.
          * @return bool - True if the ISBN is valid; False if any of the validation checks fail.
          */
+
+        
         public static function isValidISBN(string $isbn) : string {
             if (empty($isbn)) {
                 return "ISBN must not be null or contain only whitespaces";
@@ -135,6 +147,8 @@
 
             return true;
         }
+
+        /** END OF REFERENCED CONTENT */
 
         /**
          * Determines if the provided genre is valid.
