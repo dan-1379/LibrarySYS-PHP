@@ -1,52 +1,39 @@
 <?php
-    ini_set('display_errors', 1);
-    error_reporting(E_ALL);
-
     require_once("config/config.php");
     validateRoleForPage(['reception', 'manager']);
 
     $inputErrors = [];
     $success = "";
+    $errors = "";
+
+    function getMemberFromPost() : Member {
+        return new Member(
+            trim($_POST['cFirstName'] ?? ""),
+            trim($_POST['cLastName'] ?? ""),
+            trim($_POST['cDOB'] ?? ""),
+            trim($_POST['cPhone'] ?? ""),
+            trim($_POST['cEmail'] ?? ""),
+            trim($_POST['cAddressLine1'] ?? ""),
+            trim($_POST['cAddressLine2'] ?? ""),
+            trim($_POST['cCity'] ?? ""),
+            trim($_POST['cCounty'] ?? ""),
+            trim($_POST['cEircode'] ?? ""),
+            trim($_POST['cRegistrationDate'] ?? ""),
+            trim($_POST['cStatus'] ?? ""),
+            (int) ($_POST['cMemberID'] ?? 0)
+        );
+    }
     
     if (isset($_POST["updateMemberDetails"])) {
-        $cfirstName = $_POST['cFirstName'] ?? "";
-        $clastName = $_POST['cLastName'] ?? "";
-        $cDOB = $_POST['cDOB'] ?? "";
-        $cPhone = $_POST['cPhone'] ?? "";
-        $cEmail = $_POST['cEmail'] ?? "";
-        $cAddressLine1 = $_POST['cAddressLine1'] ?? "";
-        $cAddressLine2 = $_POST['cAddressLine2'] ?? "";
-        $cCity = $_POST['cCity'] ?? "";
-        $cCounty = $_POST['cCounty'] ?? "";
-        $cEircode = $_POST['cEircode'] ?? "";
-        $cRegistrationDate = $_POST['cRegistrationDate'] ?? "";
-        $cStatus = $_POST['cStatus'] ?? "";
-        $cID = (int) $_POST['cMemberID'] ?? 0;
-
-        $member = new Member($cfirstName, $clastName, $cDOB, $cPhone, $cEmail, $cAddressLine1, $cAddressLine2, $cCity,
-                             $cCounty, $cEircode, $cRegistrationDate, $cStatus, $cID);
+        $member = getMemberFromPost();
         $inputErrors = $libraryService->updateMember($member);
 
         if (empty($inputErrors)) {
             header("Location: memberCRUD.php");
+            exit();
         }
-    } else if(isset($_POST["addMemberDetails"])) {
-        $cfirstName = $_POST['cFirstName'] ?? "";
-        $clastName = $_POST['cLastName'] ?? "";
-        $cDOB = $_POST['cDOB'] ?? "";
-        $cPhone = $_POST['cPhone'] ?? "";
-        $cEmail = $_POST['cEmail'] ?? "";
-        $cAddressLine1 = $_POST['cAddressLine1'] ?? "";
-        $cAddressLine2 = $_POST['cAddressLine2'] ?? "";
-        $cCity = $_POST['cCity'] ?? "";
-        $cCounty = $_POST['cCounty'] ?? "";
-        $cEircode = $_POST['cEircode'] ?? "";
-        $cRegistrationDate = $_POST['cRegistrationDate'] ?? "";
-        $cStatus = $_POST['cStatus'] ?? "";
-        $cID = (int) $_POST['cMemberID'] ?? 0;
-
-        $member = new Member($cfirstName, $clastName, $cDOB, $cPhone, $cEmail, $cAddressLine1, $cAddressLine2, $cCity,
-                             $cCounty, $cEircode, $cRegistrationDate, $cStatus, $cID);
+    } else if(isset($_POST["addMemberDetails"])) {        
+        $member = getMemberFromPost();
         $inputErrors = $libraryService->addMember($member);
     }
 
@@ -68,7 +55,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Library - Members</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="style.css">
 </head>
@@ -118,16 +105,16 @@
                     </tr>
 
                     <?php foreach($members as $member) : ?>
-                        <?php $statusText = ($member->getStatus() === 'A') ? 'Active' : 'Inactive'; ?>
+                        <?php $statusText = (htmlspecialchars($member->getStatus()) === 'A') ? 'Active' : 'Inactive'; ?>
                         <tr>
-                            <td><?php echo $member->getId(); ?></td>
-                            <td><?php echo $member->getFirstName() . ' ' . $member->getLastName();; ?></td>
-                            <td><?php echo $member->getDob(); ?></td>
-                            <td><?php echo $member->getPhone(); ?></td>
-                            <td><?php echo $member->getEmail(); ?></td>
-                            <td><?php echo $member->getAddressLine1() . ', ' . $member->getAddressLine2() . ', ' . $member->getCity() . ', ' . $member->getEircode(); ?></td>
-                            <td><?php echo $member->getCounty(); ?></td>
-                            <td><?php echo $member->getRegistrationDate(); ?></td>
+                            <td><?php echo htmlspecialchars($member->getId()); ?></td>
+                            <td><?php echo htmlspecialchars($member->getFirstName()) . ' ' . htmlspecialchars($member->getLastName()); ?></td>
+                            <td><?php echo htmlspecialchars($member->getDob()); ?></td>
+                            <td><?php echo htmlspecialchars($member->getPhone()); ?></td>
+                            <td><?php echo htmlspecialchars($member->getEmail()); ?></td>
+                            <td><?php echo htmlspecialchars($member->getAddressLine1()) . ', ' . htmlspecialchars($member->getAddressLine2()) . ', ' . htmlspecialchars($member->getCity()) . ', ' . htmlspecialchars(($member->getEircode())); ?></td>
+                            <td><?php echo htmlspecialchars($member->getCounty()); ?></td>
+                            <td><?php echo htmlspecialchars($member->getRegistrationDate()); ?></td>
                             <td><?php echo $statusText ?></td>
                             <td>
                                 <div class="editMember">
@@ -137,7 +124,7 @@
                             <td>
                                 <form action="memberCRUD.php" method="post">
                                     <div class='deleteMember'>
-                                        <input type="hidden" name="cMemberID" value="<?php echo $member->getId(); ?>">
+                                        <input type="hidden" name="cMemberID" value="<?php echo htmlspecialchars($member->getId()); ?>">
                                         <button onclick = 'deleteMember(this)' class='deleteMemberButton' name="deleteMember"><i class='fa fa-trash-o'></i>DELETE</button>
                                     </div>
                                 </form>

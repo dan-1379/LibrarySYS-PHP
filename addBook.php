@@ -4,14 +4,14 @@
     $inputErrors = [];
 
     if (isset($_POST['submitBookDetails'])) {
-        $ctitle = htmlspecialchars($_POST['ctitle'] ?? "");
-        $cauthor = htmlspecialchars($_POST['cauthor'] ?? "");
-        $cdescription = htmlspecialchars($_POST['cdescription'] ?? "");
-        $cisbn = htmlspecialchars($_POST['cisbn'] ?? "");
-        $cgenre = htmlspecialchars($_POST['cgenre'] ?? "");
-        $cpublisher = htmlspecialchars($_POST['cpublisher'] ?? "");
-        $cpublication = htmlspecialchars($_POST['cpublication'] ?? "");
-        $cstatus = htmlspecialchars($_POST['cstatus'] ?? "");
+        $ctitle = trim($_POST['ctitle'] ?? "");
+        $cauthor = trim($_POST['cauthor'] ?? "");
+        $cdescription = trim($_POST['cdescription'] ?? "");
+        $cisbn = trim($_POST['cisbn'] ?? "");
+        $cgenre = trim($_POST['cgenre'] ?? "");
+        $cpublisher = trim($_POST['cpublisher'] ?? "");
+        $cpublication = trim($_POST['cpublication'] ?? "");
+        $cstatus = trim($_POST['cstatus'] ?? "");
 
         $book = new Book($ctitle, $cauthor, $cdescription, $cisbn, $cgenre, $cpublisher, $cpublication, $cstatus);
         $inputErrors = $libraryService->addBook($book);
@@ -27,7 +27,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Add Book</title>
+    <title>Library - Add Book</title>
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>

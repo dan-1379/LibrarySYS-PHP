@@ -44,6 +44,9 @@
          * Creates a new LibraryService instance.
          * @param BookRepository $bookRepo The repository for the book database operations.
          * @param MemberRepository $memberRepo The repository for the member database operations.
+         * @param LoanRepository $loanRepo The repository for the loan database operations.
+         * @param FineRepository $fineRepo The repository for the fine database operations.
+         * @param AuthenticationRepository $authRepo The repository for the user database operations.
          */
         public function __construct(BookRepository $bookRepo, MemberRepository $memberRepo, LoanRepository $loanRepo, FineRepository $fineRepo, AuthenticationRepository $authRepo) {
             $this->bookRepo = $bookRepo;
@@ -59,8 +62,8 @@
          * Validates the username and password fields and checks the credentials against
          * the users table.
          * 
-         * @param $username The username of the user.
-         * @param $password The password of the user prior to hashing.
+         * @param string $username xThe username of the user.
+         * @param string $password The password of the user prior to hashing.
          * 
          * @return null|array An array of errors if errors occur or null if login is successful.
          * 
@@ -96,6 +99,17 @@
             return $user;
         }
 
+        /**
+         * Validates the details of a Book object before adding or updating it in the system.
+         * 
+         * Checks all entry fields provided using the BookValidator class. Also checks that
+         * the ISBN is not already in use by an existing book.
+         * 
+         * @param Book $book The book object whose details are to be validated.
+         * @return array An associative array of validation errors.
+         * 
+         * @see BookValidator
+         */
         private function validateBookDetails(Book $book) : array {
             $inputErrors = [];
 
@@ -208,7 +222,7 @@
          * @see BookRepository::searchBooks()
          */
         public function searchBooks(string $searchKey) : ?Book {
-            if (!BookValidator::isValidISBN($searchKey)) {
+            if (BookValidator::isValidISBN($searchKey) !== "Valid ISBN") {
                 return null;
             }
 
@@ -219,6 +233,14 @@
             }
         }
 
+         /**
+         * Validates the details of a Member object before adding or updating it in the system.
+         * 
+         * Checks all entry fields provided using the MemberValidator class. 
+         * 
+         * @param Member $member The member object whose details are to be validated.
+         * @return array An associative array of validation errors.
+         */
         private function validateMemberDetails(Member $member) : array {
             $inputErrors = [];
 
@@ -351,12 +373,12 @@
         /**
          * Retrieves the total count of members in the database.
          * 
-         * @param $status The count of members the status applies to i.e. 'A' or 'I'
+         * @param string $status The count of members the status applies to i.e. 'A' or 'I'
          * @return int An integer count of the members.
          * 
          * @see MemberRepository::getTotalMembers()
          */
-        public function getTotalMembers($status) : int {
+        public function getTotalMembers(string $status) : int {
             try {
                 return $this->memberRepo->getTotalMembers($status);
             } catch (Exception $e) {
@@ -466,6 +488,47 @@
             } catch (Exception $e) {
                 return [];
             }
+        }
+
+        /**
+         * Retrieves all loans from the database.
+         * 
+         * @return array An array of Loan objects, or an empty array if none found.
+         * 
+         * @see LoanRepository::getAllLoans()
+         */
+        public function getAllLoans() : array {
+            try {
+                return $this->loanRepo->getAllLoans();
+            } catch (Exception $e) {
+                return [];
+            }
+        }
+
+        /**
+         * Retrieves all loan items from the database.
+         * 
+         * @return array An array of LoanItem objects, or an empty array if none found.
+         * 
+         * @see LoanRepository::getAllLoanItems()
+         */
+        public function getAllLoanItems() : array {
+            try {
+                return $this->loanRepo->getAllLoanItems();
+            } catch (Exception $e) {
+                return [];
+            }
+        }
+
+        /**
+         * Updates the LoanDate and DueDate of a loan.
+         * 
+         * @return void
+         * 
+         * @see LoanRepository::updateLoanDetails()
+         */
+        public function updateLoanDetails(Loan $loan) : void {
+            $this->loanRepo->updateLoanDetails($loan);
         }
 
         /**

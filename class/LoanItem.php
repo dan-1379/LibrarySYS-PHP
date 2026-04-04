@@ -56,15 +56,6 @@
         }
 
         /**
-         * Sets the return date of the loan item. Defaults to null.
-         * @param DateTime $returnDate The return date of the item.
-         * @return void
-         */
-        public function setReturnDate(DateTime $returnDate) : void {
-            $this->returnDate = $returnDate;
-        }
-
-        /**
          * Returns the associated loan ID of the loan item.
          * @return int The loan ID of the loan item.
          */

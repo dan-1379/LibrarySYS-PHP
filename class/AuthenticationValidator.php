@@ -43,7 +43,7 @@
             $pattern = "/^[a-zA-Z0-9!@$]+$/";
 
             if (!preg_match($pattern, $password)) {
-                return "Password must only be uppercase or lowercase letters.";
+                return "Password must only contain letters, numbers, or the symbols !@$.";
             }
 
             return "valid";

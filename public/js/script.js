@@ -129,3 +129,28 @@ function openAddMenu() {
     overlay.classList.add("open");
     editForm.classList.add("open");
 }
+
+const loanOverlay = document.getElementById("loanOverlay");
+const editLoan = document.getElementById("updateLoanForm");
+
+function showEditLoan(editButton) {
+    // https://www.w3schools.com/jsref/met_element_closest.asp
+    const row = editButton.closest("tr");
+    const cells = row.querySelectorAll("td");
+
+    document.getElementById("cLoanID").value = cells[0].innerText;
+    document.getElementById("cLoanDate").value = cells[1].innerText;
+    document.getElementById("cDueDate").value = cells[2].innerText;
+    document.getElementById("cMemberID").value = cells[3].innerText;
+
+    loanOverlay.classList.add("open");
+    editLoan.classList.add("open");
+}
+
+function closeEditLoan() {
+    loanOverlay.classList.remove("open");
+    editLoan.classList.remove("open");
+
+    const errorOutputs = document.querySelectorAll(".errorOutput");
+    errorOutputs.forEach(error => error.remove());
+}

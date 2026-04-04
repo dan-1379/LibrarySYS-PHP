@@ -121,6 +121,7 @@
                     <div class="submenu">
                         <!-- <a href="#">Produce Fine Report</a>
                         <a href="#">Produce Genre Report</a> -->
+                        <a href="records.php">Library Records</a>
                     </div>
                 </div>
             <?php endif; ?>

@@ -1,7 +1,4 @@
 <?php 
-    ini_set('display_errors', 1);
-    error_reporting(E_ALL);
-
     require_once("config/config.php");
     $totalBooks = $libraryService->getTotalBooks();
 
@@ -22,7 +19,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Library Dashboard</title>
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
@@ -101,19 +98,19 @@
                             <td>
                                 <div class="recentBookContainer">
                                     <i class="fa fa-book"></i>
-                                    <?php echo $recent['book']->getTitle(); ?>
+                                    <?php echo htmlspecialchars($recent['book']->getTitle()); ?>
                                 </div>
                             </td>
                             <td>
                                 <div class="recentMemberContainer">
                                     <div class="recentMemberInitials">
-                                        <?php echo $recent['member']->getFirstName()[0] . $recent['member']->getLastName()[0]; ?>
+                                        <?php echo htmlspecialchars($recent['member']->getFirstName()[0]) . htmlspecialchars($recent['member']->getLastName()[0]); ?>
                                     </div>
-                                    <?php echo $recent['member']->getFirstName() . " " . $recent['member']->getLastName(); ?>
+                                    <?php echo htmlspecialchars($recent['member']->getFirstName()) . " " . htmlspecialchars($recent['member']->getLastName()); ?>
                                 </div>
                             </td>
-                            <td><?php echo $recent['loanDate'] ?></td>
-                            <td><?php echo $recent['dueDate'] ?></td>
+                            <td><?php echo htmlspecialchars($recent['loanDate']) ?></td>
+                            <td><?php echo htmlspecialchars($recent['dueDate']) ?></td>
                             <td>
                                 <?php echo empty($recent['returnDate'])
                                     ? "<span class='loanedStatus'>Loaned</span>" 
@@ -135,12 +132,12 @@
                                     <i class="fa fa-user"></i>
                                 </div>
                                 <div class="memberCardInfo">
-                                    <h3 class="memberCardName"><?php echo $topBorrower["member"]->getFirstName() . " " . $topBorrower["member"]->getLastName(); ?></h3>
-                                    <span class="memberCardId"><?php echo $topBorrower["member"]->getAddressLine1() . ", " . $topBorrower["member"]->getAddressLine2() . ", " . $topBorrower["member"]->getCity(); ?></span>
+                                    <h3 class="memberCardName"><?php echo htmlspecialchars($topBorrower["member"]->getFirstName()) . " " . htmlspecialchars($topBorrower["member"]->getLastName()); ?></h3>
+                                    <span class="memberCardId"><?php echo htmlspecialchars($topBorrower["member"]->getAddressLine1()) . ", " . htmlspecialchars($topBorrower["member"]->getAddressLine2()) . ", " . htmlspecialchars($topBorrower["member"]->getCity()); ?></span>
                                 </div>
                             </div>
                             <div class="memberCardCount">
-                               <?php echo $topBorrower["loanCount"]; ?> Loans
+                               <?php echo htmlspecialchars($topBorrower["loanCount"]); ?> Loans
                             </div>
                         </div>
                 <?php endforeach; ?>

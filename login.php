@@ -1,15 +1,13 @@
 <?php 
     require_once("config/config.php");
+    $result = [];
 
     if (isset($_POST['submitLogin'])) {
-        $username = htmlspecialchars($_POST['username']);
-        $password = htmlspecialchars($_POST['password']);
-
+        $username = trim($_POST['username']);
+        $password = trim($_POST['password']);
         $result = $libraryService->processLogin($username, $password);
 
-        if (isset($result['usernameError']) || isset($result['passwordError']) || isset($result['login'])) {
-            $errors = $result;
-        } else {
+        if (empty($result['usernameError']) && empty($result['passwordError']) && empty($result['login'])) {
             $_SESSION['username'] = $result['username'];
             header("Location: index.php");
             exit();
@@ -32,20 +30,20 @@
         <p>Enter your staff credentials to continue.</p>
 
         <form action="login.php" method="post">
-            <?php if (!empty($errors['login'])): ?>
+            <?php if (!empty($result['login'])): ?>
                 <div class="errorOutput">
                     <i class="fa fa-exclamation-triangle"></i>
-                    <span class="errorMessage"><?php echo $errors['login']; ?></span>
+                    <span class="errorMessage"><?php echo $result['login']; ?></span>
                 </div>
             <?php endif; ?>
             <div class="formGroup">
                 <label for="username">Username</label>
                 <input type="text" name="username" id="username" placeholder="Enter your username">
 
-                <?php if (!empty($errors['usernameError'])): ?>
+                <?php if (!empty($result['usernameError'])): ?>
                     <div class="errorOutput">
                         <i class="fa fa-exclamation-triangle"></i>
-                        <span class="errorMessage"><?php echo $errors['usernameError']; ?></span>
+                        <span class="errorMessage"><?php echo $result['usernameError']; ?></span>
                     </div>
                 <?php endif; ?>
             </div>
@@ -54,10 +52,10 @@
                 <label for="password">Password</label>
                 <input type="password" name="password" id="password" placeholder="Enter your password">
 
-                <?php if (!empty($errors['passwordError'])): ?>
+                <?php if (!empty($result['passwordError'])): ?>
                     <div class="errorOutput">
                         <i class="fa fa-exclamation-triangle"></i>
-                        <span class="errorMessage"><?php echo $errors['passwordError']; ?></span>
+                        <span class="errorMessage"><?php echo $result['passwordError']; ?></span>
                     </div>
                 <?php endif; ?>
             </div>

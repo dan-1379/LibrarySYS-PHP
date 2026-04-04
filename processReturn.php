@@ -1,8 +1,5 @@
 <?php 
     require_once("config/config.php");
-    
-    ini_set('display_errors', 1);
-    error_reporting(E_ALL);
 
     validateRoleForPage(['reception', 'manager']);
 
@@ -15,13 +12,14 @@
     $booksLoaned = [];
 
     $success = "";
+    $returnError = "";
 
     if (!empty($searchMember)) {
         unset($_SESSION['SelectedBooks']);
         unset($_SESSION['FineErrors']);
 
         try {
-            $member = $libraryService->searchMembers(htmlspecialchars($searchMember));
+            $member = $libraryService->searchMembers(trim($searchMember));
 
             if ($member == null) {
                 $memberError = "This is not a valid member";
@@ -51,14 +49,16 @@
     if (isset($_POST["processReturn"])) {
         $selectedToReturn =  $_SESSION['SelectedBooks'] ?? [];
 
-        if (!empty($selectedToReturn)) {
+        if (empty($selectedToReturn)) {
+            $returnError = "Please select at least one book to return";
+        } else {
             $errors = $libraryService->processReturn($selectedToReturn);
             $_SESSION['FineErrors'] = $errors;
-        }
 
-        $updatedLoans = $libraryService->getLoanedBooks($_SESSION['Member']->getId());
-        $_SESSION['LoanedBooks'] = $updatedLoans;
-        $success = "Books returned successfully";
+            $updatedLoans = $libraryService->getLoanedBooks($_SESSION['Member']->getId());
+            $_SESSION['LoanedBooks'] = $updatedLoans;
+            $success = "Books returned successfully";
+        }
     }
 ?>
 
@@ -67,7 +67,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Library - Process Return</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="public/css/style.css">
 </head>
 <body>
     <?php include_once("inc/navMenu.php") ?>
@@ -95,13 +97,17 @@
                         </div>
 
                         <div class="memberCardInfo">
-                            <h3 class="memberCardName"><?php echo $_SESSION['Member']->getFirstName() . ' ' . $_SESSION['Member']->getLastName() ?></h3>
-                            <span class="memberCardId"><?php echo "ID: " . $_SESSION['Member']->getId(); ?></span>
+                            <h3 class="memberCardName">
+                                <?php echo htmlspecialchars($_SESSION['Member']->getFirstName()) . ' ' . htmlspecialchars($_SESSION['Member']->getLastName()); ?>
+                            </h3>
+                            <span class="memberCardId"><?php echo "ID: " . htmlspecialchars($_SESSION['Member']->getId()); ?></span>
                         </div>
                     </div>
 
                     <div class="memberCardRight">
-                        <span class="<?php echo $_SESSION['Member']->getStatus() === 'A' ? "memberCardActiveStatus" : "memberCardInactiveStatus"?>"><?php echo $_SESSION['Member']->getStatus() === 'A' ? "Active" : "Inactive"; ?></span>
+                        <span class="<?php echo $_SESSION['Member']->getStatus() === 'A' ? "memberCardActiveStatus" : "memberCardInactiveStatus"?>">
+                            <?php echo $_SESSION['Member']->getStatus() === 'A' ? "Active" : "Inactive"; ?>
+                        </span>
                     </div>
                 </div>
             <?php endif; ?>
@@ -119,6 +125,13 @@
                         </div>
                     <?php endif; ?>
 
+                    <?php if (!empty($returnError)) : ?>
+                        <div class="errorOutput">
+                            <i class="fa fa-exclamation-triangle"></i>
+                            <span class="errorMessage"><?php echo $returnError; ?></span>
+                        </div>
+                    <?php endif; ?>
+
                     <?php if (!empty($_SESSION['FineErrors'])) : ?>
                         <h2>Fines to be paid</h2>
                         <?php foreach($_SESSION['FineErrors'] as $fineError) : ?>
@@ -132,7 +145,7 @@
                     <?php if(count($_SESSION['LoanedBooks']) != 0) : ?>
                         <p>Select all books to be returned</p>
                     <?php else : ?>
-                        <p><?php echo $_SESSION['Member']->getFirstName() . " " . $_SESSION['Member']->getLastName(); ?> has no active loans</p>
+                        <p><?php echo htmlspecialchars($_SESSION['Member']->getFirstName()) . " " . htmlspecialchars($_SESSION['Member']->getLastName()); ?> has no active loans</p>
                     <?php endif; ?>
 
                     <?php foreach($_SESSION['LoanedBooks'] as $book) : ?>
@@ -142,13 +155,15 @@
                                     <i class="fa fa-book"></i>
                                 </div>
                                 <div class="memberCardInfo">
-                                    <h3 class="memberCardName"><?php echo $book->getTitle(); ?></h3>
-                                    <span class="memberCardId"><?php echo "ID: " . $book->getISBN(); ?></span>
+                                    <h3 class="memberCardName"><?php echo htmlspecialchars($book->getTitle()); ?></h3>
+                                    <span class="memberCardId"><?php echo "ID: " . htmlspecialchars($book->getISBN()); ?></span>
                                 </div>
                             </div>
 
                             <div class="memberCardRight">
-                                <input type="checkbox" name="selectBook[]" value="<?php echo $book->getId(); ?>" <?php echo in_array($book->getId(), $_SESSION["SelectedBooks"] ?? []) ? "checked" : ""; ?>>
+                                <input type="checkbox" name="selectBook[]" value="<?php echo htmlspecialchars($book->getId()); ?>" 
+                                    <?php echo in_array($book->getId(), $_SESSION["SelectedBooks"] ?? []) ? "checked" : ""; ?>
+                                >
                             </div>
                         </div>
                     <?php endforeach; ?>

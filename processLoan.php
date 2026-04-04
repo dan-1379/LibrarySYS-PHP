@@ -1,7 +1,4 @@
 <?php 
-    ini_set('display_errors', 1);
-    error_reporting(E_ALL);
-
     require_once("config/config.php");
     validateRoleForPage(['reception', 'manager']);
 
@@ -16,7 +13,7 @@
 
     if (!empty($searchMember)) {
         try {
-            $member = $libraryService->searchMembers(htmlspecialchars($searchMember));
+            $member = $libraryService->searchMembers(trim($searchMember));
 
             if ($member == null) {
                 $memberError = "This is not a valid member";
@@ -37,7 +34,7 @@
 
     if (!empty($searchBook)) {
         try {
-            $book = $libraryService->searchBooks(htmlspecialchars($searchBook));
+            $book = $libraryService->searchBooks(trim($searchBook));
 
             if ($book === null) {
                 $bookError = "No book found with that ISBN";
@@ -81,6 +78,7 @@
 
             $libraryService->processLoan($loan, $_SESSION["BooksInCart"]);
             header("Location: loanConfirmation.php");
+            exit();
         }
     }
 ?>
@@ -90,7 +88,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Process Loans</title>
+    <title>Library - Process Loan</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="public/css/style.css">
 </head>
@@ -120,13 +118,19 @@
                         </div>
 
                         <div class="memberCardInfo">
-                            <h3 class="memberCardName"><?php echo $_SESSION['Member']->getFirstName() . ' ' . $_SESSION['Member']->getLastName(); ?></h3>
-                            <span class="memberCardId"><?php echo "ID:" . $_SESSION['Member']->getId(); ?></span>
+                            <h3 class="memberCardName">
+                                <?php echo htmlspecialchars($_SESSION['Member']->getFirstName()) . ' ' . htmlspecialchars($_SESSION['Member']->getLastName()); ?>
+                            </h3>
+                            <span class="memberCardId">
+                                <?php echo "ID:" . htmlspecialchars($_SESSION['Member']->getId()); ?>
+                            </span>
                         </div>
                     </div>
 
                     <div class="memberCardRight">
-                        <span class="<?php echo $_SESSION['Member']->getStatus() === 'A' ? "memberCardActiveStatus" : "memberCardInactiveStatus"?>"><?php echo $_SESSION['Member']->getStatus() === 'A' ? "Active" : "Inactive"; ?></span>
+                        <span class="<?php echo $_SESSION['Member']->getStatus() === 'A' ? "memberCardActiveStatus" : "memberCardInactiveStatus"?>">
+                            <?php echo $_SESSION['Member']->getStatus() === 'A' ? "Active" : "Inactive"; ?>
+                        </span>
                     </div>
                 </div>
             <?php endif; ?>
@@ -155,12 +159,14 @@
                                     <i class="fa fa-book"></i>
                                 </div>
                                 <div class="memberCardInfo">
-                                    <h3 class="memberCardName"><?php echo $bookInCart->getTitle() ?></h3>
-                                    <span class="memberCardId"><?php echo "ID:" . $bookInCart->getISBN(); ?></span>
+                                    <h3 class="memberCardName"><?php echo htmlspecialchars($bookInCart->getTitle()) ?></h3>
+                                    <span class="memberCardId"><?php echo "ID:" . htmlspecialchars($bookInCart->getISBN()); ?></span>
                                 </div>
                             </div>
                             <div class="memberCardRight">
-                                <span class="<?php echo $bookInCart->getStatus() === 'A' ? "memberCardActiveStatus" : "memberCardInactiveStatus"?>"><?php echo $bookInCart->getStatus() === 'A' ? "Active" : "Inactive"; ?></span>
+                                <span class="<?php echo $bookInCart->getStatus() === 'A' ? "memberCardActiveStatus" : "memberCardInactiveStatus"?>">
+                                    <?php echo $bookInCart->getStatus() === 'A' ? "Active" : "Inactive"; ?>
+                                </span>
                             </div>
                         </div>
                     <?php endforeach; ?>
@@ -177,8 +183,8 @@
 
                             <?php foreach($_SESSION['BooksInCart'] as $bookInCart) : ?>
                                 <div class="loanSummaryBook">
-                                    <p><?php echo $bookInCart->getTitle(); ?></p>
-                                    <p><?php echo $bookInCart->getAuthor(); ?></p>
+                                    <p><?php echo htmlspecialchars($bookInCart->getTitle()); ?></p>
+                                    <p><?php echo htmlspecialchars($bookInCart->getAuthor()); ?></p>
                                 </div>
                             <?php endforeach; ?>
                         </div>
@@ -189,8 +195,13 @@
 
                         <div class="loanSummaryMember">
                             <h5><i class="fa fa-user"></i>Member</h5>
-                            <p><?php echo $_SESSION['Member']->getFirstName() . ' ' . $_SESSION['Member']->getLastName() ?></p>
-                            <p><?php echo $_SESSION['Member']->getAddressLine1() . ', ' . $_SESSION['Member']->getAddressLine2() . ', ' . $_SESSION['Member']->getCity() ?></p>
+                            <p>
+                                <?php echo htmlspecialchars($_SESSION['Member']->getFirstName()) . ' ' . htmlspecialchars($_SESSION['Member']->getLastName()); ?>
+                            </p>
+                            <p>
+                                <?php echo htmlspecialchars($_SESSION['Member']->getAddressLine1()) . ', ' . htmlspecialchars($_SESSION['Member']->getAddressLine2()) . ', ' . 
+                                htmlspecialchars($_SESSION['Member']->getCity()); ?>
+                            </p>
                         </div>
                     </div>
                 </div>

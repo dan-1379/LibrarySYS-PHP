@@ -1,7 +1,4 @@
 <?php 
-    error_reporting(E_ALL);
-    ini_set('display_errors', 1);
-
     require_once("config/config.php");
     $books = $libraryService->getAllBooks();
 ?>
@@ -39,14 +36,14 @@
 
                 <?php foreach($books as $book) :  ?>
                     <tr>
-                        <td><?php echo $book->getId(); ?></td>
-                        <td><?php echo $book->getTitle(); ?></td>
-                        <td><?php echo $book->getAuthor(); ?></td>
-                        <td><?php echo $book->getDescription(); ?></td>
-                        <td><?php echo $book->getIsbn(); ?></td>
-                        <td><?php echo $book->getGenre(); ?></td>
-                        <td><?php echo $book->getPublisher(); ?></td>
-                        <td><?php echo $book->getPublicationDate(); ?></td>
+                        <td><?php echo htmlspecialchars($book->getId()); ?></td>
+                        <td><?php echo htmlspecialchars($book->getTitle()); ?></td>
+                        <td><?php echo htmlspecialchars($book->getAuthor()); ?></td>
+                        <td><?php echo htmlspecialchars($book->getDescription()); ?></td>
+                        <td><?php echo htmlspecialchars($book->getIsbn()); ?></td>
+                        <td><?php echo htmlspecialchars($book->getGenre()); ?></td>
+                        <td><?php echo htmlspecialchars($book->getPublisher()); ?></td>
+                        <td><?php echo htmlspecialchars($book->getPublicationDate()); ?></td>
                         <td><?php echo $book->isAvailable() ? "Available" : "Unavailable"; ?></td>
                     </tr>
                 <?php endforeach; ?>
