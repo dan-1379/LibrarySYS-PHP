@@ -108,12 +108,12 @@
                         <?php $statusText = (htmlspecialchars($member->getStatus()) === 'A') ? 'Active' : 'Inactive'; ?>
                         <tr>
                             <td><?php echo htmlspecialchars($member->getId()); ?></td>
-                            <td><?php echo htmlspecialchars($member->getFirstName()) . ' ' . htmlspecialchars($member->getLastName()); ?></td>
+                            <td><?php echo htmlspecialchars(ucwords($member->getFirstName())) . ' ' . htmlspecialchars(ucwords($member->getLastName())); ?></td>
                             <td><?php echo htmlspecialchars($member->getDob()); ?></td>
                             <td><?php echo htmlspecialchars($member->getPhone()); ?></td>
                             <td><?php echo htmlspecialchars($member->getEmail()); ?></td>
-                            <td><?php echo htmlspecialchars($member->getAddressLine1()) . ', ' . htmlspecialchars($member->getAddressLine2()) . ', ' . htmlspecialchars($member->getCity()) . ', ' . htmlspecialchars(($member->getEircode())); ?></td>
-                            <td><?php echo htmlspecialchars($member->getCounty()); ?></td>
+                            <td><?php echo htmlspecialchars(ucwords($member->getAddressLine1())) . ', ' . htmlspecialchars(ucwords($member->getAddressLine2())) . ', ' . htmlspecialchars(ucwords($member->getCity())) . ', ' . htmlspecialchars(($member->getEircode())); ?></td>
+                            <td><?php echo htmlspecialchars(ucwords($member->getCounty())); ?></td>
                             <td><?php echo htmlspecialchars($member->getRegistrationDate()); ?></td>
                             <td><?php echo $statusText ?></td>
                             <td>

@@ -38,12 +38,12 @@
         }
 
         /**
-        * Determines if the provided first name is valid.
+        * Determines if the provided name section is valid.
         * @param string $name - The name of the member to be validated. This method will be used for both first and last name.
         * @return bool - True if the name is non-empty and does not exceed 30 characters; otherwise, false.
         */
         public static function isValidName(string $name) : bool {
-            return !empty(trim($name)) && strlen(trim($name)) <= 30;
+            return !empty(trim($name)) && strlen(trim($name)) <= 30 && preg_match('/^[a-zA-Z0-9\s\']+$/', $name);
         }
 
         /**
@@ -175,7 +175,7 @@
         * @return bool - True if the address line is non-empty and between 5 and 30 characters long; otherwise, false.
         */
         public static function isValidAddressLine(string $addressLine) : bool {
-            return !empty(trim($addressLine)) && strlen(trim($addressLine)) <= 30; 
+            return !empty(trim($addressLine)) && strlen(trim($addressLine)) <= 30 && preg_match('/^[a-zA-Z0-9\s\']+$/', $addressLine); 
         }
 
         /**
@@ -184,7 +184,7 @@
         * @return bool - True if the city is non-empty and between 1 and 30 characters long; otherwise, false.
         */
         public static function isValidCity(string $city) : bool {
-            return !empty(trim($city)) && strlen(trim($city)) >= 1 && strlen(trim($city)) <= 30; 
+            return !empty(trim($city)) && strlen(trim($city)) >= 1 && strlen(trim($city)) <= 30 && preg_match('/^[a-zA-Z0-9\s\']+$/', $city);  
         }
         
         /**

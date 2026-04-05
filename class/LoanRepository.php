@@ -30,23 +30,27 @@
          * @return array An array of Loan objects, or an empty array if none found.
          */
         public function getAllLoans() : array {
-            $sql = "SELECT * From Loans";
-            $stmt = $this->pdo->prepare($sql);
-            $stmt->execute();
+            try {
+                $sql = "SELECT * From Loans";
+                $stmt = $this->pdo->prepare($sql);
+                $stmt->execute();
 
-            $rows = $stmt->fetchAll();
-            $loans = [];
+                $rows = $stmt->fetchAll();
+                $loans = [];
 
-            foreach($rows as $row) {
-                $loans[] = new Loan(
-                    DateTime::createFromFormat("Y-m-d",$row["LoanDate"]),
-                    DateTime::createFromFormat("Y-m-d", $row["DueDate"]),
-                    $row["MemberID"],
-                    $row["LoanID"]
-                );
-            }
+                foreach($rows as $row) {
+                    $loans[] = new Loan(
+                        DateTime::createFromFormat("Y-m-d",$row["LoanDate"]),
+                        DateTime::createFromFormat("Y-m-d", $row["DueDate"]),
+                        $row["MemberID"],
+                        $row["LoanID"]
+                    );
+                }
 
-            return $loans;
+                return $loans;
+            } catch (PDOException $e) {  
+                throw new Exception("Could not retrieve loans from the database.");
+            } 
         }
 
         /**
@@ -82,14 +86,18 @@
          * @see LoanRepository::updateLoanDetails()
          */
         public function updateLoanDetails(Loan $loan) : void {
-            $sql = "UPDATE Loans SET LoanDate = :cLoanDate, DueDate = :cDueDate WHERE LoanID = :cLoanID";
+            try {
+                $sql = "UPDATE Loans SET LoanDate = :cLoanDate, DueDate = :cDueDate WHERE LoanID = :cLoanID";
 
-            $stmt = $this->pdo->prepare($sql);
-            $stmt->bindValue(":cLoanDate", $loan->getLoanDate()->format("Y-m-d"));
-            $stmt->bindValue(":cDueDate", $loan->getDueDate()->format("Y-m-d"));
-            $stmt->bindValue(":cLoanID", $loan->getLoanID());
+                $stmt = $this->pdo->prepare($sql);
+                $stmt->bindValue(":cLoanDate", $loan->getLoanDate()->format("Y-m-d"));
+                $stmt->bindValue(":cDueDate", $loan->getDueDate()->format("Y-m-d"));
+                $stmt->bindValue(":cLoanID", $loan->getLoanID());
 
-            $stmt->execute();
+                $stmt->execute();
+            } catch (PDOException $e) {
+                throw new Exception("Error updating loan. Please try again.");
+            }
         }
 
         /**
@@ -98,22 +106,26 @@
          * @return array An array of LoanItem objects, or an empty array if none found.
          */
         public function getAllLoanItems() : array {
-            $sql = "SELECT * From LoanItems";
-            $stmt = $this->pdo->prepare($sql);
-            $stmt->execute();
+            try {
+                $sql = "SELECT * From LoanItems";
+                $stmt = $this->pdo->prepare($sql);
+                $stmt->execute();
 
-            $rows = $stmt->fetchAll();
-            $loanItems = [];
+                $rows = $stmt->fetchAll();
+                $loanItems = [];
 
-            foreach($rows as $row) {
-                $loanItems[] = new LoanItem(
-                    $row["LoanID"],
-                    $row["BookID"],
-                    $row["ReturnDate"] ? DateTime::createFromFormat("Y-m-d", $row["ReturnDate"]) : null
-                );
-            }
+                foreach($rows as $row) {
+                    $loanItems[] = new LoanItem(
+                        $row["LoanID"],
+                        $row["BookID"],
+                        $row["ReturnDate"] ? DateTime::createFromFormat("Y-m-d", $row["ReturnDate"]) : null
+                    );
+                }
 
-            return $loanItems;
+                return $loanItems;
+            } catch (PDOException $e) {  
+                throw new Exception("Could not retrieve loan items from the database.");
+            } 
         }
 
         /**

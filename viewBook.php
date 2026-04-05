@@ -37,12 +37,12 @@
                 <?php foreach($books as $book) :  ?>
                     <tr>
                         <td><?php echo htmlspecialchars($book->getId()); ?></td>
-                        <td><?php echo htmlspecialchars($book->getTitle()); ?></td>
-                        <td><?php echo htmlspecialchars($book->getAuthor()); ?></td>
+                        <td><?php echo htmlspecialchars(ucwords($book->getTitle())); ?></td>
+                        <td><?php echo htmlspecialchars(ucwords($book->getAuthor())); ?></td>
                         <td><?php echo htmlspecialchars($book->getDescription()); ?></td>
                         <td><?php echo htmlspecialchars($book->getIsbn()); ?></td>
-                        <td><?php echo htmlspecialchars($book->getGenre()); ?></td>
-                        <td><?php echo htmlspecialchars($book->getPublisher()); ?></td>
+                        <td><?php echo htmlspecialchars(ucwords($book->getGenre())); ?></td>
+                        <td><?php echo htmlspecialchars(ucwords($book->getPublisher())); ?></td>
                         <td><?php echo htmlspecialchars($book->getPublicationDate()); ?></td>
                         <td><?php echo $book->isAvailable() ? "Available" : "Unavailable"; ?></td>
                     </tr>

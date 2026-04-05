@@ -25,7 +25,7 @@
          * @return bool - True if the title is non-empty and does not exceed 30 characters.
          */
         public static function isValidTitle(string $title) : bool {
-            return !empty(trim($title)) && strlen(trim($title)) <= 30;
+            return !empty($title) && strlen($title) <= 30 && preg_match('/^[a-zA-Z0-9\s\']+$/', $title);
         }
 
         /**
@@ -34,7 +34,7 @@
          * @return bool - True if the author is non-empty and does not exceed 25 characters.
          */
         public static function isValidAuthor(string $author) : bool {
-            return !empty(trim($author)) && strlen(trim($author)) <= 25;
+            return !empty(trim($author)) && strlen(trim($author)) <= 25 && preg_match('/^[a-zA-Z0-9\s\']+$/', $author);
         }
 
         /**
@@ -43,7 +43,7 @@
          * @return bool - True if the description is non-empty and does not exceed 25 characters.
          */
         public static function isValidDescription(string $description) : bool {
-            return !empty(trim($description)) && strlen(trim($description)) <= 30;
+            return !empty(trim($description)) && strlen(trim($description)) <= 30 && preg_match('/^[a-zA-Z0-9\s]+$/', $description);
         }
 
         /*******************************************************************************
@@ -173,7 +173,7 @@
          * @return bool - True if the publisher is non-empty and does not exceed 25 characters; otherwise false.
          */
         public static function isValidPublisher(string $publisher) : bool {
-            return !empty(trim($publisher)) && strlen(trim($publisher)) <= 25;
+            return !empty(trim($publisher)) && strlen(trim($publisher)) <= 25 && preg_match('/^[a-zA-Z0-9\s\']+$/', $publisher);
         }
 
         /**
