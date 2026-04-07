@@ -127,19 +127,19 @@
 
                 <?php foreach($topBorrowers as $topBorrower) : ?>
                     <div class="memberContainer">
-                            <div class="memberCardLeft">
-                                <div class="memberIcon">
-                                    <i class="fa fa-user"></i>
-                                </div>
-                                <div class="memberCardInfo">
-                                    <h3 class="memberCardName"><?php echo htmlspecialchars($topBorrower["member"]->getFirstName()) . " " . htmlspecialchars($topBorrower["member"]->getLastName()); ?></h3>
-                                    <span class="memberCardId"><?php echo htmlspecialchars($topBorrower["member"]->getAddressLine1()) . ", " . htmlspecialchars($topBorrower["member"]->getAddressLine2()) . ", " . htmlspecialchars($topBorrower["member"]->getCity()); ?></span>
-                                </div>
+                        <div class="memberCardLeft">
+                            <div class="memberIcon">
+                                <i class="fa fa-user"></i>
                             </div>
-                            <div class="memberCardCount">
-                               <?php echo htmlspecialchars($topBorrower["loanCount"]); ?> Loans
+                            <div class="memberCardInfo">
+                                <h3 class="memberCardName"><?php echo htmlspecialchars($topBorrower["member"]->getFirstName()) . " " . htmlspecialchars($topBorrower["member"]->getLastName()); ?></h3>
+                                <span class="memberCardId"><?php echo htmlspecialchars($topBorrower["member"]->getAddressLine1()) . ", " . htmlspecialchars($topBorrower["member"]->getAddressLine2()) . ", " . htmlspecialchars($topBorrower["member"]->getCity()); ?></span>
                             </div>
                         </div>
+                        <div class="memberCardCount">
+                            <?php echo htmlspecialchars($topBorrower["loanCount"]); ?> Loans
+                        </div>
+                    </div>
                 <?php endforeach; ?>
             </div>
         </div>

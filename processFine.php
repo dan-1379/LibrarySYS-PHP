@@ -2,6 +2,10 @@
     require_once("config/config.php");
     validateRoleForPage(['reception', 'manager']);
 
+    error_reporting(E_ALL);
+    ini_set('display_errors', 1);
+
+
     if (isset($_POST["deleteFine"])) {
         $fineID = (int) $_POST["cfineID"];
         $libraryService->deleteFine($fineID);
@@ -32,25 +36,25 @@
             <th>ID</th>
             <th>Amount</th>
             <th>Status</th>
-            <th>Loan ID</th>
-            <th>Book ID</th>
+            <th>Member</th>
+            <th>Book</th>
             <th>Pay</th>
             <th>Forgive</th>
         </tr>
 
         <?php foreach($fines as $fine) :  ?>
             <tr>
-                <td><?php echo $fine->getFineID(); ?></td>
-                <td><?php echo htmlspecialchars(number_format($fine->getFineAmount(), 2)); ?></td>
-                <td><?php echo $fine->getStatus() === "U" ? "Unpaid" : "Paid"; ?></td>
-                <td><?php echo $fine->getLoanID(); ?></td>
-                <td><?php echo $fine->getBookID(); ?></td>
+                <td><?php echo $fine["fine"]->getFineID(); ?></td>
+                <td><?php echo htmlspecialchars(number_format($fine["fine"]->getFineAmount(), 2)); ?></td>
+                <td><?php echo $fine["fine"]->getStatus() === "U" ? "Unpaid" : "Paid"; ?></td>
+                <td><?php echo $fine["member"]; ?></td>
+                <td><?php echo $fine["book"]; ?></td>
 
-                <?php if ($fine->getStatus() === "U") : ?>
+                <?php if ($fine["fine"]->getStatus() === "U") : ?>
                     <td>
                         <form action="processFine.php" method="post">
                             <div class='payFine'>
-                                <input type="hidden" name="cfineID" value="<?php echo $fine->getFineID(); ?>">
+                                <input type="hidden" name="cfineID" value="<?php echo $fine["fine"]->getFineID(); ?>">
                                 <button class='payFineButton' name="payFine"><i class="fa fa-credit-card"></i>PAY FINE</button>
                             </div>
                         </form>
@@ -64,7 +68,7 @@
                 <td>
                     <form action="processFine.php" method="post">
                         <div class='deleteFine'>
-                            <input type="hidden" name="cfineID" value="<?php echo $fine->getFineID(); ?>">
+                            <input type="hidden" name="cfineID" value="<?php echo $fine["fine"]->getFineID(); ?>">
                             <button class='deleteFineButton' name="deleteFine"><i class='fa fa-trash-o'></i>FORGIVE FINE</button>
                         </div>
                     </form>

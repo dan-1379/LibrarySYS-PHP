@@ -351,6 +351,10 @@ nav a:hover {
     .totalsContainer {
         grid-template-columns: repeat(1, 1fr);
     }
+
+    .memberContainer .memberIcon {
+        display: none;
+    }
 }
 
 .totalInfo {
@@ -929,9 +933,9 @@ input[type="submit"]:hover {
     border: 1px solid var(--aside-border-color);
     border-radius: 1em;
     padding: 2em;
-    width: 100%;           /* changed from 70% */
-    box-sizing: border-box; /* prevents overflow */
-    margin-right: 0;        /* remove the right margin */
+    width: 100%;
+    box-sizing: border-box;
+    margin-right: 0;
     height: fit-content;
 }
 
@@ -940,10 +944,10 @@ input[type="submit"]:hover {
     border: 1px solid var(--aside-border-color);
     border-radius: 1em;
     padding: 2em;
-    width: 100%;           /* changed from 90% */
+    width: 100%; 
     box-sizing: border-box;
     margin-right: 0;
-    height: fit-content;   /* let content dictate height */
+    height: fit-content;
 }
 
 .formContainerInfo {
@@ -1219,6 +1223,9 @@ input[type="submit"]:hover {
 }
 
 .deleteFineButton {
+    display: flex;
+    gap: 0.5em;
+    align-items: center;
     padding: 0.8em;
     background-color: var(--delete-button);
     color: white;

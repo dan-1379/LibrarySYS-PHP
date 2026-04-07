@@ -42,6 +42,7 @@ function toggleAside() {
 
 function toggleLightMode() {
     const lightIcon = document.querySelector(".lightMode i");
+    const lightText = document.querySelector(".lightModeText");
 
     // https://www.w3schools.com/js/js_htmldom_navigation.asp
     const root = document.documentElement;
@@ -51,9 +52,11 @@ function toggleLightMode() {
     if (root.classList.contains("light")) {
         lightIcon.classList.remove("fa-sun-o");
         lightIcon.classList.add("fa-moon-o");
+        lightText.textContent = "Dark Mode";
     } else {
         lightIcon.classList.remove("fa-moon-o");
         lightIcon.classList.add("fa-sun-o");
+        lightText.textContent = "Light Mode";
     }
 
     localStorage.setItem('colorMode', document.documentElement.classList.contains('light') ? 'light' : 'dark');

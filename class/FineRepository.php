@@ -80,7 +80,11 @@
          */
         public function getAllFines() : array {
             try {
-                $sql = 'SELECT * FROM Fines';
+                $sql = 'SELECT f.*, m.FirstName, m.LastName, b.Title 
+                        FROM Fines f
+                        JOIN Loans l ON f.LoanID = l.LoanID
+                        JOIN Members m on l.MemberID = m.MemberID
+                        JOIN Books b ON f.BookID = b.BookID';
                 $stmt = $this->pdo->prepare($sql);
                 $stmt->execute();
 
@@ -88,13 +92,17 @@
                 $fines = [];
 
                 foreach($rows as $row) {
-                    $fines[] = new Fine (
-                        $row['FineAmount'],
-                        $row['LoanID'],
-                        $row['BookID'],
-                        $row['FineID'],
-                        $row['Status'],
-                    );
+                    $fines[] = [
+                        "fine" => new Fine (
+                            $row['FineAmount'],
+                            $row['LoanID'],
+                            $row['BookID'],
+                            $row['FineID'],
+                            $row['Status'],
+                        ),
+                        "member" => $row["FirstName"] . " " . $row["LastName"],
+                        "book" => $row["Title"]
+                    ];
                 }
 
                 return $fines;

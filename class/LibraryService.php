@@ -62,7 +62,7 @@
          * Validates the username and password fields and checks the credentials against
          * the users table.
          * 
-         * @param string $username xThe username of the user.
+         * @param string $username The username of the user.
          * @param string $password The password of the user prior to hashing.
          * 
          * @return null|array An array of errors if errors occur or null if login is successful.
