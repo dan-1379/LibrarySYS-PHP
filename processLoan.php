@@ -57,6 +57,17 @@
         unset($_SESSION['Member']);
     }
 
+    if (isset($_POST["removeBook"])) {
+        $bookToRemove = $_POST["removeBook"];
+
+        foreach($_SESSION["BooksInCart"] as $index => $book) {
+            if ($book->getISBN() == $bookToRemove) {
+                array_splice($_SESSION["BooksInCart"], $index, 1);
+                break;
+            }
+        }
+    }
+
     if (isset($_POST["confirmProcessLoan"])) {
         $member = $_SESSION["Member"];
 
@@ -97,7 +108,7 @@
 
     <main class="processLoanMain">
         <div class="formContainer">
-            <h2>Search Members</h2>
+            <h2>Process Loan - Search Member</h2>
 
             <form action="processLoan.php" method="post">
                 <input type="text" name="cSearchMember" id="cSearchMember" class="searchMember" placeholder="Search member by ID...">
@@ -160,13 +171,18 @@
                                 </div>
                                 <div class="memberCardInfo">
                                     <h3 class="memberCardName"><?php echo htmlspecialchars($bookInCart->getTitle()) ?></h3>
-                                    <span class="memberCardId"><?php echo "ID:" . htmlspecialchars($bookInCart->getISBN()); ?></span>
+                                    <span class="memberCardId"><?php echo "ISBN: " . htmlspecialchars($bookInCart->getISBN()); ?></span>
                                 </div>
                             </div>
                             <div class="memberCardRight">
-                                <span class="<?php echo $bookInCart->getStatus() === 'A' ? "memberCardActiveStatus" : "memberCardInactiveStatus"?>">
+                                <!-- <span class="<?php echo $bookInCart->getStatus() === 'A' ? "memberCardActiveStatus" : "memberCardInactiveStatus"?>">
                                     <?php echo $bookInCart->getStatus() === 'A' ? "Active" : "Inactive"; ?>
-                                </span>
+                                </span> -->
+
+                                <form action="processLoan.php" method="post">
+                                    <input type="hidden" name="removeBook" value="<?php echo htmlspecialchars($bookInCart->getISBN()); ?>">
+                                    <button type="submit" class="deleteMemberButton"><i class='fa fa-trash-o'></i>Remove</button>
+                                </form>
                             </div>
                         </div>
                     <?php endforeach; ?>

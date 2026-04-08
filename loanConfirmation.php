@@ -45,12 +45,12 @@
         <div class="datesContainer">
             <div class="loanDate">
                 <h4>Loan Date</h4>
-                <p><?php echo $_SESSION["LoanDate"]; ?></p>
+                <p><?php echo DateTime::createFromFormat("Y-m-d", $_SESSION["LoanDate"])->format("D d F"); ?></p>
             </div>
 
             <div class="dueDate">
                 <h4>Due Date</h4>
-                <p><?php echo $_SESSION["DueDate"]; ?></p>
+                <p><?php echo DateTime::createFromFormat("Y-m-d",$_SESSION["DueDate"])->format("D d F"); ?></p>
             </div>
         </div>
 
@@ -63,8 +63,8 @@
                     </div>
 
                     <div class="memberCardInfo">
-                        <h3 class="memberCardName"><?php echo $_SESSION["Member"]->getFirstName(); ?></h3>
-                        <span class="memberCardId"><?php echo $_SESSION["Member"]->getId() ?></span>
+                        <h3 class="memberCardName"><?php echo $_SESSION["Member"]->getFirstName() . " " . $_SESSION["Member"]->getLastName(); ?></h3>
+                        <span class="memberCardId">ID: <?php echo $_SESSION["Member"]->getId() ?></span>
                     </div>
                 </div>
             </div>
@@ -90,7 +90,9 @@
 
         <div class="returnWarning">
             <i class="fa fa-warning"></i>
-            <p>Please return all books by <span><?php echo $_SESSION["DueDate"] ?></span> to avoid late fines.</p>
+            <p>Please return all books by <span>
+                <?php echo DateTime::createFromFormat("Y-m-d",$_SESSION["DueDate"])->format("D d F"); ?>
+            </span> to avoid late fines.</p>
         </div>
 
         <div class="actionButtons">

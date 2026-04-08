@@ -1089,6 +1089,14 @@ input[type="submit"]:hover {
     align-content: center;
 }
 
+.overdueLabel {
+    color: var(--error-msg-text);
+}
+
+.notoverdueLabel {
+    color: var(--success-msg-text);
+}
+
 /*
     LOAN CONFIRMATION SCREEN
 */

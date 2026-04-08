@@ -210,5 +210,34 @@
                 throw new Exception("Error retrieving total fines.");
             }
         }
+
+        /**
+         * Retrieves the details of the member with the most amount of fines.
+         * 
+         * @return array An associative array containing member details and total fine sum.
+         */
+        public function getTopFineOffender() : ?array {
+            try {
+                $sql = "SELECT m.*, sum(f.FineAmount) as Total_Fine
+                        FROM Fines f
+                        JOIN Loans l ON f.LoanID = l.LoanID
+                        JOIN Members m ON l.MemberID = m.MemberID
+                        GROUP BY m.MemberID
+                        ORDER BY Total_Fine DESC
+                        LIMIT 1";
+
+                $stmt = $this->pdo->prepare($sql);
+                $stmt->execute();
+                $row = $stmt->fetch(PDO::FETCH_ASSOC);
+
+                if (!$row) {
+                    return null;
+                }
+                
+                return $row;
+            } catch(PDOException $e) {
+                throw new Exception("Error retrieving top fine offender.");
+            }
+        }
     }
 ?>

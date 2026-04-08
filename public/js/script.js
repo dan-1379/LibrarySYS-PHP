@@ -17,12 +17,20 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 })
 
-// https://www.w3schools.com/jsref/prop_element_classlist.asp
+/**
+ * Opens the sub menu for each module i.e. Books, Members, Loans, Admin
+ * @param {*} button The menu button
+ * @see https://www.w3schools.com/jsref/prop_element_classlist.asp
+ */
 function toggleMenu(button) {
     const menuItem = button.parentElement;
     menuItem.classList.toggle('open');
 }
 
+/**
+ * Opens and closes the aside menu using the arrow.
+ * Uses local storage to persist the selected option across pages.
+ */
 function toggleAside() {
     const aside = document.querySelector("aside");
     aside.classList.toggle("collapsed");
@@ -40,13 +48,16 @@ function toggleAside() {
 
 }
 
+/**
+ * Sets the pages color mode to dark/light.
+ * Uses local storage to persist the selected option across pages
+ * @see https://www.w3schools.com/js/js_htmldom_navigation.asp
+ */
 function toggleLightMode() {
     const lightIcon = document.querySelector(".lightMode i");
     const lightText = document.querySelector(".lightModeText");
 
-    // https://www.w3schools.com/js/js_htmldom_navigation.asp
     const root = document.documentElement;
-
     root.classList.toggle("light");
 
     if (root.classList.contains("light")) {
@@ -69,6 +80,12 @@ function toggleLightMode() {
 const overlay = document.getElementById("overlay");
 const editForm = document.getElementById("updateMemberForm");
 
+/**
+ * Provides the functionality to update a member when an edit button is clicked.
+ * The button is used to identify which row it exists on and therefore the member data to be fetched.
+ * The member data is retrieved from the table and displayed in the form for updating.
+ * @param {*} editButton 
+ */
 function showEditMenu(editButton) {
     // https://www.w3schools.com/jsref/met_element_closest.asp
     const row = editButton.closest("tr");
@@ -103,6 +120,10 @@ function showEditMenu(editButton) {
     editForm.classList.add("open");
 }
 
+/**
+ * Provides the functionality to allow the user to close the edit menu by clicking the cancel button
+ * or the overlay. 
+ */
 function closeEditMenu() {
     overlay.classList.remove("open");
     editForm.classList.remove("open");
@@ -111,6 +132,11 @@ function closeEditMenu() {
     errorOutputs.forEach(error => error.remove());
 }
 
+/**
+ * Provides the funcionality to add a member when the button is clicked.
+ * The same form used for editing a member is used here by changing the button text and
+ * value when submitting.
+ */
 function openAddMenu() {
     const submitButton = document.getElementById("submitMemberDetails");
     submitButton.value = "Add Member";
@@ -136,6 +162,11 @@ function openAddMenu() {
 const loanOverlay = document.getElementById("loanOverlay");
 const editLoan = document.getElementById("updateLoanForm");
 
+/**
+ * Provides the functionality to update loan date and due date of a loan
+ * for the purposes of testing.
+ * @param {*} editButton 
+ */
 function showEditLoan(editButton) {
     // https://www.w3schools.com/jsref/met_element_closest.asp
     const row = editButton.closest("tr");
@@ -150,6 +181,9 @@ function showEditLoan(editButton) {
     editLoan.classList.add("open");
 }
 
+/**
+ * Provides the functionality to close the edit loan form.
+ */
 function closeEditLoan() {
     loanOverlay.classList.remove("open");
     editLoan.classList.remove("open");

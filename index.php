@@ -12,6 +12,8 @@
     $recentLoans = $libraryService->getRecentLoans();
 
     $topBorrowers = $libraryService->getTopBorrowers();
+
+    $fineOffender = $libraryService->getTopFineOffender();
 ?>
 
 <!DOCTYPE html>
@@ -141,6 +143,26 @@
                         </div>
                     </div>
                 <?php endforeach; ?>
+            </div>
+
+            <div class="leaderboardContainer">
+                <h2>Top Fine Offender</h2>
+                <p>DO NOT LOAN TO THIS PERSON</p>
+
+                <div class="memberContainer">
+                    <div class="memberCardLeft">
+                        <div class="memberIcon">
+                            <i class="fa fa-user"></i>
+                        </div>
+                        <div class="memberCardInfo">
+                            <h3 class="memberCardName"><?php echo htmlspecialchars($fineOffender["FirstName"]) . " " . htmlspecialchars($fineOffender["LastName"]); ?></h3>
+                            <span class="memberCardId"><?php echo htmlspecialchars($fineOffender["AddressLine1"]) . ", " . htmlspecialchars($fineOffender["AddressLine2"]) . ", " . htmlspecialchars($fineOffender["City"]); ?></span>
+                        </div>
+                    </div>
+                    <div class="memberCardCount">
+                        €<?php echo htmlspecialchars($fineOffender["Total_Fine"]); ?> Fines
+                    </div>
+                </div>
             </div>
         </div>
     </main>

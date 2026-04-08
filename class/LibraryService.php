@@ -431,7 +431,7 @@
             } 
             
             if ($this->getCurrentLoanCount($memberID) > 0) {
-                return "This member books loaned.";
+                return "This member has books loaned.";
             }
 
             try {
@@ -590,6 +590,21 @@
                 return $this->fineRepo->getUnpaidMemberFine($memberID);
             } catch (Exception $e) {
                 return 0.00;
+            }
+        }
+
+        /**
+         * Retrieves the details of the member with the most amount of fines.
+         * 
+         * @return array An associative array containing member details and total fine sum.
+         * 
+         * @see FineRepository::getTopFineOffender()
+         */
+        public function getTopFineOffender() : array {
+             try {
+                return $this->fineRepo->getTopFineOffender();
+            } catch (Exception $e) {
+                return [];
             }
         }
 

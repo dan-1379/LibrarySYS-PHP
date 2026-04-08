@@ -18,6 +18,7 @@
 
         if (empty($inputErrors)) {
             $success = "Book added successfully";
+            $_POST = [];
         }
     }
 ?>

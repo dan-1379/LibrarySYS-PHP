@@ -76,7 +76,7 @@
 
     <main class="processLoanMain">
         <div class="formContainer">
-            <h2>Search Members</h2>
+            <h2>Process Return - Search Member</h2>
 
             <form action="processReturn.php" method="post">
                 <input type="text" name="cSearchMember" id="cSearchMember" class="searchMember" placeholder="Search member by ID...">
@@ -149,32 +149,46 @@
                     <?php endif; ?>
 
                     <?php foreach($_SESSION['LoanedBooks'] as $book) : ?>
+                        <?php $checkOverdue = new DateTime($book["due"]) < new DateTime(); ?>
+
                         <div class="memberContainer">
                             <div class="memberCardLeft">
                                 <div class="memberIcon">
                                     <i class="fa fa-book"></i>
                                 </div>
                                 <div class="memberCardInfo">
-                                    <h3 class="memberCardName"><?php echo htmlspecialchars($book->getTitle()); ?></h3>
-                                    <span class="memberCardId"><?php echo "ID: " . htmlspecialchars($book->getISBN()); ?></span>
+                                    <h3 class="memberCardName"><?php echo htmlspecialchars($book["book"]->getTitle()); ?>
+                                        (<span class="<?php echo $checkOverdue ? 'overdueLabel' : 'notoverdueLabel';?>">
+                                            <?php echo $checkOverdue ? "OVERDUE" : "NOT OVERDUE"; ?>
+                                        </span>)
+                                    </h3>
+                                    <span class="memberCardId"><?php echo "ID: " . htmlspecialchars($book["book"]->getISBN()); ?></span>
                                 </div>
                             </div>
 
                             <div class="memberCardRight">
-                                <input type="checkbox" name="selectBook[]" value="<?php echo htmlspecialchars($book->getId()); ?>" 
-                                    <?php echo in_array($book->getId(), $_SESSION["SelectedBooks"] ?? []) ? "checked" : ""; ?>
+                                <input type="checkbox" name="selectBook[]" value="<?php echo htmlspecialchars($book["book"]->getId()); ?>" 
+                                    <?php echo in_array($book["book"]->getId(), $_SESSION["SelectedBooks"] ?? []) ? "checked" : ""; ?>
                                 >
                             </div>
                         </div>
                     <?php endforeach; ?>
                 </div>
 
-                <input type="submit" value="Return Books" name="processReturn">
+                <?php if(!empty($_SESSION['LoanedBooks'])) : ?>
+                    <input type="submit" value="Return Books" name="processReturn">
+                <?php endif; ?>
             </form>
 
-            <form action="processReturn.php" method="post">
-                <input type="submit" value="Cancel Return" name="clearCart">
-            </form>
+            <?php if(count($_SESSION['LoanedBooks']) != 0) : ?>
+                <form action="processReturn.php" method="post">
+                    <input type="submit" value="Cancel Return" name="clearCart">
+                </form>
+            <?php else : ?>
+                <form action="processReturn.php" method="post">
+                    <input type="submit" value="OK" name="clearCart">
+                </form>
+            <?php endif; ?>
         <?php endif; ?>
     </main>
 </body>
