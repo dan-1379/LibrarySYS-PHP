@@ -66,10 +66,10 @@
                     </button>
 
                     <div class="submenu">
-                        <a href="addBook.php">Add Book</a>
+                        <a href="addBook.php"><i class="fa fa-plus"></i>Add Book</a>
                         <!-- <a href="#">Delete Book</a> -->
                         <!-- <a href="#">Update Book</a> -->
-                        <a href="viewBook.php">View Book</a>
+                        <a href="viewBook.php"><i class="fa fa-eye"></i>View Book</a>
                     </div>
                 </div>
             <?php endif; ?>
@@ -85,7 +85,7 @@
                     </button>
 
                     <div class="submenu">
-                        <a href="memberCrud.php">Update Members</a>
+                        <a href="memberCrud.php"><i class="fa fa-edit"></i> Update Members</a>
                     </div>
                 </div>
             <?php endif; ?>
@@ -101,9 +101,9 @@
                     </button>
 
                     <div class="submenu">
-                        <a href="processLoan.php">Process Loan</a>
-                        <a href="processReturn.php">Process Return</a>
-                        <a href="processFine.php">Process Fine</a>
+                        <a href="processLoan.php"><i class="fa fa-cart-arrow-down"></i>Process Loan</a>
+                        <a href="processReturn.php"><i class="fa fa-cart-arrow-down"></i> Process Return</a>
+                        <a href="processFine.php"><i class="fa fa-euro"></i> Process Fine</a>
                     </div>
                 </div>
             <?php endif; ?>
@@ -121,7 +121,7 @@
                     <div class="submenu">
                         <!-- <a href="#">Produce Fine Report</a>
                         <a href="#">Produce Genre Report</a> -->
-                        <a href="records.php">Library Records</a>
+                        <a href="records.php"><i class="fa fa-file-archive-o"></i> Library Records</a>
                     </div>
                 </div>
             <?php endif; ?>

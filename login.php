@@ -50,7 +50,10 @@
 
             <div class="formGroup">
                 <label for="password">Password</label>
-                <input type="password" name="password" id="password" placeholder="Enter your password">
+                <div class="passwordField">
+                    <input type="password" name="password" id="password" placeholder="Enter your password">
+                    <i class="fa fa-eye-slash" onclick="showPassword(this)"></i>
+                </div>
 
                 <?php if (!empty($result['passwordError'])): ?>
                     <div class="errorOutput">
@@ -63,5 +66,6 @@
             <input type="submit" value="Sign in" name="submitLogin">
         </form>
     </div>
+    <script src="public/js/passwordVisibility.js"></script>
 </body>
 </html>
