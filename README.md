@@ -35,6 +35,64 @@ flowchart TD
     C <--> |PDO| D
 ```
 
+## Entity Relationship Diagram
+```mermaid
+erDiagram
+    MEMBERS ||--o{ LOANS : "takes out"
+    LOANS ||--|{ LOANITEMS : "contains"
+    BOOKS ||--o{ LOANITEMS : "included in"
+    LOANITEMS ||--o| FINES : "can incur"
+    BOOKS {
+        TINYINT BookID PK
+        VARCHAR Title 
+        VARCHAR Author
+        VARCHAR Description
+        CHAR ISBN
+        VARCHAR Genre
+        VARCHAR Publisher
+        DATE PublicationDate 
+        ENUM Status
+    }
+    MEMBERS {
+        TINYINT MemberID PK
+        VARCHAR FirstName
+        VARCHAR LastName
+        DATE DOB
+        VARCHAR Phone
+        VARCHAR Email
+        VARCHAR AddressLine1
+        VARCHAR AddressLine2
+        VARCHAR City
+        VARCHAR County
+        CHAR Eircode
+        DATE RegistrationDate
+        ENUM Status
+    }
+    LOANS {
+        TINYINT LoanID PK
+        DATE LoanDate
+        DATE DueDate
+        TINYINT MemberID FK
+    }
+    LOANITEMS {
+        TINYINT LoanID FK
+        TINYINT BookID FK
+        DATE ReturnDate
+    }
+    FINES {
+        TINYINT FineID PK
+        DECIMAL FineAmount
+        ENUM Status
+        TINYINT LoanID FK
+        TINYINT BookID FK
+    }
+    USERS {
+        TINYINT UserID PK
+        VARCHAR Username
+        VARCHAR Password
+    }
+```
+
 ## Installation
 ### Prerequisites
 - XAMPP
