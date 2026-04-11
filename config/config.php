@@ -20,8 +20,10 @@
     require_once("class/MemberValidator.php");
     require_once("class/AuthenticationValidator.php");
 
+    // Session
     session_start();
 
+    // Disallow navigation to application pages if not successfully logged in
     $publicPage = ['login.php'];
     $currentPage = basename($_SERVER['PHP_SELF']);  // full path of file being run stripped by basename down to file name
 
@@ -30,6 +32,7 @@
         exit();
     } 
 
+    // Configuration of role based access
     function validateRoleForPage(array $validRole) {
         if (!in_array($_SESSION['username'], $validRole)) {
             header("Location: index.php");
@@ -37,10 +40,12 @@
         }
     }
 
+    // Constant Declarations for Lending
     define("LOAN_LENDING_PERIOD", 5);
     define("MAX_BOOKS_PER_LOAN", 5);
     define("FINE_RATE_PER_DAY", 0.20);
 
+    // Instantiation of Service and Repository
     $bookRepository = new BookRepository($pdo);
     $memberRepository = new MemberRepository($pdo);
     $loanRepository = new LoanRepository($pdo);

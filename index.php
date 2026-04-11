@@ -1,3 +1,14 @@
+<!--
+ * Title: Font Awesome Icons
+ * Author: W3 Schools
+ * Site: w3schools.com
+ * Date: 09/03/26
+ * Code Version: N/A
+ * Availability: https://www.w3schools.com/icons/fontawesome_icons_intro.asp
+ * Accessed: 09/03/26
+ * Modified: No modifications made. Using icons.
+-->
+
 <?php 
     require_once("config/config.php");
     $totalBooks = $libraryService->getTotalBooks();
@@ -22,7 +33,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Library Dashboard</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="public/css/style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
 <body>

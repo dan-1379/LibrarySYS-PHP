@@ -1,3 +1,14 @@
+<!--
+ * Title: Font Awesome Icons
+ * Author: W3 Schools
+ * Site: w3schools.com
+ * Date: 09/03/26
+ * Code Version: N/A
+ * Availability: https://www.w3schools.com/icons/fontawesome_icons_intro.asp
+ * Accessed: 09/03/26
+ * Modified: No modifications made. Using icons.
+-->
+
 <?php 
     require_once("config/config.php");
 

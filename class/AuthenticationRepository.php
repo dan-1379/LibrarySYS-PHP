@@ -24,17 +24,6 @@
             $this->pdo = $pdo;
         }
 
-        public function processRegistration($username, $hashedPassword) : void {
-            $sql = "INSERT INTO Users(email, password) VALUES (?, ?)";
-            $stmt = $this->pdo->prepare($sql);
-
-            try {
-                $stmt->execute([$username, $hashedPassword]);
-            } catch(PDOException $e) {
-                throw $e;
-            }
-        }
-
         /**
          * Retrieves login credentials for user with specified username to check users entry
          * against.

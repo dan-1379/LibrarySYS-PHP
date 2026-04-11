@@ -16,7 +16,7 @@
     }
 ?>
 
-<!DOCTYPE html>
+<!-- <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -25,7 +25,7 @@
     <link rel="stylesheet" href="public/css/style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
-<body>
+<body> -->
     <aside>
         <div class="logo">
             <h1>Killorglin Library</h1>
@@ -157,5 +157,5 @@
             window.location.href = "logout.php";
         })
     </script>
-</body>
-</html>
+<!-- </body>
+</html> -->
