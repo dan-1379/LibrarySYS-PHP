@@ -154,22 +154,18 @@
          * @return int The count of books.
          */
         public function hasOverDueBooks(int $memberID) : int {
-            try {
-                $sql = "SELECT COUNT(*) 
-                        FROM LoanItems li
-                        JOIN Loans l ON li.LoanID = l.LoanID
-                        WHERE l.MemberID = :cmemberID
-                        AND li.ReturnDate IS NULL
-                        AND l.DueDate < CURDATE()";
+            $sql = "SELECT COUNT(*) 
+                    FROM LoanItems li
+                    JOIN Loans l ON li.LoanID = l.LoanID
+                    WHERE l.MemberID = :cmemberID
+                    AND li.ReturnDate IS NULL
+                    AND l.DueDate < CURDATE()";
 
-                $stmt = $this->pdo->prepare($sql);
-                $stmt->bindValue(':cmemberID', $memberID);
+            $stmt = $this->pdo->prepare($sql);
+            $stmt->bindValue(':cmemberID', $memberID);
 
-                $stmt->execute();
-                return (int) $stmt->fetchColumn(); // retrieves the integer value from the first column in the result set i.e. count digit
-            } catch (PDOException $e) {  
-                throw new Exception("Could not retrieve overdue book count.");
-            }
+            $stmt->execute();
+            return (int) $stmt->fetchColumn(); // retrieves the integer value from the first column in the result set i.e. count digit
         }
 
         /**
@@ -180,21 +176,17 @@
          * @return int The count of books.
          */
         public function getCurrentLoanCount(int $memberID) : int {
-            try {
-                $sql = "SELECT COUNT(*) 
-                        FROM LoanItems li
-                        JOIN Loans l ON li.LoanID = l.LoanID
-                        WHERE l.MemberID = :cmemberID
-                        AND li.ReturnDate IS NULL";
+            $sql = "SELECT COUNT(*) 
+                    FROM LoanItems li
+                    JOIN Loans l ON li.LoanID = l.LoanID
+                    WHERE l.MemberID = :cmemberID
+                    AND li.ReturnDate IS NULL";
 
-                $stmt = $this->pdo->prepare($sql);
-                $stmt->bindValue(':cmemberID', $memberID);
+            $stmt = $this->pdo->prepare($sql);
+            $stmt->bindValue(':cmemberID', $memberID);
 
-                $stmt->execute();
-                return (int) $stmt->fetchColumn(); // retrieves the integer value from the first column in the result set i.e. count digit
-            } catch (PDOException $e) {  
-                throw new Exception("Could not retrieve current loan count.");
-            }
+            $stmt->execute();
+            return (int) $stmt->fetchColumn(); // retrieves the integer value from the first column in the result set i.e. count digit
         }
 
         /**
@@ -351,16 +343,12 @@
          * @return int The total count of loans.
          */
         public function getTotalLoans() : int {
-            try {
-                $sql = "SELECT COUNT(DISTINCT LoanID) FROM LoanItems 
-                        WHERE ReturnDate IS NULL";
+            $sql = "SELECT COUNT(DISTINCT LoanID) FROM LoanItems 
+                    WHERE ReturnDate IS NULL";
 
-                $stmt = $this->pdo->prepare($sql);
-                $stmt->execute();
-                return $stmt->fetchColumn();
-            } catch(Exception $e) {
-                throw new Exception("Error in fetching total loan count.");
-            }
+            $stmt = $this->pdo->prepare($sql);
+            $stmt->execute();
+            return $stmt->fetchColumn();
         }
 
         /**
@@ -370,38 +358,34 @@
          * member, book and loan information.
          */
         public function getRecentLoans() : array {
-            try {
-                $sql = "SELECT b.*, m.*, l.LoanDate, l.DueDate, li.ReturnDate
-                        FROM Loans l
-                        JOIN LoanItems li ON l.LoanID = li.LoanID
-                        JOIN Books b ON li.BookID = b.BookID
-                        JOIN Members m ON l.MemberID = m.MemberID
-                        ORDER BY l.LoanDate DESC
-                        LIMIT 5";
+            $sql = "SELECT b.*, m.*, l.LoanDate, l.DueDate, li.ReturnDate
+                    FROM Loans l
+                    JOIN LoanItems li ON l.LoanID = li.LoanID
+                    JOIN Books b ON li.BookID = b.BookID
+                    JOIN Members m ON l.MemberID = m.MemberID
+                    ORDER BY l.LoanDate DESC
+                    LIMIT 5";
 
-                $stmt = $this->pdo->prepare($sql);
-                $stmt->execute();
+            $stmt = $this->pdo->prepare($sql);
+            $stmt->execute();
 
-                $rows = $stmt->fetchAll();
-                $loans = [];
+            $rows = $stmt->fetchAll();
+            $loans = [];
 
-                foreach($rows as $row) {
-                    $loans[] = array(
-                        "book" => new Book($row["Title"], $row["Author"], $row["Description"], $row["ISBN"], $row["Genre"],
-                                        $row["Publisher"], $row["PublicationDate"], $row["Status"]),
-                        "member" => new Member($row["FirstName"], $row["LastName"], $row["DOB"], $row["Phone"], 
-                                            $row["Email"],$row["AddressLine1"], $row["AddressLine2"], $row["City"], 
-                                            $row["County"], $row["Eircode"], $row["RegistrationDate"], $row["Status"]),
-                        "loanDate" => DateTime::createFromFormat('Y-m-d', $row["LoanDate"])->format("l d M Y"),
-                        "dueDate" => DateTime::createFromFormat('Y-m-d', $row["DueDate"])->format("l d M Y"),
-                        "returnDate" => $row["ReturnDate"]
-                    );
-                }
-
-                return $loans;
-            } catch (Exception $e) {
-                throw new Exception("Error in fetching recent loans.");
+            foreach($rows as $row) {
+                $loans[] = array(
+                    "book" => new Book($row["Title"], $row["Author"], $row["Description"], $row["ISBN"], $row["Genre"],
+                                    $row["Publisher"], $row["PublicationDate"], $row["Status"]),
+                    "member" => new Member($row["FirstName"], $row["LastName"], $row["DOB"], $row["Phone"], 
+                                        $row["Email"],$row["AddressLine1"], $row["AddressLine2"], $row["City"], 
+                                        $row["County"], $row["Eircode"], $row["RegistrationDate"], $row["Status"]),
+                    "loanDate" => DateTime::createFromFormat('Y-m-d', $row["LoanDate"])->format("l d M Y"),
+                    "dueDate" => DateTime::createFromFormat('Y-m-d', $row["DueDate"])->format("l d M Y"),
+                    "returnDate" => $row["ReturnDate"]
+                );
             }
+
+            return $loans;
         }
 
         /**
@@ -410,43 +394,39 @@
          * @return array An array of the three members along with loan count.
          */
         public function getTopBorrowers() : array {
-            try {
-                $sql = "SELECT m.*, COUNT(*) as LoanCount FROM Loans l
-                    JOIN Members m ON l.MemberID = m.MemberID
-                    GROUP BY m.MemberID
-                    ORDER BY LoanCount DESC
-                    LIMIT 3";
+            $sql = "SELECT m.*, COUNT(*) as LoanCount FROM Loans l
+                JOIN Members m ON l.MemberID = m.MemberID
+                GROUP BY m.MemberID
+                ORDER BY LoanCount DESC
+                LIMIT 3";
 
-                $stmt = $this->pdo->prepare($sql);
-                $stmt->execute();
+            $stmt = $this->pdo->prepare($sql);
+            $stmt->execute();
 
-                $rows = $stmt->fetchAll();
-                $loans = [];
+            $rows = $stmt->fetchAll();
+            $loans = [];
 
-                foreach($rows as $row) {
-                    $loans[] = [
-                        "member" => new Member (
-                        $row["FirstName"], 
-                        $row["LastName"], 
-                        $row["DOB"], 
-                        $row["Phone"], 
-                        $row["Email"],
-                        $row["AddressLine1"], 
-                        $row["AddressLine2"], 
-                        $row["City"], 
-                        $row["County"], 
-                        $row["Eircode"], 
-                        $row["RegistrationDate"], 
-                        $row["Status"]
-                        ),
-                        "loanCount" => $row["LoanCount"]
-                    ];
-                } 
+            foreach($rows as $row) {
+                $loans[] = [
+                    "member" => new Member (
+                    $row["FirstName"], 
+                    $row["LastName"], 
+                    $row["DOB"], 
+                    $row["Phone"], 
+                    $row["Email"],
+                    $row["AddressLine1"], 
+                    $row["AddressLine2"], 
+                    $row["City"], 
+                    $row["County"], 
+                    $row["Eircode"], 
+                    $row["RegistrationDate"], 
+                    $row["Status"]
+                    ),
+                    "loanCount" => $row["LoanCount"]
+                ];
+            } 
 
-                return $loans;
-            } catch (Exception $e) {
-                throw new Exception("Error in fetching top borrowers.");
-            }
+            return $loans;
         }
     }
 ?>

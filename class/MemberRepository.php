@@ -30,36 +30,32 @@
          * @return array An array of member objects, or an empty array if none found.
          */
         function getAllMembers() : array {
-            try {
-                $sql = 'SELECT * FROM Members';
-                $stmt = $this->pdo->prepare($sql);
-                $stmt->execute();
+            $sql = 'SELECT * FROM Members';
+            $stmt = $this->pdo->prepare($sql);
+            $stmt->execute();
 
-                $rows = $stmt->fetchAll();
-                $members = [];
+            $rows = $stmt->fetchAll();
+            $members = [];
 
-                foreach($rows as $row) {
-                    $members[] = new Member (
-                        $row['FirstName'],
-                        $row['LastName'],
-                        $row['DOB'],
-                        $row['Phone'],
-                        $row['Email'],
-                        $row['AddressLine1'],
-                        $row['AddressLine2'],
-                        $row['City'],
-                        $row['County'],
-                        $row['Eircode'],
-                        $row['RegistrationDate'],
-                        $row['Status'],
-                        $row['MemberID']
-                    );
-                }
+            foreach($rows as $row) {
+                $members[] = new Member (
+                    $row['FirstName'],
+                    $row['LastName'],
+                    $row['DOB'],
+                    $row['Phone'],
+                    $row['Email'],
+                    $row['AddressLine1'],
+                    $row['AddressLine2'],
+                    $row['City'],
+                    $row['County'],
+                    $row['Eircode'],
+                    $row['RegistrationDate'],
+                    $row['Status'],
+                    $row['MemberID']
+                );
+            }
 
-                return $members;
-            } catch (PDOException $e) {  
-                throw new Exception("Could not retrieve members from the database.");
-            } 
+            return $members;
         }
 
         /**
@@ -205,7 +201,6 @@
          * @return int An integer count of the members.
          */
         public function getTotalMembers(string $status) : int {
-            try {
                 $sql = "SELECT COUNT(*) FROM Members WHERE Status = :cstatus";
 
                 $stmt = $this->pdo->prepare($sql);
@@ -213,9 +208,6 @@
                 $stmt->execute();
 
                 return (int) $stmt->fetchColumn();
-            } catch (PDOException $e) {
-                throw new Exception("Error updating member. Please try again.");
-            }
         }
     }
 ?>

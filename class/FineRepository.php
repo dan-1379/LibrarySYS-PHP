@@ -54,23 +54,19 @@
          * @return float The total unpaid fine amount, or 0.00 if no unpaid fines.
          */
         public function getUnpaidMemberFine(int $memberID) : float {
-            try {
-                $sql = "SELECT SUM(f.FineAmount) 
-                        FROM Fines f
-                        JOIN Loans l ON f.LoanID = l.LoanID
-                        WHERE l.MemberID = :cmemberID 
-                        AND f.Status = 'U'";
+            $sql = "SELECT SUM(f.FineAmount) 
+                    FROM Fines f
+                    JOIN Loans l ON f.LoanID = l.LoanID
+                    WHERE l.MemberID = :cmemberID 
+                    AND f.Status = 'U'";
 
-                $stmt = $this->pdo->prepare($sql);
-                $stmt->bindValue(':cmemberID', $memberID);
+            $stmt = $this->pdo->prepare($sql);
+            $stmt->bindValue(':cmemberID', $memberID);
 
-                $stmt->execute();
-                $result = $stmt->fetchColumn();
+            $stmt->execute();
+            $result = $stmt->fetchColumn();
 
-                return $result > 0 ? (float) $result : 0.00;
-            } catch (PDOException $e) {  
-                throw new Exception("Error retrieving unpaid member fine.");
-            }
+            return $result > 0 ? (float) $result : 0.00;
         }
 
         /**
@@ -197,18 +193,14 @@
          * @return float The total value of fines that are unpaid.
          */
         public function getTotalFines() : float {
-            try {
-                $sql = "SELECT SUM(FineAmount) FROM Fines WHERE Status = 'U'";
+            $sql = "SELECT SUM(FineAmount) FROM Fines WHERE Status = 'U'";
 
-                $stmt = $this->pdo->prepare($sql);
-                $stmt->execute();
+            $stmt = $this->pdo->prepare($sql);
+            $stmt->execute();
 
-                $result = $stmt->fetchColumn();
+            $result = $stmt->fetchColumn();
 
-                return $result === 0.00 ? 0.00 : (float) $result;
-            } catch(PDOException $e) {
-                throw new Exception("Error retrieving total fines.");
-            }
+            return $result === 0.00 ? 0.00 : (float) $result;
         }
 
         /**
@@ -217,27 +209,23 @@
          * @return array An associative array containing member details and total fine sum.
          */
         public function getTopFineOffender() : ?array {
-            try {
-                $sql = "SELECT m.*, sum(f.FineAmount) as Total_Fine
-                        FROM Fines f
-                        JOIN Loans l ON f.LoanID = l.LoanID
-                        JOIN Members m ON l.MemberID = m.MemberID
-                        GROUP BY m.MemberID
-                        ORDER BY Total_Fine DESC
-                        LIMIT 1";
+            $sql = "SELECT m.*, sum(f.FineAmount) as Total_Fine
+                    FROM Fines f
+                    JOIN Loans l ON f.LoanID = l.LoanID
+                    JOIN Members m ON l.MemberID = m.MemberID
+                    GROUP BY m.MemberID
+                    ORDER BY Total_Fine DESC
+                    LIMIT 1";
 
-                $stmt = $this->pdo->prepare($sql);
-                $stmt->execute();
-                $row = $stmt->fetch(PDO::FETCH_ASSOC);
+            $stmt = $this->pdo->prepare($sql);
+            $stmt->execute();
+            $row = $stmt->fetch(PDO::FETCH_ASSOC);
 
-                if (!$row) {
-                    return null;
-                }
-                
-                return $row;
-            } catch(PDOException $e) {
-                throw new Exception("Error retrieving top fine offender.");
+            if (!$row) {
+                return null;
             }
+            
+            return $row;
         }
     }
 ?>

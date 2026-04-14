@@ -16,6 +16,7 @@
     $inputErrors = [];
     $success = "";
     $errors = "";
+    $error = "";
 
     function getMemberFromPost() : Member {
         return new Member(
@@ -53,7 +54,12 @@
         $errors = $libraryService->alterMemberStatus($memberID);
     }
 
-    $members = $libraryService->getAllMembers();
+    try {
+        $members = $libraryService->getAllMembers();
+    } catch (Exception $ex) {
+        $error = "Error in retrieving member records. Please try again later.";
+    }
+
     $searchMember = $_POST['cSearchMember'] ?? '';
 
     if (!empty($searchMember)) {
@@ -74,76 +80,83 @@
     <?php include_once("inc/navMenu.php"); ?>
 
     <main class="main">
-        <div class="memberAddSearch">
-            <div class="addMember">
-                <button onclick="openAddMenu()"><i class="fa fa-user-plus"></i>Add Member</button>
-            </div>
-
-            <!-- <div class="searchMember">
-                <form action="memberCRUD.php" method="post">
-                    <input type="text" name="cSearchMember" id="cSearchMember" placeholder="Search library records...">
-                </form>
-            </div> -->
-        </div>
-
-        <?php if (!empty($errors)): ?>
+        <?php if(!empty($error)) : ?>
             <div class="errorOutput">
                 <i class="fa fa-exclamation-triangle"></i>
-                <span class="errorMessage"><?php echo $errors . " Please rectify to continue."; ?></span>
-            </div>
-        <?php endif; ?>
-
-        <?php if(empty($members)) : ?>
-            <div class="infoMessage">
-                <i class="fa fa-warning"></i>
-                <p>No members currently in the library</p>
+                <span class="errorMessage"><?php echo $error; ?></span>
             </div>
         <?php else : ?>
-            <div class="memberTable">
-                <table class="memberCrudTable">
-                    <tr>
-                        <th>ID</th>
-                        <th>Name</th>
-                        <th>DOB</th>
-                        <th>Phone</th>
-                        <th>Email</th>
-                        <th>Address</th>
-                        <th>County</th>
-                        <th>Registration</th>
-                        <th>Status</th>
-                        <th>Edit</th>
-                        <th>Delete</th>
-                    </tr>
+            <div class="memberAddSearch">
+                <div class="addMember">
+                    <button onclick="openAddMenu()"><i class="fa fa-user-plus"></i>Add Member</button>
+                </div>
 
-                    <?php foreach($members as $member) : ?>
-                        <?php $statusText = (htmlspecialchars($member->getStatus()) === 'A') ? 'Active' : 'Inactive'; ?>
-                        <tr>
-                            <td><?php echo htmlspecialchars($member->getId()); ?></td>
-                            <td><?php echo htmlspecialchars(ucwords($member->getFirstName())) . ' ' . htmlspecialchars(ucwords($member->getLastName())); ?></td>
-                            <td><?php echo htmlspecialchars($member->getDob()); ?></td>
-                            <td><?php echo htmlspecialchars($member->getPhone()); ?></td>
-                            <td><?php echo htmlspecialchars($member->getEmail()); ?></td>
-                            <td><?php echo htmlspecialchars(ucwords($member->getAddressLine1())) . ', ' . htmlspecialchars(ucwords($member->getAddressLine2())) . ', ' . htmlspecialchars(ucwords($member->getCity())) . ', ' . htmlspecialchars(($member->getEircode())); ?></td>
-                            <td><?php echo htmlspecialchars(ucwords($member->getCounty())); ?></td>
-                            <td><?php echo htmlspecialchars($member->getRegistrationDate()); ?></td>
-                            <td><?php echo $statusText ?></td>
-                            <td>
-                                <div class="editMember">
-                                    <button onclick='showEditMenu(this)' class='editMemberButton'><i class='fa fa-edit'></i>EDIT</button>
-                                </div>
-                            </td>
-                            <td>
-                                <form action="memberCRUD.php" method="post">
-                                    <div class='deleteMember'>
-                                        <input type="hidden" name="cMemberID" value="<?php echo htmlspecialchars($member->getId()); ?>">
-                                        <button onclick = 'deleteMember(this)' class='deleteMemberButton' name="deleteMember"><i class='fa fa-trash-o'></i>DELETE</button>
-                                    </div>
-                                </form>
-                            </td>
-                        </tr>
-                    <?php endforeach; ?>
-                </table>
+                <!-- <div class="searchMember">
+                    <form action="memberCRUD.php" method="post">
+                        <input type="text" name="cSearchMember" id="cSearchMember" placeholder="Search library records...">
+                    </form>
+                </div> -->
             </div>
+
+            <?php if (!empty($errors)): ?>
+                <div class="errorOutput">
+                    <i class="fa fa-exclamation-triangle"></i>
+                    <span class="errorMessage"><?php echo $errors . " Please rectify to continue."; ?></span>
+                </div>
+            <?php endif; ?>
+
+            <?php if(empty($members)) : ?>
+                <div class="infoMessage">
+                    <i class="fa fa-warning"></i>
+                    <p>No members currently in the library</p>
+                </div>
+            <?php else : ?>
+                <div class="memberTable">
+                    <table class="memberCrudTable">
+                        <tr>
+                            <th>ID</th>
+                            <th>Name</th>
+                            <th>DOB</th>
+                            <th>Phone</th>
+                            <th>Email</th>
+                            <th>Address</th>
+                            <th>County</th>
+                            <th>Registration</th>
+                            <th>Status</th>
+                            <th>Edit</th>
+                            <th>Delete</th>
+                        </tr>
+
+                        <?php foreach($members as $member) : ?>
+                            <?php $statusText = (htmlspecialchars($member->getStatus()) === 'A') ? 'Active' : 'Inactive'; ?>
+                            <tr>
+                                <td><?php echo htmlspecialchars($member->getId()); ?></td>
+                                <td><?php echo htmlspecialchars(ucwords($member->getFirstName())) . ' ' . htmlspecialchars(ucwords($member->getLastName())); ?></td>
+                                <td><?php echo htmlspecialchars($member->getDob()); ?></td>
+                                <td><?php echo htmlspecialchars($member->getPhone()); ?></td>
+                                <td><?php echo htmlspecialchars($member->getEmail()); ?></td>
+                                <td><?php echo htmlspecialchars(ucwords($member->getAddressLine1())) . ', ' . htmlspecialchars(ucwords($member->getAddressLine2())) . ', ' . htmlspecialchars(ucwords($member->getCity())) . ', ' . htmlspecialchars(($member->getEircode())); ?></td>
+                                <td><?php echo htmlspecialchars(ucwords($member->getCounty())); ?></td>
+                                <td><?php echo htmlspecialchars($member->getRegistrationDate()); ?></td>
+                                <td><?php echo $statusText ?></td>
+                                <td>
+                                    <div class="editMember">
+                                        <button onclick='showEditMenu(this)' class='editMemberButton'><i class='fa fa-edit'></i>EDIT</button>
+                                    </div>
+                                </td>
+                                <td>
+                                    <form action="memberCRUD.php" method="post">
+                                        <div class='deleteMember'>
+                                            <input type="hidden" name="cMemberID" value="<?php echo htmlspecialchars($member->getId()); ?>">
+                                            <button onclick = 'deleteMember(this)' class='deleteMemberButton' name="deleteMember"><i class='fa fa-trash-o'></i>DELETE</button>
+                                        </div>
+                                    </form>
+                                </td>
+                            </tr>
+                        <?php endforeach; ?>
+                    </table>
+                </div>
+            <?php endif; ?>
         <?php endif; ?>
     </main>
 

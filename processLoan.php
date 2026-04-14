@@ -38,7 +38,7 @@
                 $_SESSION['Member'] = $member;
             }
 
-        } catch (InvalidArgumentException $ex) {
+        } catch (Exception $ex) {
             $memberError = $ex->getMessage();
         }
     }
@@ -58,7 +58,7 @@
             } else {
                 $_SESSION['BooksInCart'][] = $book;
             }
-        } catch (InvalidArgumentException $ex) {
+        } catch (Exception $ex) {
             $bookError = $ex->getMessage();
         }
     }
@@ -80,27 +80,31 @@
     }
 
     if (isset($_POST["confirmProcessLoan"])) {
-        $member = $_SESSION["Member"];
+        try {
+            $member = $_SESSION["Member"];
 
-        if (!$member->isActive()) {
-            $memberError = "Cannot proceed with loan. Member is inactive.";
-        } else if ($libraryService->hasOverdueBooks($member->getId()) > 0) {
-            $memberError = "Cannot proceed with loan. Member has overdue books.";
-        } else if ($libraryService->getUnpaidMemberFine($member->getId()) > 0) {
-            $memberError = "Cannot proceed with loan. Member has outstanding fines.";
-        } else if ($libraryService->getCurrentLoanCount($member->getId()) + count($_SESSION["BooksInCart"]) > MAX_BOOKS_PER_LOAN) {
-            $memberError = "Cannot proceed with loan. Member has reached the maximum loan limit of " . MAX_BOOKS_PER_LOAN . " books.";
-        } else {
-            $loanDate = new DateTime();
-            $dueDate = (new DateTime())->modify("+" . LOAN_LENDING_PERIOD . " days");
-            $loan = new Loan($loanDate, $dueDate, $member->getId());
+            if (!$member->isActive()) {
+                $memberError = "Cannot proceed with loan. Member is inactive.";
+            } else if ($libraryService->hasOverdueBooks($member->getId()) > 0) {
+                $memberError = "Cannot proceed with loan. Member has overdue books.";
+            } else if ($libraryService->getUnpaidMemberFine($member->getId()) > 0) {
+                $memberError = "Cannot proceed with loan. Member has outstanding fines.";
+            } else if ($libraryService->getCurrentLoanCount($member->getId()) + count($_SESSION["BooksInCart"]) > MAX_BOOKS_PER_LOAN) {
+                $memberError = "Cannot proceed with loan. Member has reached the maximum loan limit of " . MAX_BOOKS_PER_LOAN . " books.";
+            } else {
+                $loanDate = new DateTime();
+                $dueDate = (new DateTime())->modify("+" . LOAN_LENDING_PERIOD . " days");
+                $loan = new Loan($loanDate, $dueDate, $member->getId());
 
-            $_SESSION["LoanDate"] = $loanDate->format("Y-m-d");
-            $_SESSION["DueDate"] = $dueDate->format("Y-m-d");
+                $_SESSION["LoanDate"] = $loanDate->format("Y-m-d");
+                $_SESSION["DueDate"] = $dueDate->format("Y-m-d");
 
-            $libraryService->processLoan($loan, $_SESSION["BooksInCart"]);
-            header("Location: loanConfirmation.php");
-            exit();
+                $libraryService->processLoan($loan, $_SESSION["BooksInCart"]);
+                header("Location: loanConfirmation.php");
+                exit();
+            }
+        } catch (Exception $ex) {
+            $memberError = "Error occurred while processing the loan. Please try again later.";
         }
     }
 ?>

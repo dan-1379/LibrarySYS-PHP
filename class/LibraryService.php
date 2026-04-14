@@ -188,11 +188,7 @@
          * @see BookRepository::getAllBooks()
          */
         public function getAllBooks() : array {
-            try {
-                return $this->bookRepo->getAllBooks();
-            } catch (Exception $e) {
-                return [];
-            }
+            return $this->bookRepo->getAllBooks();
         }
 
         /**
@@ -203,11 +199,7 @@
          * @see BookRepository::getTotalCount()
          */
         public function getTotalBooks() : int {
-            try {
-                return $this->bookRepo->getTotalCount();
-            } catch (Exception $e) {
-                return 0;
-            }
+            return $this->bookRepo->getTotalCount();
         }
 
         /**
@@ -363,11 +355,7 @@
          * @see MemberRepository::getAllMembers()
          */
         public function getAllMembers() : array {
-            try {
-                return $this->memberRepo->getAllMembers();
-            } catch (Exception $e) {
-                return [];
-            }
+            return $this->memberRepo->getAllMembers();
         }
 
         /**
@@ -379,11 +367,7 @@
          * @see MemberRepository::getTotalMembers()
          */
         public function getTotalMembers(string $status) : int {
-            try {
-                return $this->memberRepo->getTotalMembers($status);
-            } catch (Exception $e) {
-                return 0;
-            }
+            return $this->memberRepo->getTotalMembers($status);
         }
 
         /**
@@ -451,11 +435,7 @@
          * @see LoanRepository::hasOverDueBooks()
          */
         public function hasOverdueBooks(int $member) : int {
-            try {
-                return $this->loanRepo->hasOverDueBooks($member);
-            } catch (Exception $e) {
-                return 0;
-            }
+            return $this->loanRepo->hasOverDueBooks($member);
         }
 
         /**
@@ -467,11 +447,7 @@
          * @see LoanRepository::getCurrentLoanCount()
          */
         public function getCurrentLoanCount(int $member) : int {
-            try {
-                return $this->loanRepo->getCurrentLoanCount($member);
-            } catch (Exception $e) {
-                return 0;
-            }
+            return $this->loanRepo->getCurrentLoanCount($member);
         }
 
         /**
@@ -539,11 +515,7 @@
          * @see LoanRepository::getTotalLoans()
          */
         public function getTotalLoans() : int {
-            try {
-                return $this->loanRepo->getTotalLoans();
-            } catch (Exception $e) {
-                return 0;
-            }
+            return $this->loanRepo->getTotalLoans();
         }
 
         /**
@@ -555,11 +527,7 @@
          *  @see LoanRepository::getRecentLoans()
          */
         public function getRecentLoans() : array {
-            try {
-                return $this->loanRepo->getRecentLoans();
-            } catch (Exception $e) {
-                return [];
-            }
+            return $this->loanRepo->getRecentLoans();
         }
 
         /**
@@ -570,11 +538,7 @@
          * @see LoanRepository::getTopBorrowers()
          */
         public function getTopBorrowers() : array {
-            try {
-                return $this->loanRepo->getTopBorrowers();
-            } catch (Exception $e) {
-                return [];
-            }
+            return $this->loanRepo->getTopBorrowers();
         }
         
         /**
@@ -586,11 +550,7 @@
          * @see FineRepository::getUnpaidMemberFine()
          */
         public function getUnpaidMemberFine(int $memberID) : float {
-            try {
-                return $this->fineRepo->getUnpaidMemberFine($memberID);
-            } catch (Exception $e) {
-                return 0.00;
-            }
+            return $this->fineRepo->getUnpaidMemberFine($memberID);
         }
 
         /**
@@ -601,11 +561,7 @@
          * @see FineRepository::getTopFineOffender()
          */
         public function getTopFineOffender() : array {
-             try {
-                return $this->fineRepo->getTopFineOffender();
-            } catch (Exception $e) {
-                return [];
-            }
+            return $this->fineRepo->getTopFineOffender();
         }
 
          /**
@@ -741,11 +697,7 @@
          * @see FineRepository::getTotalFines()
          */
         public function getTotalFines() : float {
-            try {
-                return $this->fineRepo->getTotalFines();
-            } catch (Exception $e) {
-                return 0.00;
-            }
+            return $this->fineRepo->getTotalFines();
         }
     }
 ?>

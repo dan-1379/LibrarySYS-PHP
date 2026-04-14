@@ -30,32 +30,28 @@
          * @return array An array of book objects, or an empty array if none found.
          */
         public function getAllBooks() : array {
-            try {
-                $sql = 'SELECT * FROM Books';
-                $stmt = $this->pdo->prepare($sql);
-                $stmt->execute();
+            $sql = 'SELECT * FROM Books';
+            $stmt = $this->pdo->prepare($sql);
+            $stmt->execute();
 
-                $rows = $stmt->fetchAll();
-                $books = [];
+            $rows = $stmt->fetchAll();
+            $books = [];
 
-                foreach($rows as $row) {
-                    $books[] = new Book (
-                        $row['Title'],
-                        $row['Author'],
-                        $row['Description'],
-                        $row['ISBN'],
-                        $row['Genre'],
-                        $row['Publisher'],
-                        $row['PublicationDate'],
-                        $row['Status'],
-                        $row['BookID']
-                    );
-                }
+            foreach($rows as $row) {
+                $books[] = new Book (
+                    $row['Title'],
+                    $row['Author'],
+                    $row['Description'],
+                    $row['ISBN'],
+                    $row['Genre'],
+                    $row['Publisher'],
+                    $row['PublicationDate'],
+                    $row['Status'],
+                    $row['BookID']
+                );
+            }
 
-                return $books;
-            } catch (PDOException $e) {  
-                throw new Exception("Could not retrieve books from the database.");
-            } 
+            return $books;
         }
 
         /**
@@ -64,16 +60,12 @@
          * @return int The total number of books, or 0 if an error occurs.
          */
         public function getTotalCount() : int {
-            try {
-                $sql = 'SELECT COUNT(*) FROM Books';
+            $sql = 'SELECT COUNT(*) FROM Books';
 
-                $stmt = $this->pdo->prepare($sql);
-                $stmt->execute();
+            $stmt = $this->pdo->prepare($sql);
+            $stmt->execute();
 
-                return $stmt->fetchColumn();
-            } catch (PDOException $e) {  
-                throw new Exception("Could not retrieve book count.");
-            } 
+            return $stmt->fetchColumn();
         }
 
         /**

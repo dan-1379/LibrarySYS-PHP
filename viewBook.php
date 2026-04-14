@@ -1,6 +1,12 @@
 <?php 
     require_once("config/config.php");
-    $books = $libraryService->getAllBooks();
+    $error = "";
+
+    try {
+        $books = $libraryService->getAllBooks();
+    } catch (Exception $ex) {
+        $error = "Error in retrieving books. Please try again later.";
+    }
 ?>
 
 <!DOCTYPE html>
@@ -15,7 +21,12 @@
 <body>
     <?php include_once("inc/navMenu.php"); ?>
 
-    <?php if(empty($books)) : ?>
+    <?php if(!empty($error)) : ?>
+        <div class="infoMessage">
+            <i class="fa fa-warning"></i>
+            <p><?php echo $error; ?></p>
+        </div>
+    <?php elseif(empty($books)) : ?>
         <div class="infoMessage">
             <i class="fa fa-warning"></i>
             <p>No books currently in the library</p>
