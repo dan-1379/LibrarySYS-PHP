@@ -177,6 +177,7 @@
                                 </div>
                             </div>
 
+                            <!-- https://stackoverflow.com/questions/11820608/how-to-submit-multiple-array-checkbox-with-html-forms -->
                             <div class="memberCardRight">
                                 <input type="checkbox" name="selectBook[]" value="<?php echo htmlspecialchars($book["book"]->getId()); ?>" 
                                     <?php echo in_array($book["book"]->getId(), $_SESSION["SelectedBooks"] ?? []) ? "checked" : ""; ?>
