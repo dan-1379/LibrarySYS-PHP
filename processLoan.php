@@ -94,6 +94,8 @@
             } else {
                 $loanDate = new DateTime();
                 $dueDate = (new DateTime())->modify("+" . LOAN_LENDING_PERIOD . " days");
+                $dueDate = $dueDate->format("D") === "Sun" ? $dueDate->modify("+1 days") : $dueDate;
+
                 $loan = new Loan($loanDate, $dueDate, $member->getId());
 
                 $_SESSION["LoanDate"] = $loanDate->format("Y-m-d");
