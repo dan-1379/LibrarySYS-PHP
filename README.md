@@ -121,7 +121,7 @@ CREATE DATABASE LibrarySYS;
 
 5. Exit the MariaDB environment and execute the following:
 ```terminal
-C:\xampp\mysql\bin>mysql.exe -u root -p LibrarySYS < \LibrarySYS.sql
+C:\xampp\mysql\bin>mysql -u root -p LibrarySYS < "C:\xampp\htdocs\Dan\LibrarySYS-PHP\LibrarySYS.sql"
 ```
 
 6. When prompted for a password, press Enter.
